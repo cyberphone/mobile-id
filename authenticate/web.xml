@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<web-app xmlns="http://java.sun.com/xml/ns/j2ee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
+    version="2.4">
+
+    <context-param>
+        <description>Local Installation</description>
+        <param-name>local_installation</param-name>
+        <param-value>@local-installation@</param-value>
+    </context-param>
+
+    <context-param>
+        <description>Merchant Key Password</description>
+        <param-name>key_password</param-name>
+        <param-value>@key-password@</param-value>
+    </context-param>
+ 
+    <context-param>
+        <description>Merchant Key</description>
+        <param-name>merchant_key</param-name>
+        <param-value>@merchant-key@</param-value>
+    </context-param>
+
+    <context-param>
+        <description>Merchant Common Name</description>
+        <param-name>merchant_cn</param-name>
+        <param-value>@merchant-cn@</param-value>
+    </context-param>
+
+    <context-param>
+        <description>Merchant ID</description>
+        <param-name>merchant_id</param-name>
+        <param-value>@merchant-id@</param-value>
+    </context-param>
+
+    <context-param>
+        <description>Other Network Key (May be zero length)</description>
+        <param-name>othernetwork_key</param-name>
+        <param-value>@othernetwork-key@</param-value>
+    </context-param>
+
+    <context-param>
+        <description>Other Network ID</description>
+        <param-name>othernetwork_id</param-name>
+        <param-value>@othernetwork-id@</param-value>
+    </context-param>
+
+    <context-param>
+        <description>Payment Network Root Certificate</description>
+        <param-name>payment_root</param-name>
+        <param-value>@payment-root@</param-value>
+    </context-param>
+
+    <context-param>
+        <description>Acquirer Network Root Certificate</description>
+        <param-name>acquirer_root</param-name>
+        <param-value>@acquirer-root@</param-value>
+    </context-param>
+    
+    <context-param>
+        <description>Server Port Mapping (may be undefined)</description>
+        <param-name>server_port_map</param-name>
+        <param-value>@server-port-map@</param-value>
+    </context-param>
+
+    <context-param>
+        <description>Payee Acquirer Authority URL</description>
+        <param-name>payee_acquirer_authority_url</param-name>
+        <param-value>@payee-acquirer-authority-url@</param-value>
+    </context-param>
+
+    <context-param>
+        <description>Payee Provider Authority URL</description>
+        <param-name>payee_provider_authority_url</param-name>
+        <param-value>@payee-provider-authority-url@</param-value>
+    </context-param>
+
+    <context-param>
+        <description>Currency</description>
+        <param-name>currency</param-name>
+        <param-value>@currency@</param-value>
+    </context-param>
+
+    <context-param>
+        <description>Add the 'Unusual' card</description>
+        <param-name>add_unusual_card</param-name>
+        <param-value>@add-unusual-card@</param-value>
+    </context-param>
+
+    <context-param>
+        <description>Web2Native Bridge wallet name</description>
+        <param-name>w2nb_wallet</param-name>
+        <param-value>@w2nb-wallet@</param-value>
+    </context-param>
+
+    <context-param>
+        <description>Loading of Bouncycastle (EJBCA or Tomcat)</description>
+        <param-name>bouncycastle_first</param-name>
+        <param-value>@bouncycastle-first@</param-value>
+    </context-param>
+    
+    <context-param>
+        <description>Android WebPKI Version Check</description>
+        <param-name>android_webpki_versions</param-name>
+        <param-value>@android-webpki-versions@</param-value>
+    </context-param>
+
+    <context-param>
+        <description>Support Desktop Wallet</description>
+        <param-name>desktop_wallet</param-name>
+        <param-value>@desktop-wallet@</param-value>
+    </context-param>
+
+    <context-param>
+        <description>Slow operation flag</description>
+        <param-name>slow_operation</param-name>
+        <param-value>@slow-operation@</param-value>
+    </context-param>
+
+    <context-param>
+        <description>Test Mode</description>
+        <param-name>test-mode</param-name>
+        <param-value></param-value>
+    </context-param>
+
+    <context-param>
+        <description>Logging</description>
+        <param-name>logging</param-name>
+        <param-value>@logging@</param-value>
+    </context-param>
+
+    <listener>
+        <listener-class>org.webpki.saturn.merchant.MerchantService</listener-class>
+    </listener>
+
+    <servlet>
+        <servlet-name>HomeServlet</servlet-name>
+        <servlet-class>org.webpki.saturn.merchant.HomeServlet</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>ShoppingServlet</servlet-name>
+        <servlet-class>org.webpki.saturn.merchant.ShoppingServlet</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>W2NBWalletServlet</servlet-name>
+        <servlet-class>org.webpki.saturn.merchant.W2NBWalletServlet</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>ChoosePaymentServlet</servlet-name>
+        <servlet-class>org.webpki.saturn.merchant.ChoosePaymentServlet</servlet-class>
+    </servlet>
+    
+    <servlet>
+        <servlet-name>AuthorizationServlet</servlet-name>
+        <servlet-class>org.webpki.saturn.merchant.AuthorizationServlet</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>ResultServlet</servlet-name>
+        <servlet-class>org.webpki.saturn.merchant.ResultServlet</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>RefundServlet</servlet-name>
+        <servlet-class>org.webpki.saturn.merchant.RefundServlet</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>DebugServlet</servlet-name>
+        <servlet-class>org.webpki.saturn.merchant.DebugServlet</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>ErrorServlet</servlet-name>
+        <servlet-class>org.webpki.saturn.merchant.ErrorServlet</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>NFCLauncherServlet</servlet-name>
+        <servlet-class>org.webpki.saturn.merchant.NFCLauncherServlet</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>QRDisplayServlet</servlet-name>
+        <servlet-class>org.webpki.saturn.merchant.QRDisplayServlet</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>AndroidPluginServlet</servlet-name>
+        <servlet-class>org.webpki.saturn.merchant.AndroidPluginServlet</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>AndroidServlet</servlet-name>
+        <servlet-class>org.webpki.saturn.merchant.AndroidServlet</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>GasStationServlet</servlet-name>
+        <servlet-class>org.webpki.saturn.merchant.GasStationServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>HomeServlet</servlet-name>
+        <url-pattern>/home</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>ShoppingServlet</servlet-name>
+        <url-pattern>/shop</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>W2NBWalletServlet</servlet-name>
+        <url-pattern>/w2nbwallet</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>ChoosePaymentServlet</servlet-name>
+        <url-pattern>/choose</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+        <servlet-name>AuthorizationServlet</servlet-name>
+        <url-pattern>/authorize</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>ResultServlet</servlet-name>
+        <url-pattern>/result</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>RefundServlet</servlet-name>
+        <url-pattern>/refund</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>DebugServlet</servlet-name>
+        <url-pattern>/debug</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>ErrorServlet</servlet-name>
+        <url-pattern>/error</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>NFCLauncherServlet</servlet-name>
+        <url-pattern>/nfc</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>QRDisplayServlet</servlet-name>
+        <url-pattern>/qrdisplay</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>AndroidPluginServlet</servlet-name>
+        <url-pattern>/androidplugin</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>AndroidServlet</servlet-name>
+        <url-pattern>/android</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>GasStationServlet</servlet-name>
+        <url-pattern>/gasstation</url-pattern>
+    </servlet-mapping>
+
+    <session-config>
+      <session-timeout>60</session-timeout>
+    </session-config>
+
+    <security-constraint>
+      <web-resource-collection>
+        <web-resource-name>The app</web-resource-name>
+          <url-pattern>/*</url-pattern>
+       </web-resource-collection>
+       <user-data-constraint>
+         <transport-guarantee>CONFIDENTIAL</transport-guarantee>
+      </user-data-constraint>
+    </security-constraint>
+
+ </web-app>
