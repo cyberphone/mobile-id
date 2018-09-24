@@ -20,10 +20,15 @@ package org.webpki.mobileid.keyprovider;
 import java.io.IOException;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintWriter;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.security.GeneralSecurityException;
+import java.security.PublicKey;
 import java.security.cert.X509Certificate;
 import java.security.interfaces.RSAPublicKey;
+import java.math.BigInteger;
 import java.net.URLEncoder;
 
 import javax.servlet.ServletException;
@@ -32,9 +37,14 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.webpki.asn1.cert.DistinguishedName;
+import org.webpki.ca.CA;
+import org.webpki.ca.CertSpec;
 import org.webpki.crypto.AlgorithmPreferences;
+import org.webpki.crypto.AsymKeySignerInterface;
 import org.webpki.crypto.AsymSignatureAlgorithms;
 import org.webpki.crypto.KeyAlgorithms;
+import org.webpki.crypto.SignatureWrapper;
 import org.webpki.keygen2.ServerState;
 import org.webpki.keygen2.KeySpecifier;
 import org.webpki.keygen2.KeyGen2URIs;
@@ -50,6 +60,7 @@ import org.webpki.keygen2.KeyCreationRequestEncoder;
 import org.webpki.keygen2.ProvisioningFinalizationRequestEncoder;
 import org.webpki.sks.AppUsage;
 import org.webpki.sks.PassphraseFormat;
+import org.webpki.util.MIMETypedObject;
 import org.webpki.webutil.ServletUtil;
 import org.webpki.json.JSONEncoder;
 import org.webpki.json.JSONDecoder;
@@ -225,6 +236,69 @@ public class KeyProviderServlet extends HttpServlet {
                 case KEY_CREATION:
                   KeyCreationResponseDecoder keyCreationResponse = (KeyCreationResponseDecoder) jsonObject;
                   keygen2State.update(keyCreationResponse);
+                  ServerState.Key key = keygen2State.getKeys()[0];
+                  String citizenId = "123412341234";
+                  String citizenName = "Luke Skywalker";
+                  CertSpec certSpec = new CertSpec();
+                  certSpec.setSubject("cn=" + citizenName + ", serialNumber=" + citizenId);
+                  CA ca = new CA();
+                  X509Certificate[] caCertPath = issuer.subCA.getCertificatePath();
+                  DistinguishedName issuerName = DistinguishedName.subjectDN(caCertPath[0]);
+                  BigInteger serialNumber = new BigInteger(String.valueOf(new Date().getTime()));
+                  GregorianCalendar validity = new GregorianCalendar();
+                  validity.add(GregorianCalendar.YEAR, 2);
+                  X509Certificate[] certPath = new X509Certificate[caCertPath.length + 1];
+                  int q = 0;
+                  for (X509Certificate cert : caCertPath) {
+                      certPath[++q] = cert;
+                  }
+                  certPath[0] = ca.createCert(certSpec,
+                                              issuerName,
+                                              serialNumber,
+                                              new Date(),
+                                              validity.getTime(),
+                                              AsymSignatureAlgorithms.ECDSA_SHA256,
+                                              new AsymKeySignerInterface() {
+
+                        @Override
+                        public PublicKey getPublicKey() throws IOException {
+                            return issuer.subCA.getPublicKey();
+                        }
+    
+                        @Override
+                        public byte[] signData(byte[] data,
+                                               AsymSignatureAlgorithms certAlg)
+                                throws IOException {
+                            try {
+                                return new SignatureWrapper(certAlg, issuer.subCA.getPrivateKey())
+                                        .setEcdsaSignatureEncoding(true)
+                                        .update(data)
+                                        .sign();
+                            } catch (GeneralSecurityException e) {
+                                throw new IOException(e);
+                            }
+                        }
+                  },
+                                              key.getPublicKey());
+                  key.setCertificatePath(certPath);
+                  key.addLogotype(KeyGen2URIs.LOGOTYPES.CARD, new MIMETypedObject() {
+
+                        @Override
+                        public byte[] getData() throws IOException {
+                            return issuer.cardImage.replace("@n", citizenName)
+                                      .replace("@i", 
+                                               citizenId.substring(0, 4) +
+                                                 " " +
+                                                 citizenId.substring(4, 8) +
+                                                 " " +
+                                                 citizenId.substring(8)).getBytes("utf-8");
+                        }
+    
+                        @Override
+                        public String getMimeType() throws IOException {
+                            return "image/svg+xml";
+                        }
+                  });
                   keygen2JSONBody(response,
                                   new ProvisioningFinalizationRequestEncoder(keygen2State,
                                                                              keygen2EnrollmentUrl));
