@@ -18,10 +18,11 @@ package org.webpki.mobileid.keyprovider;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.security.PublicKey;
+
 import java.security.cert.X509Certificate;
-import java.security.interfaces.RSAPublicKey;
+
 import java.util.Vector;
+
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -30,19 +31,20 @@ import javax.servlet.ServletContextListener;
 
 import org.webpki.crypto.CertificateUtil;
 import org.webpki.crypto.CustomCryptoProvider;
+
 import org.webpki.json.JSONArrayReader;
 import org.webpki.json.JSONDecoderCache;
 import org.webpki.json.JSONObjectReader;
 import org.webpki.json.JSONParser;
-import org.webpki.json.encryption.DataEncryptionAlgorithms;
-import org.webpki.json.encryption.KeyEncryptionAlgorithms;
+
 import org.webpki.keygen2.CredentialDiscoveryResponseDecoder;
 import org.webpki.keygen2.InvocationResponseDecoder;
 import org.webpki.keygen2.KeyCreationResponseDecoder;
 import org.webpki.keygen2.ProvisioningFinalizationResponseDecoder;
 import org.webpki.keygen2.ProvisioningInitializationResponseDecoder;
+
 import org.webpki.util.ArrayUtil;
-import org.webpki.util.MIMETypedObject;
+
 import org.webpki.webutil.InitPropertyReader;
 
 public class KeyProviderService extends InitPropertyReader implements ServletContextListener {
@@ -142,7 +144,7 @@ public class KeyProviderService extends InitPropertyReader implements ServletCon
             ////////////////////////////////////////////////////////////////////////////////////////////
             tlsCertificate = CertificateUtil.getCertificateFromBlob(getResourceBytes(getPropertyString(TLS_CERTIFICATE)));
 
-            logger.info("MobileID KeyProvider-server initiated: " + tlsCertificate.getSubjectX500Principal().getName());
+            logger.info("Mobile ID KeyProvider-server initiated: " + tlsCertificate.getSubjectX500Principal().getName());
         } catch (Exception e) {
             logger.log(Level.SEVERE, "********\n" + e.getMessage() + "\n********", e);
         }
