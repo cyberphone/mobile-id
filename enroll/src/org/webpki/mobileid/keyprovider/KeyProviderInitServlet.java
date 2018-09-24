@@ -84,8 +84,7 @@ public class KeyProviderInitServlet extends HttpServlet {
             s.append(' ').append(bodyscript);
         }
         s.append(
-                "><img style=\"cursor:pointer;position:absolute;top:15pt;left:15pt;z-index:5;visibility:visible;width:150pt;" +
-                "border-width:1px;border-style:solid;border-color:black;box-shadow:3pt 3pt 3pt #D0D0D0\"" +
+                "><img style=\"cursor:pointer;position:absolute;top:10pt;left:10pt;z-index:5;visibility:visible\"" +
                 " onclick=\"document.location.href='https://github.com/cyberphone/mobile-id'\" title=\"Home of Mobile ID\" " +
                 "src=\"images/mobileidlogo.svg\">" +
                 "<table cellapdding=\"0\" cellspacing=\"0\" width=\"100%\" height=\"100%\">")
