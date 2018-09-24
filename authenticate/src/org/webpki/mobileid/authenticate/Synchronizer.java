@@ -14,21 +14,27 @@
  *  limitations under the License.
  *
  */
-package org.webpki.saturn.merchant;
 
-import java.io.Serializable;
+package org.webpki.mobileid.authenticate;
 
-public class ProductEntry implements Serializable {
+class Synchronizer {
+	boolean touched;
 
-    private static final long serialVersionUID = 1L;
+	synchronized boolean perform(int timeout) {
+		boolean timeout_flag = false;
+		while (!touched && !timeout_flag) {
+			try {
+				wait(timeout);
+			} catch (InterruptedException e) {
+				return false;
+			}
+			timeout_flag = true;
+		}
+		return touched;
+	}
 
-    String imageUrl;
-    String name;
-    long priceX100;
-    
-    public ProductEntry (String imageUrl, String name, long priceX100) {
-        this.imageUrl = imageUrl;
-        this.name = name;
-        this.priceX100 = priceX100;
-    }
+	synchronized void haveData4You() {
+		touched = true;
+		notify();
+	}
 }
