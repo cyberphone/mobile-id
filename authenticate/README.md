@@ -1,2 +1,2 @@
-### Saturn Payment Authorization System
-This project holds the code for a demo Payee (Merchant)
+### Mobile ID
+This project holds Web code for testing the Mobile ID client

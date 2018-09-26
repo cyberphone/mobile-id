@@ -1,0 +1,18 @@
+<project name="Make a French version of the source" default="help" basedir=".">
+
+  <!-- set properties for this build -->
+
+  <target name="help">
+      <echo message="help french"/>
+  </target>
+
+  <target name="french">
+     <delete dir="locale.french"/>
+     <copy todir="locale.french" preservelastmodified="true">
+       <fileset dir=".">
+          <exclude name="make-it-french.xml"/>
+       </fileset>
+   	  </copy>
+	</target>
+   
+</project>

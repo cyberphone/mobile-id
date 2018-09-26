@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<web-app xmlns="http://java.sun.com/xml/ns/j2ee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
+    version="2.4">
+
+    <context-param>
+        <description>Android WebPKI Version Check</description>
+        <param-name>android_webpki_versions</param-name>
+        <param-value>@android-webpki-versions@</param-value>
+    </context-param>
+
+    <context-param>
+        <description>Key Password</description>
+        <param-name>key_password</param-name>
+        <param-value>@key-password@</param-value>
+    </context-param>
+ 
+    <context-param>
+        <description>Key Provider Base URL</description>
+        <param-name>keyprov_base_url</param-name>
+        <param-value>@keyprov-base-url@</param-value>
+    </context-param>
+
+    <context-param>
+        <description>Loading of Bouncycastle (EJBCA or Tomcat)</description>
+        <param-name>bouncycastle_first</param-name>
+        <param-value>@bouncycastle-first@</param-value>
+    </context-param>
+
+    <context-param>
+        <description>TLS certificate</description>
+        <param-name>server_tls_certificate</param-name>
+        <param-value>@server-tls-certificate@</param-value>
+    </context-param>
+
+    <listener>
+        <listener-class>org.webpki.mobileid.keyprovider.KeyProviderService</listener-class>
+    </listener>
+
+    <servlet>
+        <servlet-name>KeyProviderServlet</servlet-name>
+        <servlet-class>org.webpki.mobileid.keyprovider.KeyProviderServlet</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>KeyProviderInitServlet</servlet-name>
+        <servlet-class>org.webpki.mobileid.keyprovider.KeyProviderInitServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>KeyProviderServlet</servlet-name>
+        <url-pattern>/getkeys</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>KeyProviderInitServlet</servlet-name>
+        <url-pattern>/init</url-pattern>
+    </servlet-mapping>
+
+    <security-constraint>
+      <web-resource-collection>
+        <web-resource-name>The app</web-resource-name>
+        <url-pattern>/*</url-pattern>
+      </web-resource-collection>
+      <user-data-constraint>
+        <transport-guarantee>CONFIDENTIAL</transport-guarantee>
+      </user-data-constraint>
+    </security-constraint>
+    
+</web-app>
