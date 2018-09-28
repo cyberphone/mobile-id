@@ -1,4 +1,5 @@
 /bin/
 .tmp/
 /dist/
-/locale.french
+/locale.*
+

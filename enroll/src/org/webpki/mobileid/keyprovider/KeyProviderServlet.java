@@ -103,7 +103,7 @@ public class KeyProviderServlet extends HttpServlet {
     
     void keygen2JSONBody(HttpServletResponse response, JSONEncoder object) throws IOException {
         byte[] jsonData = object.serializeJSONDocument(JSONOutputFormats.PRETTY_PRINT);
-        if (KeyProviderService.isDebug()) {
+        if (KeyProviderService.logging) {
             log.info("Sent message\n" + new String(jsonData, "UTF-8"));
         }
         response.setContentType(JSON_CONTENT_TYPE);
@@ -120,11 +120,9 @@ public class KeyProviderServlet extends HttpServlet {
                                          8,
                                          3,
                                          null);
-        
-        ServerState.Key key = 
-                    keygen2State.createKey(AppUsage.SIGNATURE,
-                                           new KeySpecifier(KeyAlgorithms.NIST_P_256),
-                                           standardPinPolicy);
+        keygen2State.createKey(AppUsage.SIGNATURE,
+                               new KeySpecifier(KeyAlgorithms.NIST_P_256),
+                               standardPinPolicy);
         keygen2JSONBody(response, 
                         new KeyCreationRequestEncoder(keygen2State,
                                                       KeyProviderInitServlet.keygen2EnrollmentUrl));
@@ -198,7 +196,7 @@ public class KeyProviderServlet extends HttpServlet {
             if (!request.getContentType().equals(JSON_CONTENT_TYPE)) {
                 throw new IOException("Wrong \"Content-Type\": " + request.getContentType());
             }
-            if (KeyProviderService.isDebug()) {
+            if (KeyProviderService.logging) {
                 log.info("Received message:\n" + new String(jsonData, "UTF-8"));
             }
             JSONDecoder jsonObject = KeyProviderService.keygen2JSONCache.parse(jsonData);
@@ -248,6 +246,8 @@ public class KeyProviderServlet extends HttpServlet {
                   KeyCreationResponseDecoder keyCreationResponse = (KeyCreationResponseDecoder) jsonObject;
                   keygen2State.update(keyCreationResponse);
                   ServerState.Key key = keygen2State.getKeys()[0];
+
+                  // Certification of key starts here
                   String citizenId = "123412341234";
                   String citizenName = "Luke Skywalker";
                   CertSpec certSpec = new CertSpec();
@@ -266,7 +266,7 @@ public class KeyProviderServlet extends HttpServlet {
                   certPath[0] = ca.createCert(certSpec,
                                               issuerName,
                                               serialNumber,
-                                              new Date(),
+                                              new Date(System.currentTimeMillis() - 600000), // Ten minutes backward...
                                               validity.getTime(),
                                               AsymSignatureAlgorithms.ECDSA_SHA256,
                                               new AsymKeySignerInterface() {
@@ -291,7 +291,11 @@ public class KeyProviderServlet extends HttpServlet {
                         }
                   },
                                               key.getPublicKey());
+                  // Certification of key ends here
+
                   key.setCertificatePath(certPath);
+                  
+                  // Personalize the card image
                   key.addLogotype(KeyGen2URIs.LOGOTYPES.CARD, new MIMETypedObject() {
 
                         @Override

@@ -22,16 +22,31 @@ import java.io.IOException;
 import javax.servlet.ServletException;
 
 import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class HomeServlet extends HttpServlet {
+public class LoginServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
+    
+    static final String LOGIN_TARGET = "target";
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
-        HTML.homePage(response, UserData.getUserData(request));
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            session.invalidate();
+        }
+        HTML.loginPage(response, request.getParameter("target"));
+    }
+
+    @Override
+    public void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws IOException, ServletException {
+        HttpSession session = request.getSession(true);
+        session.setAttribute(UserData.USER_DATA, new UserData("Luke Skywalker", "433456656666"));
+        response.sendRedirect(request.getParameter(LOGIN_TARGET));
     }
 }

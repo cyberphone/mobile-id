@@ -14,15 +14,12 @@
  *  limitations under the License.
  *
  */
-package org.webpki.mobileid.keyprovider;
+package org.webpki.mobileid.egovernment;
 
 import java.io.IOException;
 import java.io.InputStream;
-
-import java.security.cert.X509Certificate;
-
-import java.util.Vector;
-
+import java.security.GeneralSecurityException;
+import java.security.KeyStore;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -31,63 +28,46 @@ import javax.servlet.ServletContextListener;
 
 import org.webpki.crypto.CertificateUtil;
 import org.webpki.crypto.CustomCryptoProvider;
-
+import org.webpki.crypto.KeyStoreVerifier;
 import org.webpki.json.JSONArrayReader;
 import org.webpki.json.JSONDecoderCache;
 import org.webpki.json.JSONObjectReader;
 import org.webpki.json.JSONParser;
-
+import org.webpki.json.JSONX509Verifier;
 import org.webpki.keygen2.CredentialDiscoveryResponseDecoder;
 import org.webpki.keygen2.InvocationResponseDecoder;
 import org.webpki.keygen2.KeyCreationResponseDecoder;
 import org.webpki.keygen2.ProvisioningFinalizationResponseDecoder;
 import org.webpki.keygen2.ProvisioningInitializationResponseDecoder;
-
 import org.webpki.util.ArrayUtil;
-
 import org.webpki.webutil.InitPropertyReader;
 
-public class KeyProviderService extends InitPropertyReader implements ServletContextListener {
+public class eGovernmentService extends InitPropertyReader implements ServletContextListener {
 
-    static Logger logger = Logger.getLogger(KeyProviderService.class.getCanonicalName());
+    static Logger logger = Logger.getLogger(eGovernmentService.class.getCanonicalName());
     
     static final String VERSION_CHECK         = "android_webpki_versions";
 
     static final String KEYSTORE_PASSWORD     = "key_password";
 
-    static final String TLS_CERTIFICATE       = "server_tls_certificate";
-
     static final String BOUNCYCASTLE_FIRST    = "bouncycastle_first";
+
+    static final String ISSUER_JSON           = "issuer";
 
     static final String LOGGING               = "logging";
 
     static JSONDecoderCache keygen2JSONCache;
     
-    static X509Certificate tlsCertificate;
-
     static String[] grantedVersions;
-
+    
+    static JSONX509Verifier trustedIssuers;
+    
     static boolean logging;
 
-    static Vector<IssuerHolder> issuers = new Vector<IssuerHolder>();
-    
-    class IssuerHolder {
-        
-        private final static String ISSUER_JSON = "issuer";
-        
-        KeyStoreEnumerator keyManagementKey;
-        KeyStoreEnumerator subCA;
-        String cardImage;
-
-        public IssuerHolder(JSONObjectReader issuerObject) throws IOException {
-            String issuerBase = issuerObject.getString(ISSUER_JSON);
-            keyManagementKey = new KeyStoreEnumerator(getResource(issuerBase + "-kmk.p12"),
-                                                        getPropertyString(KEYSTORE_PASSWORD));
-            subCA = new KeyStoreEnumerator(getResource(issuerBase + "-sub-ca.p12"),
-                                           getPropertyString(KEYSTORE_PASSWORD));
-            cardImage = getResourceString("card-" + issuerBase + ".svg");
-            issuerObject.checkForUnread();
-        }
+    void addIssuer(KeyStore keyStore, JSONObjectReader issuerObject) throws IOException, GeneralSecurityException {
+        String issuerBase = issuerObject.getString(ISSUER_JSON);
+        keyStore.setCertificateEntry (issuerBase,
+                CertificateUtil.getCertificateFromBlob(getResourceBytes(issuerBase + "-root-ca.cer")));        
     }
 
     InputStream getResource(String name) throws IOException {
@@ -105,7 +85,7 @@ public class KeyProviderService extends InitPropertyReader implements ServletCon
     String getResourceString(String name) throws IOException {
         return new String(getResourceBytes(name), "UTF-8");
     }
-
+    
     JSONObjectReader readJSONFile(String name) throws IOException {
         return JSONParser.parse(getResourceBytes(name));        
     }
@@ -131,12 +111,15 @@ public class KeyProviderService extends InitPropertyReader implements ServletCon
             keygen2JSONCache.addToCache(ProvisioningFinalizationResponseDecoder.class);
 
             ////////////////////////////////////////////////////////////////////////////////////////////
-            // Issuers
+            // Trusted issuers
             ////////////////////////////////////////////////////////////////////////////////////////////
             JSONArrayReader issuerArray = readJSONFile("issuers.json").getJSONArrayReader();
+            KeyStore keyStore = KeyStore.getInstance("JKS");
+            keyStore.load (null, null);
             do {
-                issuers.add(new IssuerHolder(issuerArray.getObject()));
+                addIssuer(keyStore, issuerArray.getObject());
             } while (issuerArray.hasMore());
+            trustedIssuers = new JSONX509Verifier(new KeyStoreVerifier(keyStore));
 
             ////////////////////////////////////////////////////////////////////////////////////////////
             // Android WebPKI version check
@@ -144,16 +127,11 @@ public class KeyProviderService extends InitPropertyReader implements ServletCon
             grantedVersions = getPropertyStringList(VERSION_CHECK);
  
             ////////////////////////////////////////////////////////////////////////////////////////////
-            // Get TLS server certificate
-            ////////////////////////////////////////////////////////////////////////////////////////////
-            tlsCertificate = CertificateUtil.getCertificateFromBlob(getResourceBytes(getPropertyString(TLS_CERTIFICATE)));
-
-            ////////////////////////////////////////////////////////////////////////////////////////////
             // Are we logging?
             ////////////////////////////////////////////////////////////////////////////////////////////
             logging = getPropertyBoolean(LOGGING);
 
-            logger.info("Mobile ID KeyProvider Server initiated: " + tlsCertificate.getSubjectX500Principal().getName());
+            logger.info("Mobile ID eGovernment server initiated");
         } catch (Exception e) {
             logger.log(Level.SEVERE, "********\n" + e.getMessage() + "\n********", e);
         }

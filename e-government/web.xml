@@ -29,33 +29,53 @@
     </context-param>
 
     <context-param>
-        <description>TLS certificate</description>
-        <param-name>server_tls_certificate</param-name>
-        <param-value>@server-tls-certificate@</param-value>
+        <description>Logging</description>
+        <param-name>logging</param-name>
+        <param-value>@logging@</param-value>
     </context-param>
 
     <listener>
-        <listener-class>org.webpki.mobileid.keyprovider.KeyProviderService</listener-class>
+        <listener-class>org.webpki.mobileid.egovernment.eGovernmentService</listener-class>
     </listener>
 
     <servlet>
-        <servlet-name>KeyProviderServlet</servlet-name>
-        <servlet-class>org.webpki.mobileid.keyprovider.KeyProviderServlet</servlet-class>
+        <servlet-name>DeclarationServlet</servlet-name>
+        <servlet-class>org.webpki.mobileid.egovernment.DeclarationServlet</servlet-class>
     </servlet>
 
     <servlet>
-        <servlet-name>KeyProviderInitServlet</servlet-name>
-        <servlet-class>org.webpki.mobileid.keyprovider.KeyProviderInitServlet</servlet-class>
+        <servlet-name>LoginServlet</servlet-name>
+        <servlet-class>org.webpki.mobileid.egovernment.LoginServlet</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>LogoutServlet</servlet-name>
+        <servlet-class>org.webpki.mobileid.egovernment.LogoutServlet</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>HomeServlet</servlet-name>
+        <servlet-class>org.webpki.mobileid.egovernment.HomeServlet</servlet-class>
     </servlet>
 
     <servlet-mapping>
-        <servlet-name>KeyProviderServlet</servlet-name>
-        <url-pattern>/getkeys</url-pattern>
+        <servlet-name>DeclarationServlet</servlet-name>
+        <url-pattern>/declaration</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>
-        <servlet-name>KeyProviderInitServlet</servlet-name>
-        <url-pattern>/init</url-pattern>
+        <servlet-name>HomeServlet</servlet-name>
+        <url-pattern>/home</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>LoginServlet</servlet-name>
+        <url-pattern>/login</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>LogoutServlet</servlet-name>
+        <url-pattern>/logout</url-pattern>
     </servlet-mapping>
 
     <security-constraint>
