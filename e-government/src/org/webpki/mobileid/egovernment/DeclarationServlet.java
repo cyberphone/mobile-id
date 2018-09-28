@@ -35,7 +35,7 @@ public class DeclarationServlet extends ProtectedServlet {
         if (userData == null) {
             return;
         }
-        HTML.declarationPage(response);
+        HTML.declarationPage(response, userData);
     }
 
     @Override

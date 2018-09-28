@@ -115,7 +115,7 @@ public class eGovernmentService extends InitPropertyReader implements ServletCon
             ////////////////////////////////////////////////////////////////////////////////////////////
             JSONArrayReader issuerArray = readJSONFile("issuers.json").getJSONArrayReader();
             KeyStore keyStore = KeyStore.getInstance("JKS");
-            keyStore.load (null, null);
+            keyStore.load(null, null);
             do {
                 addIssuer(keyStore, issuerArray.getObject());
             } while (issuerArray.hasMore());

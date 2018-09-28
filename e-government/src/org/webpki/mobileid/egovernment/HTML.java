@@ -33,7 +33,7 @@ public class HTML {
     static final String FONT_VERDANA = "Verdana,'Bitstream Vera Sans','DejaVu Sans',Arial,'Liberation Sans'";
     static final String FONT_ARIAL = "Arial,'Liberation Sans',Verdana,'Bitstream Vera Sans','DejaVu Sans'";
     
-    static String getHTML(String javascript, String bodyscript, String box, UserData userData) {
+    static String getHTML(String javascript, String onloadCall, String content, UserData userData) {
         StringBuilder s = new StringBuilder(
             "<!DOCTYPE html>"+
             "<html><head>" +
@@ -41,26 +41,46 @@ public class HTML {
             "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">" +
             "<link rel=\"icon\" href=\"favicon.png\" sizes=\"192x192\">"+
             "<link rel=\"stylesheet\" type=\"text/css\" href=\"style.css\">" +
-            "<title>Mobile ID/eGovernment Demo</title>");
-
+            "<title>Mobile ID/eGovernment Demo</title>" +
+            "<script type=\"text/javascript\">\n" +
+            "\"use strict\";\n" +
+            "function initUi() {\n" +
+            "  var content = document.getElementById('content');\n" +
+            "  if (content) {\n" +
+            "    content.style.top = (window.innerHeight - content.offsetHeight) / 2 + 'px';\n" +
+            "    content.style.left = (window.innerWidth - content.offsetWidth) / 2 + 'px';\n" +
+            "  }\n" +
+            "}\n" +
+            "window.addEventListener('resize', () => { initUi() });\n" +
+            "function initApplication() {\n" +
+            "  initUi();\n");
+        if (onloadCall != null) {
+            s.append("  ")
+             .append(onloadCall)
+             .append(";\n");
+        }
+        s.append("}\n");
         if (javascript != null) {
-            s.append("<script type=\"text/javascript\">")
-             .append(javascript)
-             .append("</script>");
+            s.append(javascript)
+             .append("\n");
         }
-        s.append("</head><body");
-        if (bodyscript != null) {
-            if (bodyscript.charAt(0) != '>') {
-                s.append(' ');
-            }
-            s.append(bodyscript);
+        s.append(
+            "</script></head><body onload=\"initApplication()\">" +
+            "<img onclick=\"document.location.href='home'\"" +
+            " title=\"Home sweet home...\" style=\"cursor:pointer;position:absolute;top:15px;" +
+            "left:15px;z-index:5;visibility:visible;width:120px\" src=\"images/egovlogo.svg\">");
+        if (userData != null) {
+            s.append(
+                "<table style=\"position:absolute;top:15px;right:15px;z-index:5;visibility:visible\">" +
+                "<tr><td class=\"login\"><div>")
+             .append(userData.user)
+             .append(
+                "</div><div>")
+             .append(userData.id)
+             .append("</div></td><td>&nbsp;</td><td class=\"logout\" onclick=\"document.location.href='logout'\">Logout</td></tr></table>");
         }
-        s.append("><img onclick=\"document.location.href='home"
-            + "'\" title=\"Home sweet home...\" style=\"cursor:pointer;position:absolute;top:15px;"
-            + "left:15px;z-index:5;visibility:visible;width:120px\" src=\"images/egovlogo.svg\">");
-        s.append("<table cellpadding=\"0\" cellspacing=\"0\" width=\"100%\" height=\"100%\">")
-         .append(box)
-         .append("</table></body></html>");
+        s.append(content)
+         .append("</body></html>");
         return s.toString();
     }
     
@@ -76,8 +96,26 @@ public class HTML {
     }
 
     static void homePage(HttpServletResponse response, UserData userData) throws IOException, ServletException {
-        HTML.output(response, HTML.getHTML(null, null,
-                "<tr><td>Home</td></tr>", userData));
+        StringBuilder s = new StringBuilder("<table id=\"content\" style=\"position:absolute\">" +
+                "<tr><td style=\"text-align:center;padding-bottom:5pt;font-size:14pt\">Select Service</td></tr>" +
+                "<tr><td style=\"text-align:center\"><table style=\"display:inline-block\">");
+        addService(s, "declaration",    "Income Declaration");
+        addService(s, "driverslicense", "Driver's License");
+        addService(s, "submitmessage",  "Submit Message");
+        HTML.output(response, 
+                    HTML.getHTML(null, 
+                                 null, 
+                                 s.append("</table></td></tr></table>").toString(), userData));
+    }
+
+    static void addService(StringBuilder s, String service, String description) {
+        s.append("<tr><td><div class=\"multibtn\" onclick=\"document.location.href='")
+         .append(service)
+         .append("'\" title=\"")
+         .append(description)
+         .append("\">")
+         .append(description)
+         .append("</div></td></tr>");
     }
 
     static String javaScript(String string) {
@@ -96,19 +134,37 @@ public class HTML {
         return s.toString();
     }
 
-    static void declarationPage(HttpServletResponse response) {
-        // TODO Auto-generated method stub
-        
+    static void declarationPage(HttpServletResponse response, UserData userData) throws IOException, ServletException {
+        resultPage(response, userData,
+            "<table id=\"content\" style=\"position:absolute\">" +
+            "<tr><td style=\"text-align:center;padding-bottom:10pt;font-size:14pt\">Declaration</td></tr>" +
+            "</table>");    
     }
 
     static void loginPage(HttpServletResponse response, String target) throws IOException, ServletException {
-        resultPage(response, null, "<tr><td>" + target + "</td></tr>");
+        StringBuilder s = new StringBuilder(
+            "<form name=\"shoot\" method=\"POST\" action=\"login\">" +
+            "<input type=\"hidden\" name=\"" + LoginServlet.LOGIN_TARGET + "\" value=\"")
+        .append(target)
+        .append(
+            "\"><table id=\"content\" style=\"position:absolute\">" +
+            "<tr><td style=\"text-align:center;padding-bottom:15pt;font-size:14pt\">This Service Requires Login</td></tr>" +
+            "<tr><td style=\"text-align:center\"><div class=\"stdbtn\" onclick=\"document.forms.shoot.submit()\">" +
+            "<span style=\"color:blue\">Mobile</span><span style=\"color:red\">ID</span> Login</div></td></tr>" +
+            "</table></form>");
+        System.out.println(s.toString());
+        HTML.output(response, HTML.getHTML(STICK_TO_HOME_URL, null, s.toString(), null));
     }
 
     static void resultPage(HttpServletResponse response,
                            UserData userData,
                            String html) throws IOException, ServletException {
         HTML.output(response, HTML.getHTML(STICK_TO_HOME_URL, null, html, userData));
+    }
+
+    static void logoutPage(HttpServletResponse response) throws IOException, ServletException {
+        resultPage(response, null,
+                "<table id=\"content\" style=\"position:absolute\"><tr><td>Bye...</td></tr></table>");
     }
 
     /*
