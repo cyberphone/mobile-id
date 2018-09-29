@@ -78,7 +78,7 @@ public class HTML {
                 id.append(userData.id.substring(q, q + 4));
             }
             s.append(
-                "<table style=\"position:absolute;top:15px;right:15px;z-index:5;visibility:visible\">" +
+                "<table style=\"position:absolute;top:15px;right:15px;z-index:6;visibility:visible\">" +
                 "<tr><td class=\"login\"><div style=\"padding:3px 0px 2px 0px\">")
              .append(userData.user)
              .append(
@@ -92,6 +92,7 @@ public class HTML {
     }
     
     static void output(HttpServletResponse response, String html) throws IOException, ServletException {
+        System.out.println(html);
         response.setContentType("text/html; charset=utf-8");
         response.setHeader("Pragma", "No-Cache");
         response.setDateHeader("EXPIRES", 0);
@@ -146,9 +147,11 @@ public class HTML {
 
     static void declarationPage(HttpServletResponse response, UserData userData) throws IOException, ServletException {
         resultPage(response, userData,
+            "<form name=\"shoot\" method=\"POST\" action=\"declaration\">" +
             "<table id=\"content\" style=\"position:absolute\">" +
             "<tr><td class=\"header\">Declaration</td></tr>" +
-            "</table>");    
+            "<tr><td style=\"text-align:center\"><div class=\"stdbtn\" onclick=\"document.forms.shoot.submit()\">Submit</div></td></tr>" +
+            "</table></form>");    
     }
 
     static void loginPage(HttpServletResponse response, String target) throws IOException, ServletException {
@@ -162,7 +165,6 @@ public class HTML {
             "<tr><td style=\"text-align:center\"><div class=\"stdbtn\" onclick=\"document.forms.shoot.submit()\">" +
             "<span style=\"color:blue\">Mobile</span><span style=\"color:red\">ID</span> Login</div></td></tr>" +
             "</table></form>");
-        System.out.println(s.toString());
         HTML.output(response, HTML.getHTML(STICK_TO_HOME_URL, null, s.toString(), null));
     }
 
