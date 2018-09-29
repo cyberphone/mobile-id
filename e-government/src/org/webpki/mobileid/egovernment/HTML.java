@@ -36,13 +36,13 @@ public class HTML {
     static String getHTML(String javascript, String onloadCall, String content, UserData userData) {
         StringBuilder s = new StringBuilder(
             "<!DOCTYPE html>"+
-            "<html><head>" +
+            "<html lang=\"en\"><head>" +
             "<meta charset=\"utf-8\">" +
             "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">" +
             "<link rel=\"icon\" href=\"favicon.png\" sizes=\"192x192\">"+
             "<link rel=\"stylesheet\" type=\"text/css\" href=\"style.css\">" +
             "<title>Mobile ID/eGovernment Demo</title>" +
-            "<script type=\"text/javascript\">\n" +
+            "<script>\n" +
             "\"use strict\";\n" +
             "function initUi() {\n" +
             "  var content = document.getElementById('content');\n" +
@@ -66,17 +66,24 @@ public class HTML {
         }
         s.append(
             "</script></head><body onload=\"initApplication()\">" +
-            "<img onclick=\"document.location.href='home'\"" +
+            "<img alt=\"home\" onclick=\"document.location.href='home'\"" +
             " title=\"Home sweet home...\" style=\"cursor:pointer;position:absolute;top:15px;" +
             "left:15px;z-index:5;visibility:visible;width:120px\" src=\"images/egovlogo.svg\">");
         if (userData != null) {
+            StringBuilder id = new StringBuilder();
+            for (int q = 0; q < 12; q += 4) {
+                if (q != 0) {
+                    id.append('\u2009');
+                }
+                id.append(userData.id.substring(q, q + 4));
+            }
             s.append(
                 "<table style=\"position:absolute;top:15px;right:15px;z-index:5;visibility:visible\">" +
-                "<tr><td class=\"login\"><div>")
+                "<tr><td class=\"login\"><div style=\"padding:3px 0px 2px 0px\">")
              .append(userData.user)
              .append(
-                "</div><div>")
-             .append(userData.id)
+                "</div><div style=\"padding:2px 0px 3px 0px\">ID:\u2009")
+             .append(id)
              .append("</div></td><td>&nbsp;</td><td class=\"logout\" onclick=\"document.location.href='logout'\">Logout</td></tr></table>");
         }
         s.append(content)
@@ -97,23 +104,26 @@ public class HTML {
 
     static void homePage(HttpServletResponse response, UserData userData) throws IOException, ServletException {
         StringBuilder s = new StringBuilder("<table id=\"content\" style=\"position:absolute\">" +
-                "<tr><td style=\"text-align:center;padding-bottom:5pt;font-size:14pt\">Select Service</td></tr>" +
+                "<tr><td class=\"header\">Select Service</td></tr>" +
                 "<tr><td style=\"text-align:center\"><table style=\"display:inline-block\">");
-        addService(s, "declaration",    "Income Declaration");
-        addService(s, "driverslicense", "Driver's License");
-        addService(s, "submitmessage",  "Submit Message");
+        addService(s, "declaration",    "Income Declaration", true);
+        addService(s, "taxreturns",     "Tax Returns",        false);
+        addService(s, "submitmessage",  "Submit Message",     false);
         HTML.output(response, 
                     HTML.getHTML(null, 
                                  null, 
                                  s.append("</table></td></tr></table>").toString(), userData));
     }
 
-    static void addService(StringBuilder s, String service, String description) {
+    static void addService(StringBuilder s, String service, String description, boolean first) {
         s.append("<tr><td><div class=\"multibtn\" onclick=\"document.location.href='")
          .append(service)
          .append("'\" title=\"")
-         .append(description)
-         .append("\">")
+         .append(description);
+        if (first) {
+            s.append("\" style=\"margin-top:0px");
+        }
+        s.append("\">")
          .append(description)
          .append("</div></td></tr>");
     }
@@ -137,7 +147,7 @@ public class HTML {
     static void declarationPage(HttpServletResponse response, UserData userData) throws IOException, ServletException {
         resultPage(response, userData,
             "<table id=\"content\" style=\"position:absolute\">" +
-            "<tr><td style=\"text-align:center;padding-bottom:10pt;font-size:14pt\">Declaration</td></tr>" +
+            "<tr><td class=\"header\">Declaration</td></tr>" +
             "</table>");    
     }
 
@@ -148,7 +158,7 @@ public class HTML {
         .append(target)
         .append(
             "\"><table id=\"content\" style=\"position:absolute\">" +
-            "<tr><td style=\"text-align:center;padding-bottom:15pt;font-size:14pt\">This Service Requires Login</td></tr>" +
+            "<tr><td class=\"header\">This Service Requires Login</td></tr>" +
             "<tr><td style=\"text-align:center\"><div class=\"stdbtn\" onclick=\"document.forms.shoot.submit()\">" +
             "<span style=\"color:blue\">Mobile</span><span style=\"color:red\">ID</span> Login</div></td></tr>" +
             "</table></form>");
@@ -164,7 +174,7 @@ public class HTML {
 
     static void logoutPage(HttpServletResponse response) throws IOException, ServletException {
         resultPage(response, null,
-                "<table id=\"content\" style=\"position:absolute\"><tr><td>Bye...</td></tr></table>");
+                "<table id=\"content\" style=\"position:absolute\"><tr><td class=\"header\">Thank you, welcome back!</td></tr></table>");
     }
 
     /*

@@ -19,10 +19,21 @@
 
 .login, .logout {
   cursor:pointer;
+  border-radius:5pt;
   text-align:middle;
-  border-color:grey;
+  border-color:#a9a9a9;
   border-style:solid;
-  border-width:1pt;
+  border-width:1px;
+  padding-left:7pt;
+  padding-right:7pt;
+}
+
+.login {
+  background:linear-gradient(to bottom, #d0f0d0, #f0fff0, #d0f0d0);
+}
+
+.logout {
+  background:linear-gradient(to bottom, #ffe0d0, #fffff0, #ffe0d0);
 }
 
 .tftable {
@@ -67,6 +78,12 @@ li {
   text-align:right;font-weight:normal;font-size:10pt;font-family:Arial,'Liberation Sans',Verdana,'Bitstream Vera Sans','DejaVu Sans';
 }
 
+.header {
+   padding-bottom:15pt;
+   text-align:center;
+   font-size:14pt;
+}
+
 .stdbtn, .multibtn {
   font-size:11pt;
   font-family:Arial,'Liberation Sans',Verdana,'Bitstream Vera Sans','DejaVu Sans';
@@ -93,6 +110,15 @@ html, body {
 }
 
 @media (max-width:768px) {
+  .login, .logout {
+    font-size:8pt;
+    border-radius:3pt;
+  }
+
+  .header {
+    padding-bottom:10pt;
+    font-size:12pt;
+  }
 
   .tftable th {
     font-size:8pt;
