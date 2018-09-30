@@ -60,6 +60,7 @@ body {
 }
 
 .sessionview {
+  border-collapse:collapse;
   background-color:white;
   position:absolute;
   left:5pt;
@@ -91,10 +92,18 @@ li {
   text-align:right;font-weight:normal;font-size:10pt;font-family:Arial,'Liberation Sans',Verdana,'Bitstream Vera Sans','DejaVu Sans';
 }
 
+.dialog, .header {
+  font-size:14pt;
+}
+
+.dialog {
+  display:inline-block;
+  vertical-align:middle;
+}
+
 .header {
-   padding-bottom:15pt;
-   text-align:center;
-   font-size:14pt;
+  padding-bottom:15pt;
+  text-align:center;
 }
 
 .emailmsg {
@@ -135,11 +144,13 @@ li {
     border-radius:3pt;
   }
 
-  .header {
-    padding-bottom:10pt;
+  .header, .dialog {
     font-size:12pt;
   }
-
+  .header {
+    padding-bottom:10pt;
+  }
+  
   .tftable th {
     font-size:8pt;
     padding:3pt 6pt;

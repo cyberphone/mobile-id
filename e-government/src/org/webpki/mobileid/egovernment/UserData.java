@@ -18,6 +18,7 @@
 package org.webpki.mobileid.egovernment;
 
 import java.io.Serializable;
+import java.security.cert.X509Certificate;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -30,10 +31,12 @@ public class UserData implements Serializable {
     
     String user;
     String id;
+    X509Certificate certificate;
     
-    public UserData(String user, String id) {
+    public UserData(String user, String id, X509Certificate certificate) {
         this.user = user;
         this.id =id;
+        this.certificate = certificate;
     }
 
     static UserData getUserData(HttpServletRequest request) {

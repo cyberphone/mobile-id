@@ -32,11 +32,18 @@ public class ShowSessionServlet extends HttpServlet {
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
+        StringBuilder s = new StringBuilder(
+            "<div style=\"background-color:#f8f8f8\">" +
+            "<div class=\"dialog\"><img src=\"images/x.svg\" alt=\"x\" title=\"Close session wiew\""+
+            " onclick=\"document.getElementById('session').style.visibility='hidden'\"></div>" + 
+            "<div class=\"dialog\">&nbsp;&nbsp;Session Data</div>" +
+            "</div><div>");
         UserData userData = UserData.getUserData(request);
         if (userData == null) {
-            HTML.output(response, "No session");
-            return;
+            s.append("The session appears to have terminated");
+        } else {
+            s.append("<pre>" + userData.certificate.toString() + "</pre>");
         }
-        HTML.output(response, "<pre>" + eGovernmentService.demoCertificate.toString() + "</pre>");
+        HTML.output(response, s.append("</div>").toString());
     }
 }

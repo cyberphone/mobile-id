@@ -19,12 +19,16 @@ package org.webpki.mobileid.egovernment;
 
 import java.io.IOException;
 
+import java.security.cert.X509Certificate;
+
 import javax.servlet.ServletException;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.webpki.crypto.CertificateInfo;
 
 public class LoginServlet extends HttpServlet {
 
@@ -46,7 +50,12 @@ public class LoginServlet extends HttpServlet {
     public void doPost(HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
         HttpSession session = request.getSession(true);
-        session.setAttribute(UserData.USER_DATA, new UserData("Luke Skywalker", "433456656666"));
+        X509Certificate certificate = eGovernmentService.demoCertificate;
+        CertificateInfo certInfo = new CertificateInfo(certificate);
+        session.setAttribute(UserData.USER_DATA, 
+                             new UserData(certInfo.getSubjectCommonName(), 
+                                          certInfo.getSubjectSerialNumber(),
+                                          certificate));
         response.sendRedirect(request.getParameter(LOGIN_TARGET));
     }
 }
