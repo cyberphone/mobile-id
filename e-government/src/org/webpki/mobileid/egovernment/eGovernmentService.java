@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.security.GeneralSecurityException;
 import java.security.KeyStore;
+import java.security.cert.X509Certificate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -63,6 +64,8 @@ public class eGovernmentService extends InitPropertyReader implements ServletCon
     static JSONX509Verifier trustedIssuers;
     
     static boolean logging;
+
+    static X509Certificate demoCertificate;
 
     void addIssuer(KeyStore keyStore, JSONObjectReader issuerObject) throws IOException, GeneralSecurityException {
         String issuerBase = issuerObject.getString(ISSUER_JSON);
@@ -130,6 +133,11 @@ public class eGovernmentService extends InitPropertyReader implements ServletCon
             // Are we logging?
             ////////////////////////////////////////////////////////////////////////////////////////////
             logging = getPropertyBoolean(LOGGING);
+
+            ////////////////////////////////////////////////////////////////////////////////////////////
+            // Demo certificate in the waiting for the full solution
+            ////////////////////////////////////////////////////////////////////////////////////////////
+            demoCertificate = CertificateUtil.getCertificateFromBlob(getResourceBytes("lukeskywalker.cer"));
 
             logger.info("Mobile ID eGovernment server initiated");
         } catch (Exception e) {

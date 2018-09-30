@@ -18,15 +18,13 @@
 package org.webpki.mobileid.egovernment;
 
 import java.io.IOException;
-
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.GregorianCalendar;
 
 import javax.servlet.ServletException;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import org.webpki.util.ISODateTime;
 
 public class DeclarationServlet extends ProtectedServlet {
 
@@ -41,27 +39,26 @@ public class DeclarationServlet extends ProtectedServlet {
         if (userData == null) {
             return;
         }
-        HTML.declarationPage(response, userData);
+        HTML.declarationPage(response, userData, new GregorianCalendar().get(GregorianCalendar.YEAR - 1));
     }
 
     @Override
     void protectedPost(UserData userData, 
                        HttpServletRequest request,
                        HttpServletResponse response) throws IOException, ServletException {
+        String emailSubject = userData.user.toLowerCase().replace(' ', '.');
         StringBuilder s = new StringBuilder("<table id=\"content\" style=\"position:absolute\">" +
              "<tr><td class=\"header\">Declaration Received</td></tr>" +
              "<tr><td><table class=\"tftable\"><tr><th>Time Stamp</th><td>")
-        .append(ISODateTime.formatDateTime(new GregorianCalendar(), true)
-                     .replace('T', ' ').replace("Z", " UTC"))
+        .append(new SimpleDateFormat("yyyy-MM-dd' 'HH:mm:ss' CET'").format(new Date()))
         .append("</td></tr><tr><th>Reference ID</th><td>")
         .append(String.format("%08d", referenceId++))
         .append("</td></tr></table></td></tr>" +
                 "<tr><td style=\"text-align:center\">" +
-                "<table style=\"display:inline-block;margin-top:10pt;text-align:left\">" +
-                "<tr><td>A confirmation has been sent to:</td></tr>" +
-                "<tr><td><b>")
-        .append("luke.skywalker@gmail.com")
-        .append("</b></td></tr></table></td></tr></table>");
+                "<div class=\"emailmsg\">" +
+                "A confirmation has been sent to:<br><b>")
+        .append(emailSubject)
+        .append("@gmail.com</b></div></td></tr></table>");
         HTML.resultPage(response, userData, s.toString());
     }
 }

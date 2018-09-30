@@ -44,6 +44,21 @@
     </servlet>
 
     <servlet>
+        <servlet-name>TaxReturnsServlet</servlet-name>
+        <servlet-class>org.webpki.mobileid.egovernment.TaxReturnsServlet</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>SubmitMessageServlet</servlet-name>
+        <servlet-class>org.webpki.mobileid.egovernment.SubmitMessageServlet</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>ShowSessionServlet</servlet-name>
+        <servlet-class>org.webpki.mobileid.egovernment.ShowSessionServlet</servlet-class>
+    </servlet>
+
+    <servlet>
         <servlet-name>LoginServlet</servlet-name>
         <servlet-class>org.webpki.mobileid.egovernment.LoginServlet</servlet-class>
     </servlet>
@@ -64,8 +79,18 @@
     </servlet-mapping>
 
     <servlet-mapping>
-        <servlet-name>HomeServlet</servlet-name>
-        <url-pattern>/home</url-pattern>
+        <servlet-name>TaxReturnsServlet</servlet-name>
+        <url-pattern>/taxreturns</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>SubmitMessageServlet</servlet-name>
+        <url-pattern>/submitmessage</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>ShowSessionServlet</servlet-name>
+        <url-pattern>/showsession</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>
@@ -76,6 +101,11 @@
     <servlet-mapping>
         <servlet-name>LogoutServlet</servlet-name>
         <url-pattern>/logout</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>HomeServlet</servlet-name>
+        <url-pattern>/home</url-pattern>
     </servlet-mapping>
 
     <security-constraint>

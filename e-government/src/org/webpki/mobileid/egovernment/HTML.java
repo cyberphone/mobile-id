@@ -60,6 +60,26 @@ public class HTML {
              .append(";\n");
         }
         s.append("}\n");
+        if (userData != null) {
+            s.append(
+                "function showSession() {\n" +
+                "  fetch('showsession', {\n" +
+                "         method: 'GET',\n" +
+                "         credentials: 'same-origin'\n" +
+                "  }).then(function(response) {\n" +
+                "    return response.text();\n" +
+                "  }).then(function(html) {\n" +
+                "    let session = document.getElementById('session');\n" +
+                "    let login = document.getElementById('login');\n" +
+                "    session.style.top = (login.offsetTop + login.offsetHeight / 2) + 'px';\n" +
+                "    session.innerHTML = html;\n" +
+                "    session.style.visibility = 'visible';\n" +
+                "  }).catch(function(error) {\n" +
+                "    console.log('Request failed', error);\n" +
+                "  });\n" + 
+                "}\n");
+              
+        }
         if (javascript != null) {
             s.append(javascript)
              .append("\n");
@@ -78,13 +98,15 @@ public class HTML {
                 id.append(userData.id.substring(q, q + 4));
             }
             s.append(
-                "<table style=\"position:absolute;top:15px;right:15px;z-index:6;visibility:visible\">" +
-                "<tr><td class=\"login\"><div style=\"padding:3px 0px 2px 0px\">")
+                "<div id=\"session\" class=\"sessionview\"></div>" +
+                "<table id=\"login\" style=\"position:absolute;top:15px;right:15px;z-index:6;visibility:visible\">" +
+                "<tr><td class=\"login\" title=\"Click to show session data\" onclick=\"showSession()\">" +
+                "<div style=\"padding:3px 0px 2px 0px\">")
              .append(userData.user)
              .append(
                 "</div><div style=\"padding:2px 0px 3px 0px\">ID:\u2009")
              .append(id)
-             .append("</div></td><td>&nbsp;</td><td class=\"logout\" onclick=\"document.location.href='logout'\">Logout</td></tr></table>");
+             .append("</div></td><td>&nbsp;</td><td class=\"logout\" title=\"Click to logout\" onclick=\"document.location.href='logout'\">Logout</td></tr></table>");
         }
         s.append(content)
          .append("</body></html>");
@@ -145,7 +167,9 @@ public class HTML {
         return s.toString();
     }
 
-    static void declarationPage(HttpServletResponse response, UserData userData) throws IOException, ServletException {
+    static void declarationPage(HttpServletResponse response, 
+                                UserData userData, 
+                                int taxationYear) throws IOException, ServletException {
         resultPage(response, userData,
             "<form name=\"shoot\" method=\"POST\" action=\"declaration\">" +
             "<table id=\"content\" style=\"position:absolute\">" +

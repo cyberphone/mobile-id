@@ -94,6 +94,8 @@
       <zipfileset file="${logotype.dir}/mobileidlogo.svg" prefix="images"/>
       <zipfileset file="../resources/issuers.json" prefix="${class_war_path}"/>
       <zipfileset file="${tls_cert_path}" prefix="${class_war_path}"/>
+<!-- Remove next line and the democert directory when ready... -->
+      <zipfileset file="democert/lukeskywalker.cer" prefix="${class_war_path}"/>
       <fileset dir="web"/>
     </war>
     <copy file="${dist.dir}/${application}" todir="${env.CATALINA_HOME}/webapps" overwrite="true" preservelastmodified="true"/>
