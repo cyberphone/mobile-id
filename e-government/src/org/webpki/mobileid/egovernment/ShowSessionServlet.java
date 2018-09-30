@@ -18,13 +18,14 @@
 package org.webpki.mobileid.egovernment;
 
 import java.io.IOException;
-
 import java.util.Date;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.webpki.crypto.CertificateInfo;
 
 public class ShowSessionServlet extends HttpServlet {
 
@@ -44,14 +45,35 @@ public class ShowSessionServlet extends HttpServlet {
             s.append("The session appears to have terminated");
         } else {
             s.append("<table class=\"tftable\">" +
-                     "<tr><th>Session ID</th><td>")
+                     "<tr><th>Session&nbsp;ID</th><td>")
              .append(userData.sessionId)
              .append(
-                     "</td></tr><tr><th>Start Time</th><td>")
+                     "</td></tr><tr><th>Start&nbsp;Time</th><td>")
              .append(ProtectedServlet.getDateString(new Date(userData.creationTime)))
-             .append("</td></tr></table>");
-//            s.append("<pre>" + userData.certificate.toString() + "</pre>");
+             .append("</td></tr></table>" +
+                     "<div style=\"padding:10pt 0px 3px 0px\">User certificate:</div>" +
+                     "<table class=\"tftable\"");
+            CertificateInfo certInfo = new CertificateInfo(userData.certificate);
+            addEntry(s, "Serial", certInfo.getSerialNumber() +
+                     " (" + certInfo.getSerialNumberInHex() + ")");
+            addEntry(s, "Issuer", certInfo.getIssuer());
+            addEntry(s, "Subject", certInfo.getSubject());
+            addEntry(s, "Validity",
+                     ProtectedServlet.getDateString(userData.certificate.getNotBefore()) + 
+                     " - " +
+                     ProtectedServlet.getDateString(userData.certificate.getNotAfter()));
+            s.append("</table>");
         }
         HTML.output(response, s.append("</div>").toString());
+    }
+
+    private void addEntry(StringBuilder s,
+                          String header,
+                          String argument) {
+        s.append("<tr><th>")
+         .append(header)
+         .append("</th><td>")
+         .append(argument)
+         .append("</td></tr>");
     }
 }
