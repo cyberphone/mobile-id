@@ -18,9 +18,10 @@
 package org.webpki.mobileid.egovernment;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.servlet.ServletException;
-
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -55,5 +56,9 @@ public abstract class ProtectedServlet extends HttpServlet {
             response.sendRedirect("login?" + LoginServlet.LOGIN_TARGET + "=" + path.substring(path.lastIndexOf('/') + 1));
         }
         return userData;
+    }
+
+    static String getDateString(Date dateTime) {
+        return new SimpleDateFormat("yyyy-MM-dd' 'HH:mm:ss' CET'").format(dateTime);
     }
 }

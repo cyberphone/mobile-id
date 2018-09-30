@@ -53,7 +53,8 @@ public class LoginServlet extends HttpServlet {
         X509Certificate certificate = eGovernmentService.demoCertificate;
         CertificateInfo certInfo = new CertificateInfo(certificate);
         session.setAttribute(UserData.USER_DATA, 
-                             new UserData(certInfo.getSubjectCommonName(), 
+                             new UserData(session,
+                                          certInfo.getSubjectCommonName(), 
                                           certInfo.getSubjectSerialNumber(),
                                           certificate));
         response.sendRedirect(request.getParameter(LOGIN_TARGET));

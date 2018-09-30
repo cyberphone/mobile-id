@@ -19,8 +19,9 @@ package org.webpki.mobileid.egovernment;
 
 import java.io.IOException;
 
-import javax.servlet.ServletException;
+import java.util.Date;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -34,15 +35,22 @@ public class ShowSessionServlet extends HttpServlet {
             throws IOException, ServletException {
         StringBuilder s = new StringBuilder(
             "<div style=\"background-color:#f8f8f8\">" +
-            "<div class=\"dialog\"><img src=\"images/x.svg\" alt=\"x\" title=\"Close session wiew\""+
+            "<div class=\"dialog\" style=\"font-size:8pt\"><img src=\"images/x.svg\" class=\"xicon\" alt=\"x\" title=\"Close session wiew\""+
             " onclick=\"document.getElementById('session').style.visibility='hidden'\"></div>" + 
             "<div class=\"dialog\">&nbsp;&nbsp;Session Data</div>" +
-            "</div><div>");
+            "</div><div style=\"padding:10pt;background-color:white\">");
         UserData userData = UserData.getUserData(request);
         if (userData == null) {
             s.append("The session appears to have terminated");
         } else {
-            s.append("<pre>" + userData.certificate.toString() + "</pre>");
+            s.append("<table class=\"tftable\">" +
+                     "<tr><th>Session ID</th><td>")
+             .append(userData.sessionId)
+             .append(
+                     "</td></tr><tr><th>Start Time</th><td>")
+             .append(ProtectedServlet.getDateString(new Date(userData.creationTime)))
+             .append("</td></tr></table>");
+//            s.append("<pre>" + userData.certificate.toString() + "</pre>");
         }
         HTML.output(response, s.append("</div>").toString());
     }

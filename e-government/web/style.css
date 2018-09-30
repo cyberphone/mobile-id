@@ -60,14 +60,12 @@ body {
 }
 
 .sessionview {
-  border-collapse:collapse;
-  background-color:white;
   position:absolute;
   left:5pt;
   visibility:hidden;
   z-index:7;
   border-width:1px;border-style:solid;border-color:#a9a9a9;
-  collapse;box-shadow:3pt 3pt 3pt #d0d0d0;
+  box-shadow:3pt 3pt 3pt #d0d0d0;
 }
 
 a {
@@ -94,6 +92,10 @@ li {
 
 .dialog, .header {
   font-size:14pt;
+}
+
+.xicon {
+  width:24pt;
 }
 
 .dialog {

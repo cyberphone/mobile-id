@@ -95,14 +95,14 @@ public class HTML {
                 if (q != 0) {
                     id.append('\u2009');
                 }
-                id.append(userData.id.substring(q, q + 4));
+                id.append(userData.citizenId.substring(q, q + 4));
             }
             s.append(
                 "<div id=\"session\" class=\"sessionview\"></div>" +
                 "<table id=\"login\" style=\"position:absolute;top:15px;right:15px;z-index:6;visibility:visible\">" +
                 "<tr><td class=\"login\" title=\"Click to show session data\" onclick=\"showSession()\">" +
                 "<div style=\"padding:3px 0px 2px 0px\">")
-             .append(userData.user)
+             .append(userData.userName)
              .append(
                 "</div><div style=\"padding:2px 0px 3px 0px\">ID:\u2009")
              .append(id)

@@ -18,7 +18,7 @@
 package org.webpki.mobileid.egovernment;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
+
 import java.util.Date;
 import java.util.GregorianCalendar;
 
@@ -46,11 +46,11 @@ public class DeclarationServlet extends ProtectedServlet {
     void protectedPost(UserData userData, 
                        HttpServletRequest request,
                        HttpServletResponse response) throws IOException, ServletException {
-        String emailSubject = userData.user.toLowerCase().replace(' ', '.');
+        String emailSubject = userData.userName.toLowerCase().replace(' ', '.');
         StringBuilder s = new StringBuilder("<table id=\"content\" style=\"position:absolute\">" +
              "<tr><td class=\"header\">Declaration Received</td></tr>" +
              "<tr><td><table class=\"tftable\"><tr><th>Time Stamp</th><td>")
-        .append(new SimpleDateFormat("yyyy-MM-dd' 'HH:mm:ss' CET'").format(new Date()))
+        .append(getDateString(new Date()))
         .append("</td></tr><tr><th>Reference ID</th><td>")
         .append(String.format("%08d", referenceId++))
         .append("</td></tr></table></td></tr>" +
