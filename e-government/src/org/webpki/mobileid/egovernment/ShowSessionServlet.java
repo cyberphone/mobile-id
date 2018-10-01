@@ -35,11 +35,11 @@ public class ShowSessionServlet extends HttpServlet {
     public void doGet(HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
         StringBuilder s = new StringBuilder(
-            "<div style=\"background-color:#f8f8f8\">" +
+            "<div>" +
             "<div class=\"dialog\" style=\"font-size:8pt\"><img src=\"images/x.svg\" class=\"xicon\" alt=\"x\" title=\"Close session wiew\""+
             " onclick=\"document.getElementById('session').style.visibility='hidden'\"></div>" + 
-            "<div class=\"dialog\">&nbsp;&nbsp;Session Data</div>" +
-            "</div><div style=\"padding:10pt;background-color:white\">");
+            "<div class=\"dialog\">&nbsp;Session Data</div>" +
+            "</div><div style=\"padding:10pt\">");
         UserData userData = UserData.getUserData(request);
         if (userData == null) {
             s.append("The session appears to have terminated");
@@ -52,7 +52,7 @@ public class ShowSessionServlet extends HttpServlet {
              .append(ProtectedServlet.getDateString(new Date(userData.creationTime)))
              .append("</td></tr></table>" +
                      "<div style=\"padding:10pt 0px 3px 0px\">User certificate:</div>" +
-                     "<table class=\"tftable\"");
+                     "<table class=\"tftable\">");
             CertificateInfo certInfo = new CertificateInfo(userData.certificate);
             addEntry(s, "Serial", certInfo.getSerialNumber() +
                      " (" + certInfo.getSerialNumberInHex() + ")");

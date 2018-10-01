@@ -64,8 +64,8 @@ body {
   left:5pt;
   visibility:hidden;
   z-index:7;
-  border-width:1px;border-style:solid;border-color:#a9a9a9;
-  box-shadow:3pt 3pt 3pt #d0d0d0;
+  background-color:white;
+  border-width:1px;border-style:solid;border-color:#007fff;
 }
 
 a {
