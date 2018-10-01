@@ -47,8 +47,12 @@ public class HTML {
             "function initUi() {\n" +
             "  var content = document.getElementById('content');\n" +
             "  if (content) {\n" +
-            "    content.style.top = (window.innerHeight - content.offsetHeight) / 2 + 'px';\n" +
-            "    content.style.left = (window.innerWidth - content.offsetWidth) / 2 + 'px';\n" +
+            "    let top = (window.innerHeight - content.offsetHeight) / 2;\n" +
+            "    if (top < 0) top = 0;\n" +
+            "    content.style.top = top + 'px';\n" +
+            "    let left = (window.innerWidth - content.offsetWidth) / 2;\n" +
+            "    if (left < 0) left = 0;\n" +
+            "    content.style.left = left + 'px';\n" +
             "  }\n" +
             "}\n" +
             "window.addEventListener('resize', () => { initUi() });\n" +
@@ -209,7 +213,7 @@ public class HTML {
             "<form name=\"shoot\" method=\"POST\" action=\"submitmessage\">" +
             "<table id=\"content\" style=\"position:absolute;width:100%;z-index:9;background-color:white\">" +
             "<tr><td class=\"header\">Submit Message</td></tr>" +
-            "<tr><td><textarea name=\"message\" style=\"box-sizing:border-box;margin-left:5%;width:90%\" rows=\"10\" required></textarea></td></tr>" +
+            "<tr><td><textarea name=\"message\" placeholder=\"Your message...\" style=\"box-sizing:border-box;margin-left:5%;width:90%\" rows=\"10\"></textarea></td></tr>" +
             "<tr><td style=\"text-align:center;padding-top:10pt\"><div class=\"stdbtn\" onclick=\"document.forms.shoot.submit()\">Submit</div></td></tr>" +
             "</table></form>");         
     }
