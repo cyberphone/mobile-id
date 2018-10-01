@@ -20,12 +20,10 @@ package org.webpki.mobileid.egovernment;
 import java.io.IOException;
 
 import javax.servlet.ServletException;
-
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class SubmitMessageServlet extends HttpServlet {
+public class SubmitMessageServlet extends ProtectedServlet {
 
     private static final long serialVersionUID = 1L;
     
@@ -36,10 +34,14 @@ public class SubmitMessageServlet extends HttpServlet {
         if (userData == null) {
             return;
         }
-        HTML.resultPage(response, userData, 
-            "<table id=\"content\" style=\"position:absolute\">" +
-            "<tr><td class=\"header\">Submit Message</td></tr>" +
-            "<tr><td>Not yet implemented...</td></tr>" +
-            "</table>");
+        HTML.submitMessagePage(response, userData);
     }
+
+    @Override
+    void protectedPost(UserData userData, HttpServletRequest request,
+            HttpServletResponse response) throws IOException, ServletException {
+        StringBuilder s = new StringBuilder("<table id=\"content\" style=\"position:absolute\">" +
+             "<tr><td class=\"header\">Message Received</td></tr>" +
+             "<tr><td>Thank you for your input!</td></tr></table>");
+        HTML.resultPage(response, userData, s.toString());  }
 }

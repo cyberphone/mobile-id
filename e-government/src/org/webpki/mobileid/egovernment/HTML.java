@@ -203,6 +203,17 @@ public class HTML {
                 "<table id=\"content\" style=\"position:absolute\"><tr><td class=\"header\">Thank you, welcome back!</td></tr></table>");
     }
 
+    static void submitMessagePage(HttpServletResponse response,
+                                  UserData userData) throws IOException, ServletException {
+        resultPage(response, userData,
+            "<form name=\"shoot\" method=\"POST\" action=\"submitmessage\">" +
+            "<table id=\"content\" style=\"position:absolute;width:100%;z-index:9;background-color:white\">" +
+            "<tr><td class=\"header\">Submit Message</td></tr>" +
+            "<tr><td><textarea name=\"message\" style=\"box-sizing:border-box;margin-left:5%;width:90%\" rows=\"10\" required></textarea></td></tr>" +
+            "<tr><td style=\"text-align:center;padding-top:10pt\"><div class=\"stdbtn\" onclick=\"document.forms.shoot.submit()\">Submit</div></td></tr>" +
+            "</table></form>");         
+    }
+
     /*
 
     static void w2nbWalletPay(HttpServletResponse response,
