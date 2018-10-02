@@ -61,7 +61,6 @@ body {
 
 .sessionview {
   position:absolute;
-  left:5pt;
   visibility:hidden;
   z-index:10;
   background-color:white;

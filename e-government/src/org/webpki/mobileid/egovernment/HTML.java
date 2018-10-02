@@ -74,9 +74,13 @@ public class HTML {
                 "    return response.text();\n" +
                 "  }).then(function(html) {\n" +
                 "    let session = document.getElementById('session');\n" +
-                "    let login = document.getElementById('login');\n" +
-                "    session.style.top = (login.offsetTop + login.offsetHeight / 2) + 'px';\n" +
                 "    session.innerHTML = html;\n" +
+                "    let top = (window.innerHeight - session.offsetHeight) / 2;\n" +
+                "    if (top < 5) top = 5;\n" +
+                "    session.style.top = top + 'px';\n" +
+                "    let left = (window.innerWidth - session.offsetWidth) / 2;\n" +
+                "    if (left < 5) left = 5;\n" +
+                "    session.style.left = left + 'px';\n" +
                 "    session.style.visibility = 'visible';\n" +
                 "  }).catch(function(error) {\n" +
                 "    console.log('Request failed', error);\n" +
