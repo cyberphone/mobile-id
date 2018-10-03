@@ -98,6 +98,12 @@ li {
   padding:5pt;
 }
 
+.content {
+  position:absolute;
+  z-index:9;
+  background-color:white;
+}
+
 .dialog {
   display:inline-block;
   vertical-align:middle;

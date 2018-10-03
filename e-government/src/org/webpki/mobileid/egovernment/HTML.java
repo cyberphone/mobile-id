@@ -20,6 +20,7 @@ import java.io.IOException;
 
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
+
 import javax.servlet.http.HttpServletResponse;
 
 public class HTML {
@@ -134,7 +135,8 @@ public class HTML {
     }
 
     static void homePage(HttpServletResponse response, UserData userData) throws IOException, ServletException {
-        StringBuilder s = new StringBuilder("<table id=\"content\" style=\"position:absolute\">" +
+        StringBuilder s = new StringBuilder(
+                "<table id=\"content\" class=\"content\">" +
                 "<tr><td class=\"header\">Select Service</td></tr>" +
                 "<tr><td style=\"text-align:center\"><table style=\"display:inline-block\">");
         addService(s, "declaration",    "Income Declaration", true);
@@ -180,7 +182,7 @@ public class HTML {
                                 int taxationYear) throws IOException, ServletException {
         resultPage(response, userData,
             "<form name=\"shoot\" method=\"POST\" action=\"declaration\">" +
-            "<table id=\"content\" style=\"position:absolute\">" +
+            "<table id=\"content\" class=\"content\">" +
             "<tr><td class=\"header\">Declaration</td></tr>" +
             "<tr><td style=\"text-align:center\"><div class=\"stdbtn\" onclick=\"document.forms.shoot.submit()\">Submit</div></td></tr>" +
             "</table></form>");    
@@ -192,7 +194,7 @@ public class HTML {
             "<input type=\"hidden\" name=\"" + LoginServlet.LOGIN_TARGET + "\" value=\"")
         .append(target)
         .append(
-            "\"><table id=\"content\" style=\"position:absolute\">" +
+            "\"><table id=\"content\" class=\"content\">" +
             "<tr><td class=\"header\">This Service Requires Login</td></tr>" +
             "<tr><td style=\"text-align:center\"><div class=\"stdbtn\" onclick=\"document.forms.shoot.submit()\">" +
             "<span style=\"color:blue\">Mobile</span><span style=\"color:red\">ID</span> Login</div></td></tr>" +
@@ -208,18 +210,29 @@ public class HTML {
 
     static void logoutPage(HttpServletResponse response) throws IOException, ServletException {
         resultPage(response, null,
-                "<table id=\"content\" style=\"position:absolute\"><tr><td class=\"header\">Thank you, welcome back!</td></tr></table>");
+                "<table id=\"content\" class=\"content\"><tr><td class=\"header\">Thank you, welcome back!</td></tr></table>");
     }
 
     static void submitMessagePage(HttpServletResponse response,
                                   UserData userData) throws IOException, ServletException {
-        resultPage(response, userData,
+        StringBuilder s = new StringBuilder(
             "<form name=\"shoot\" method=\"POST\" action=\"submitmessage\">" +
-            "<table id=\"content\" style=\"position:absolute;width:100%;z-index:9;background-color:white\">" +
+            "<table id=\"content\" class=\"content\" style=\"width:100%\">" +
             "<tr><td class=\"header\">Submit Message</td></tr>" +
+            "<tr><td><select autofocus name=\"type\" style=\"box-sizing:border-box;margin-left:5%\">");
+        for (SubmitMessageServlet.MessageTypes type : SubmitMessageServlet.MessageTypes.values()) {
+            s.append("<option value=\"")
+             .append(type.toString())
+             .append("\">")
+             .append(type.userText)
+             .append("</option>");
+        }
+        s.append(
+            "</select></td></tr>" +
             "<tr><td><textarea name=\"message\" placeholder=\"Your message...\" style=\"box-sizing:border-box;margin-left:5%;width:90%\" rows=\"10\"></textarea></td></tr>" +
             "<tr><td style=\"text-align:center;padding-top:10pt\"><div class=\"stdbtn\" onclick=\"document.forms.shoot.submit()\">Submit</div></td></tr>" +
-            "</table></form>");         
+            "</table></form>");
+        resultPage(response, userData, s.toString());
     }
 
     /*

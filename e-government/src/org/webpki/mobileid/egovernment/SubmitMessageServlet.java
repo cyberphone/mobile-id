@@ -27,6 +27,21 @@ public class SubmitMessageServlet extends ProtectedServlet {
 
     private static final long serialVersionUID = 1L;
     
+    enum MessageTypes {
+        NOT_SELECTED      ("Select subject..."),
+        TAX_QUESTION      ("Question regarding taxation"),
+        FILE_COMPLAINT    ("File a complaint"),
+        TECHNICAL_SUPPORT ("Technical support"),
+        OTHER             ("Other topic");
+
+        String userText;
+
+        MessageTypes(String userText) {
+            this.userText = userText;
+
+        }
+    }
+
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
