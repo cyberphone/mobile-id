@@ -18,10 +18,11 @@
 package org.webpki.mobileid.egovernment;
 
 import java.io.IOException;
-import java.util.Date;
+
 import java.util.GregorianCalendar;
 
 import javax.servlet.ServletException;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -30,7 +31,7 @@ public class DeclarationServlet extends ProtectedServlet {
     private static final long serialVersionUID = 1L;
     
     private static int referenceId = 567;
-
+    
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
@@ -38,12 +39,18 @@ public class DeclarationServlet extends ProtectedServlet {
         if (userData == null) {
             return;
         }
-        HTML.resultPage(response, userData, new StringBuilder(
-            "<form name=\"shoot\" method=\"POST\" action=\"declaration\">" +
+        StringBuilder html = AvailableServices.DECLARATION.addSelfForm()
+        .append(
             "<table id=\"content\" class=\"content\">" +
-            "<tr><td class=\"header\">Declaration</td></tr>" +
-            "<tr><td style=\"text-align:center\"><div class=\"stdbtn\" onclick=\"document.forms.shoot.submit()\">Submit</div></td></tr>" +
-            "</table></form>"));   
+            "<tr><td class=\"header\">")
+        .append(LocalizedStrings.LS_DECLARATION_HEADER
+            .replace("@", 
+                     Integer.toString(new GregorianCalendar().get(GregorianCalendar.YEAR) - 1)))
+        .append("</td></tr>" +
+            "<tr><td style=\"text-align:center\">" +
+            "<div class=\"stdbtn\" onclick=\"document.forms.shoot.submit()\">Submit</div>" +
+            "</td></tr></table></form>");
+        HTML.resultPage(response, userData, html);
     }
 
     @Override
@@ -51,16 +58,27 @@ public class DeclarationServlet extends ProtectedServlet {
                        HttpServletRequest request,
                        HttpServletResponse response) throws IOException, ServletException {
         String emailSubject = userData.userName.toLowerCase().replace(' ', '.');
-        StringBuilder html = new StringBuilder("<table id=\"content\" style=\"position:absolute\">" +
-             "<tr><td class=\"header\">Declaration Received</td></tr>" +
-             "<tr><td><table class=\"tftable\"><tr><th>Time Stamp</th><td>")
-        .append(getDateString(new Date()))
-        .append("</td></tr><tr><th>Reference ID</th><td>")
+        StringBuilder html = new StringBuilder(
+            "<table id=\"content\" style=\"position:absolute\">" +
+            "<tr><td class=\"header\">" +
+            LocalizedStrings.LS_DECLARATION_RECEIVED +
+            "</td></tr>" +
+            "<tr><td><table class=\"tftable\"><tr><th>" +
+            LocalizedStrings.LS_TIME_STAMP +
+            "</th><td>")
+        .append(getDateString(new GregorianCalendar().getTime()))
+        .append(
+            "</td></tr>" +
+            "<tr><th>" +
+            LocalizedStrings.LS_REFERENCE_ID +
+            "</th><td>")
         .append(String.format("%08d", referenceId++))
-        .append("</td></tr></table></td></tr>" +
-                "<tr><td style=\"text-align:center\">" +
-                "<div class=\"emailmsg\">" +
-                "A confirmation has been sent to:<br><b>")
+        .append(
+            "</td></tr></table></td></tr>" +
+            "<tr><td style=\"text-align:center\">" +
+            "<div class=\"emailmsg\">" +
+            LocalizedStrings.LS_CONFIRMATION +
+            ":<br><b>")
         .append(emailSubject)
         .append("@gmail.com</b></div></td></tr></table>");
         HTML.resultPage(response, userData, html);

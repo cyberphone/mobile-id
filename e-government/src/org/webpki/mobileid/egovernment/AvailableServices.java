@@ -30,5 +30,11 @@ public enum AvailableServices {
         this.urlPath = urlPath;
         this.userText = userText;
     }
+
+    StringBuilder addSelfForm() {
+        return new StringBuilder("<form name=\"shoot\" method=\"POST\" action=\"")
+            .append(urlPath)
+            .append("\">");
+    }
 }
 

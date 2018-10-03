@@ -51,8 +51,8 @@ public class SubmitMessageServlet extends ProtectedServlet {
         if (userData == null) {
             return;
         }
-        StringBuilder html = new StringBuilder(
-            "<form name=\"shoot\" method=\"POST\" action=\"submitmessage\">" +
+        StringBuilder html = AvailableServices.USER_MESSAGE.addSelfForm()
+        .append(
             "<table id=\"content\" class=\"content\" style=\"width:100%\">" +
             "<tr><td class=\"header\">Submit Message</td></tr>" +
             "<tr><td><select autofocus name=\"type\" style=\"box-sizing:border-box;margin-left:5%\">");
@@ -76,8 +76,13 @@ public class SubmitMessageServlet extends ProtectedServlet {
             HttpServletResponse response) throws IOException, ServletException {
         StringBuilder html = new StringBuilder(
             "<table id=\"content\" style=\"position:absolute\">" +
-            "<tr><td class=\"header\">Message Received</td></tr>" +
-            "<tr><td>Thank you for your input!</td></tr></table>");
+            "<tr><td class=\"header\">" +
+            LocalizedStrings.LS_MESSAGE_RECEIVED +
+            "</td></tr>" +
+            "<tr><td style=\"text-align:center\">")
+        .append(HTML.prepareString(LocalizedStrings.LS_THANKS_FOR_MESSAGE))
+        .append(
+            "</td></tr></table>");
         HTML.resultPage(response, userData, html);  
     }
 }

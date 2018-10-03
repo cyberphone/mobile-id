@@ -20,7 +20,6 @@ import java.io.IOException;
 
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
-
 import javax.servlet.http.HttpServletResponse;
 
 public class HTML {
@@ -98,7 +97,9 @@ public class HTML {
         s.append(
             "</script></head><body onload=\"initApplication()\">" +
             "<img alt=\"home\" onclick=\"document.location.href='home'\"" +
-            " title=\"Home sweet home...\" style=\"cursor:pointer;position:absolute;top:15px;" +
+            " title=\"" +
+            LocalizedStrings.LS_HT_HOME +
+            "\" style=\"cursor:pointer;position:absolute;top:15px;" +
             "left:15px;z-index:5;visibility:visible;width:120px\" src=\"images/egovlogo.svg\">");
         if (userData != null) {
             StringBuilder id = new StringBuilder();
@@ -111,13 +112,20 @@ public class HTML {
             s.append(
                 "<div id=\"session\" class=\"sessionview\"></div>" +
                 "<table id=\"login\" style=\"position:absolute;top:15px;right:15px;z-index:6;visibility:visible\">" +
-                "<tr><td class=\"login\" title=\"Click to show session data\" onclick=\"showSession()\">" +
+                "<tr><td class=\"login\" title=\"" +
+                LocalizedStrings.LS_HT_SESSION +
+                "\" onclick=\"showSession()\">" +
                 "<div style=\"padding:3px 0px 2px 0px\">")
              .append(userData.userName)
              .append(
                 "</div><div style=\"padding:2px 0px 3px 0px\">ID:\u2009")
              .append(id)
-             .append("</div></td><td>&nbsp;</td><td class=\"logout\" title=\"Click to logout\" onclick=\"document.location.href='logout'\">Logout</td></tr></table>");
+             .append(
+                "</div></td><td>&nbsp;</td><td class=\"logout\" title=\"" +
+                LocalizedStrings.LS_HT_LOGOUT +
+                "\" onclick=\"document.location.href='logout'\">" +
+                LocalizedStrings.LS_LOGOUT +
+                "</td></tr></table>");
         }
         s.append(content)
          .append("</body></html>");
@@ -160,6 +168,10 @@ public class HTML {
                              null,
                              stringBuilder.toString(),
                              userData));
+    }
+
+    static Object prepareString(String subjectToLineBreak) {
+        return subjectToLineBreak.replace(" ", "&nbsp;").replace('$', ' ');
     }
 
 
