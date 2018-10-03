@@ -38,6 +38,9 @@ public class LogoutServlet extends HttpServlet {
         if (session != null) {
             session.invalidate();
         }
-        HTML.logoutPage(response);
+        HTML.resultPage(response, null,
+            new StringBuilder(
+                "<table id=\"content\" class=\"content\">" +
+                "<tr><td class=\"header\">Thank you, welcome back!</td></tr></table>"));
     }
 }

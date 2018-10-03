@@ -20,7 +20,7 @@
 .login, .logout {
   cursor:pointer;
   border-radius:5pt;
-  text-align:middle;
+  vertical-align:middle;
   border-color:#a9a9a9;
   border-style:solid;
   border-width:1px;
@@ -37,19 +37,27 @@
 }
 
 .tftable {
-  border-collapse:collapse;box-shadow:3pt 3pt 3pt #d0d0d0;
+  border-collapse:collapse;
+  box-shadow:3pt 3pt 3pt #d0d0d0;
+}
+
+.tftable th, .tftable td {
+  border-width:1px;
+  border-style:solid;
+  border-color:#a9a9a9;
+  white-space:nowrap;
 }
 
 .tftable th {
-  font-size:10pt;background-color:#f8f8f8;
-  border-width:1px;padding:4pt 10pt 4pt 10pt;border-style:solid;border-color:#a9a9a9;
-  text-align:center;font-family:Arial,'Liberation Sans',Verdana,'Bitstream Vera Sans','DejaVu Sans';
+  padding:4pt 10pt 4pt 10pt;
+  background-color:#f8f8f8;
+  text-align:center;
 }
 
 .tftable td {
-  background-color:#ffffe0;font-size:11pt;border-width:1px;
-  padding:4pt 8pt 4pt 8pt;border-style:solid;border-color:#a9a9a9;white-space:nowrap;
-  font-family:Arial,'Liberation Sans',Verdana,'Bitstream Vera Sans','DejaVu Sans';
+  padding:4pt 8pt 4pt 8pt;
+  background-color:#ffffe0;
+  font-size:11pt;
 }
 
 body {
@@ -68,7 +76,10 @@ body {
 }
 
 a {
-  font-weight:bold;font-size:8pt;color:blue;font-family:Arial,'Liberation Sans',Verdana,'Bitstream Vera Sans','DejaVu Sans';
+  font-weight:bold;
+  font-size:8pt;
+  color:blue;
+  font-family:Arial,'Liberation Sans',Verdana,'Bitstream Vera Sans','DejaVu Sans';
   text-decoration:none;
 }
 

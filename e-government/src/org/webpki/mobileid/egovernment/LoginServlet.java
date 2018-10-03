@@ -43,7 +43,17 @@ public class LoginServlet extends HttpServlet {
         if (session != null) {
             session.invalidate();
         }
-        HTML.loginPage(response, request.getParameter("target"));
+        StringBuilder html = new StringBuilder(
+            "<form name=\"shoot\" method=\"POST\" action=\"login\">" +
+            "<input type=\"hidden\" name=\"" + LoginServlet.LOGIN_TARGET + "\" value=\"")
+        .append(request.getParameter(LOGIN_TARGET))
+        .append(
+            "\"><table id=\"content\" class=\"content\">" +
+            "<tr><td class=\"header\">This Service Requires Login</td></tr>" +
+            "<tr><td style=\"text-align:center\"><div class=\"stdbtn\" onclick=\"document.forms.shoot.submit()\">" +
+            "<span style=\"color:blue\">Mobile</span><span style=\"color:red\">ID</span> Login</div></td></tr>" +
+            "</table></form>");
+        HTML.resultPage(response, null, html);
     }
 
     @Override

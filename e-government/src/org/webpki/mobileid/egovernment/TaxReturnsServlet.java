@@ -36,10 +36,11 @@ public class TaxReturnsServlet extends HttpServlet {
         if (userData == null) {
             return;
         }
-        HTML.resultPage(response, userData, 
-            "<table id=\"content\" style=\"position:absolute\">" +
-            "<tr><td class=\"header\">Tax Returns</td></tr>" +
-            "<tr><td>Not yet implemented...</td></tr>" +
-            "</table>");
+        HTML.resultPage(response, userData,
+            new StringBuilder(
+                "<table id=\"content\" style=\"position:absolute\">" +
+                "<tr><td class=\"header\">Tax Returns</td></tr>" +
+                "<tr><td>Not yet implemented...</td></tr>" +
+                "</table>"));
     }
 }

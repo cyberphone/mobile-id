@@ -32,6 +32,26 @@ public class HomeServlet extends HttpServlet {
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
-        HTML.homePage(response, UserData.getUserData(request));
+        StringBuilder html = new StringBuilder(
+                "<table id=\"content\" class=\"content\">" +
+                "<tr><td class=\"header\">Select Service</td></tr>" +
+                "<tr><td style=\"text-align:center\"><table style=\"display:inline-block\">");
+        boolean first = true;
+        for (AvailableServices service : AvailableServices.values()){
+            html.append("<tr><td><div class=\"multibtn\" onclick=\"document.location.href='")
+                .append(service.urlPath)
+                .append("'\" title=\"")
+                .append(service.userText);
+            if (first) {
+                html.append("\" style=\"margin-top:0px");
+                first = false;
+            }
+            html.append("\">")
+                .append(service.userText)
+                .append("</div></td></tr>");
+        }
+        HTML.resultPage(response,
+                        UserData.getUserData(request),
+                        html.append("</table></td></tr></table>"));
     }
 }

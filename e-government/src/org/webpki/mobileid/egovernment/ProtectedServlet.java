@@ -41,9 +41,10 @@ public abstract class ProtectedServlet extends HttpServlet {
         UserData userData = UserData.getUserData(request);
         if (userData == null) {
             HTML.resultPage(response, userData,
+                new StringBuilder(
                     "<div id=\"content\" style=\"position:absolute;color:red;font-weight:bold\">" +
                     "Session Timed Out..." +
-                    "</div>");
+                    "</div>"));
             return;
         }
         protectedPost(userData, request, response);

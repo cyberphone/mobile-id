@@ -20,6 +20,7 @@ package org.webpki.mobileid.egovernment;
 import java.io.IOException;
 
 import javax.servlet.ServletException;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -28,6 +29,7 @@ public class SubmitMessageServlet extends ProtectedServlet {
     private static final long serialVersionUID = 1L;
     
     enum MessageTypes {
+
         NOT_SELECTED      ("Select subject..."),
         TAX_QUESTION      ("Question regarding taxation"),
         FILE_COMPLAINT    ("File a complaint"),
@@ -49,14 +51,33 @@ public class SubmitMessageServlet extends ProtectedServlet {
         if (userData == null) {
             return;
         }
-        HTML.submitMessagePage(response, userData);
+        StringBuilder html = new StringBuilder(
+            "<form name=\"shoot\" method=\"POST\" action=\"submitmessage\">" +
+            "<table id=\"content\" class=\"content\" style=\"width:100%\">" +
+            "<tr><td class=\"header\">Submit Message</td></tr>" +
+            "<tr><td><select autofocus name=\"type\" style=\"box-sizing:border-box;margin-left:5%\">");
+        for (MessageTypes type : MessageTypes.values()) {
+            html.append("<option value=\"")
+                .append(type.toString())
+                .append("\">")
+                .append(type.userText)
+                .append("</option>");
+        }
+        html.append(
+            "</select></td></tr>" +
+            "<tr><td><textarea name=\"message\" placeholder=\"Your message...\" style=\"box-sizing:border-box;margin-left:5%;width:90%\" rows=\"10\"></textarea></td></tr>" +
+            "<tr><td style=\"text-align:center;padding-top:10pt\"><div class=\"stdbtn\" onclick=\"document.forms.shoot.submit()\">Submit</div></td></tr>" +
+            "</table></form>");
+        HTML.resultPage(response, userData, html);
     }
 
     @Override
     void protectedPost(UserData userData, HttpServletRequest request,
             HttpServletResponse response) throws IOException, ServletException {
-        StringBuilder s = new StringBuilder("<table id=\"content\" style=\"position:absolute\">" +
-             "<tr><td class=\"header\">Message Received</td></tr>" +
-             "<tr><td>Thank you for your input!</td></tr></table>");
-        HTML.resultPage(response, userData, s.toString());  }
+        StringBuilder html = new StringBuilder(
+            "<table id=\"content\" style=\"position:absolute\">" +
+            "<tr><td class=\"header\">Message Received</td></tr>" +
+            "<tr><td>Thank you for your input!</td></tr></table>");
+        HTML.resultPage(response, userData, html);  
+    }
 }

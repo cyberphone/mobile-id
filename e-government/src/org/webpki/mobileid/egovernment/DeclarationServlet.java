@@ -18,7 +18,6 @@
 package org.webpki.mobileid.egovernment;
 
 import java.io.IOException;
-
 import java.util.Date;
 import java.util.GregorianCalendar;
 
@@ -39,7 +38,12 @@ public class DeclarationServlet extends ProtectedServlet {
         if (userData == null) {
             return;
         }
-        HTML.declarationPage(response, userData, new GregorianCalendar().get(GregorianCalendar.YEAR - 1));
+        HTML.resultPage(response, userData, new StringBuilder(
+            "<form name=\"shoot\" method=\"POST\" action=\"declaration\">" +
+            "<table id=\"content\" class=\"content\">" +
+            "<tr><td class=\"header\">Declaration</td></tr>" +
+            "<tr><td style=\"text-align:center\"><div class=\"stdbtn\" onclick=\"document.forms.shoot.submit()\">Submit</div></td></tr>" +
+            "</table></form>"));   
     }
 
     @Override
@@ -47,7 +51,7 @@ public class DeclarationServlet extends ProtectedServlet {
                        HttpServletRequest request,
                        HttpServletResponse response) throws IOException, ServletException {
         String emailSubject = userData.userName.toLowerCase().replace(' ', '.');
-        StringBuilder s = new StringBuilder("<table id=\"content\" style=\"position:absolute\">" +
+        StringBuilder html = new StringBuilder("<table id=\"content\" style=\"position:absolute\">" +
              "<tr><td class=\"header\">Declaration Received</td></tr>" +
              "<tr><td><table class=\"tftable\"><tr><th>Time Stamp</th><td>")
         .append(getDateString(new Date()))
@@ -59,6 +63,6 @@ public class DeclarationServlet extends ProtectedServlet {
                 "A confirmation has been sent to:<br><b>")
         .append(emailSubject)
         .append("@gmail.com</b></div></td></tr></table>");
-        HTML.resultPage(response, userData, s.toString());
+        HTML.resultPage(response, userData, html);
     }
 }

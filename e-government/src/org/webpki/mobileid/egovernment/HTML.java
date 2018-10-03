@@ -40,6 +40,8 @@ public class HTML {
             "<html lang=\"en\"><head>" +
             "<meta charset=\"utf-8\">" +
             "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">" +
+            // iOS thinks all numbers are telephone numbers!
+            "<meta name=\"format-detection\" content=\"telephone=no\">" +
             "<link rel=\"icon\" href=\"favicon.png\" sizes=\"192x192\">"+
             "<link rel=\"stylesheet\" type=\"text/css\" href=\"style.css\">" +
             "<title>Mobile ID/eGovernment Demo</title>" +
@@ -134,33 +136,6 @@ public class HTML {
         servletOutputStream.flush();
     }
 
-    static void homePage(HttpServletResponse response, UserData userData) throws IOException, ServletException {
-        StringBuilder s = new StringBuilder(
-                "<table id=\"content\" class=\"content\">" +
-                "<tr><td class=\"header\">Select Service</td></tr>" +
-                "<tr><td style=\"text-align:center\"><table style=\"display:inline-block\">");
-        addService(s, "declaration",    "Income Declaration", true);
-        addService(s, "taxreturns",     "Tax Returns",        false);
-        addService(s, "submitmessage",  "Submit Message",     false);
-        HTML.output(response, 
-                    HTML.getHTML(null, 
-                                 null, 
-                                 s.append("</table></td></tr></table>").toString(), userData));
-    }
-
-    static void addService(StringBuilder s, String service, String description, boolean first) {
-        s.append("<tr><td><div class=\"multibtn\" onclick=\"document.location.href='")
-         .append(service)
-         .append("'\" title=\"")
-         .append(description);
-        if (first) {
-            s.append("\" style=\"margin-top:0px");
-        }
-        s.append("\">")
-         .append(description)
-         .append("</div></td></tr>");
-    }
-
     static String javaScript(String string) {
         StringBuilder s = new StringBuilder();
         for (char c : string.toCharArray()) {
@@ -177,63 +152,16 @@ public class HTML {
         return s.toString();
     }
 
-    static void declarationPage(HttpServletResponse response, 
-                                UserData userData, 
-                                int taxationYear) throws IOException, ServletException {
-        resultPage(response, userData,
-            "<form name=\"shoot\" method=\"POST\" action=\"declaration\">" +
-            "<table id=\"content\" class=\"content\">" +
-            "<tr><td class=\"header\">Declaration</td></tr>" +
-            "<tr><td style=\"text-align:center\"><div class=\"stdbtn\" onclick=\"document.forms.shoot.submit()\">Submit</div></td></tr>" +
-            "</table></form>");    
-    }
-
-    static void loginPage(HttpServletResponse response, String target) throws IOException, ServletException {
-        StringBuilder s = new StringBuilder(
-            "<form name=\"shoot\" method=\"POST\" action=\"login\">" +
-            "<input type=\"hidden\" name=\"" + LoginServlet.LOGIN_TARGET + "\" value=\"")
-        .append(target)
-        .append(
-            "\"><table id=\"content\" class=\"content\">" +
-            "<tr><td class=\"header\">This Service Requires Login</td></tr>" +
-            "<tr><td style=\"text-align:center\"><div class=\"stdbtn\" onclick=\"document.forms.shoot.submit()\">" +
-            "<span style=\"color:blue\">Mobile</span><span style=\"color:red\">ID</span> Login</div></td></tr>" +
-            "</table></form>");
-        HTML.output(response, HTML.getHTML(STICK_TO_HOME_URL, null, s.toString(), null));
-    }
-
     static void resultPage(HttpServletResponse response,
                            UserData userData,
-                           String html) throws IOException, ServletException {
-        HTML.output(response, HTML.getHTML(STICK_TO_HOME_URL, null, html, userData));
+                           StringBuilder stringBuilder) throws IOException, ServletException {
+        HTML.output(response, 
+                HTML.getHTML(STICK_TO_HOME_URL, 
+                             null,
+                             stringBuilder.toString(),
+                             userData));
     }
 
-    static void logoutPage(HttpServletResponse response) throws IOException, ServletException {
-        resultPage(response, null,
-                "<table id=\"content\" class=\"content\"><tr><td class=\"header\">Thank you, welcome back!</td></tr></table>");
-    }
-
-    static void submitMessagePage(HttpServletResponse response,
-                                  UserData userData) throws IOException, ServletException {
-        StringBuilder s = new StringBuilder(
-            "<form name=\"shoot\" method=\"POST\" action=\"submitmessage\">" +
-            "<table id=\"content\" class=\"content\" style=\"width:100%\">" +
-            "<tr><td class=\"header\">Submit Message</td></tr>" +
-            "<tr><td><select autofocus name=\"type\" style=\"box-sizing:border-box;margin-left:5%\">");
-        for (SubmitMessageServlet.MessageTypes type : SubmitMessageServlet.MessageTypes.values()) {
-            s.append("<option value=\"")
-             .append(type.toString())
-             .append("\">")
-             .append(type.userText)
-             .append("</option>");
-        }
-        s.append(
-            "</select></td></tr>" +
-            "<tr><td><textarea name=\"message\" placeholder=\"Your message...\" style=\"box-sizing:border-box;margin-left:5%;width:90%\" rows=\"10\"></textarea></td></tr>" +
-            "<tr><td style=\"text-align:center;padding-top:10pt\"><div class=\"stdbtn\" onclick=\"document.forms.shoot.submit()\">Submit</div></td></tr>" +
-            "</table></form>");
-        resultPage(response, userData, s.toString());
-    }
 
     /*
 
