@@ -38,6 +38,7 @@
 
 .tftable {
   border-collapse:collapse;
+  display:inline-block;
   box-shadow:3pt 3pt 3pt #d0d0d0;
 }
 
@@ -58,6 +59,7 @@
   padding:4pt 8pt 4pt 8pt;
   background-color:#ffffe0;
   font-size:11pt;
+  text-align:left;
 }
 
 body {
@@ -109,20 +111,24 @@ li {
   padding:5pt;
 }
 
-.content {
-  position:absolute;
-  z-index:9;
-  background-color:white;
-}
-
 .dialog {
   display:inline-block;
   vertical-align:middle;
 }
 
+.content {
+  z-index:9;
+  position:absolute;
+  text-align:center;
+  padding:5pt;
+}
+
 .header {
   padding-bottom:15pt;
-  text-align:center;
+}
+
+.footer {
+  padding-top:12pt;
 }
 
 .emailmsg {

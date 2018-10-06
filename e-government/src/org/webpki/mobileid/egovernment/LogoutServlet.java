@@ -40,7 +40,6 @@ public class LogoutServlet extends HttpServlet {
         }
         HTML.resultPage(response, null,
             new StringBuilder(
-                "<table id=\"content\" class=\"content\">" +
-                "<tr><td class=\"header\">Thank you, welcome back!</td></tr></table>"));
+                "<div class=\"header\">Thank you, welcome back!</div>"));
     }
 }

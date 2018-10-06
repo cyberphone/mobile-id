@@ -53,9 +53,9 @@ public class SubmitMessageServlet extends ProtectedServlet {
         }
         StringBuilder html = AvailableServices.USER_MESSAGE.addSelfForm()
         .append(
-            "<table id=\"content\" class=\"content\" style=\"width:100%\">" +
-            "<tr><td class=\"header\">Submit Message</td></tr>" +
-            "<tr><td><select autofocus name=\"type\" style=\"box-sizing:border-box;margin-left:5%\">");
+            "<div class=\"header\">Submit Message</div>" +
+            "<div><table style=\"display:inline-block\">" +
+            "<tr><td style=\"text-align:left;padding-bottom:2pt\"><select autofocus name=\"type\">");
         for (MessageTypes type : MessageTypes.values()) {
             html.append("<option value=\"")
                 .append(type.toString())
@@ -65,9 +65,9 @@ public class SubmitMessageServlet extends ProtectedServlet {
         }
         html.append(
             "</select></td></tr>" +
-            "<tr><td><textarea name=\"message\" placeholder=\"Your message...\" style=\"box-sizing:border-box;margin-left:5%;width:90%\" rows=\"10\"></textarea></td></tr>" +
-            "<tr><td style=\"text-align:center;padding-top:10pt\"><div class=\"stdbtn\" onclick=\"document.forms.shoot.submit()\">Submit</div></td></tr>" +
-            "</table></form>");
+            "<tr><td><textarea id=\"message\" name=\"message\" placeholder=\"Your message...\" style=\"box-sizing:border-box\" rows=\"10\" cols=\"10\"></textarea>" +
+            "</td></tr></table></div><div style=\"padding-top:10pt\"><div class=\"stdbtn\" onclick=\"document.forms.shoot.submit()\">Submit</div></div>" +
+            "</form>");
         HTML.resultPage(response, userData, html);
     }
 
@@ -75,14 +75,13 @@ public class SubmitMessageServlet extends ProtectedServlet {
     void protectedPost(UserData userData, HttpServletRequest request,
             HttpServletResponse response) throws IOException, ServletException {
         StringBuilder html = new StringBuilder(
-            "<table id=\"content\" style=\"position:absolute\">" +
-            "<tr><td class=\"header\">" +
+            "<div class=\"header\">" +
             LocalizedStrings.LS_MESSAGE_RECEIVED +
-            "</td></tr>" +
-            "<tr><td style=\"text-align:center\">")
+            "</div>" +
+            "<div>")
         .append(HTML.prepareString(LocalizedStrings.LS_THANKS_FOR_MESSAGE))
         .append(
-            "</td></tr></table>");
+            "</div>");
         HTML.resultPage(response, userData, html);  
     }
 }

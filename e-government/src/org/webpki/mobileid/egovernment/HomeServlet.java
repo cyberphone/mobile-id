@@ -33,9 +33,8 @@ public class HomeServlet extends HttpServlet {
     public void doGet(HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
         StringBuilder html = new StringBuilder(
-                "<table id=\"content\" class=\"content\">" +
-                "<tr><td class=\"header\">Select Service</td></tr>" +
-                "<tr><td style=\"text-align:center\"><table style=\"display:inline-block\">");
+                "<div class=\"header\">Select Service</div>" +
+                "<div><table style=\"display:inline-block\">");
         boolean first = true;
         for (AvailableServices service : AvailableServices.values()){
             html.append("<tr><td><div class=\"multibtn\" onclick=\"document.location.href='")
@@ -52,6 +51,6 @@ public class HomeServlet extends HttpServlet {
         }
         HTML.resultPage(response,
                         UserData.getUserData(request),
-                        html.append("</table></td></tr></table>"));
+                        html.append("</table></div>"));
     }
 }

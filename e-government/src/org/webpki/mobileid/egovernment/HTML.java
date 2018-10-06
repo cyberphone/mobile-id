@@ -47,7 +47,11 @@ public class HTML {
             "<script>\n" +
             "\"use strict\";\n" +
             "function initUi() {\n" +
-            "  var content = document.getElementById('content');\n" +
+            "  let message = document.getElementById('message');\n" +
+            "  if (message) {\n" +
+            "    message.style.width = (window.innerWidth * 96) / 100 + 'px';\n" +
+            "  }\n" +
+            "  let content = document.getElementById('content');\n" +
             "  if (content) {\n" +
             "    let top = (window.innerHeight - content.offsetHeight) / 2;\n" +
             "    if (top < 0) top = 0;\n" +
@@ -127,8 +131,9 @@ public class HTML {
                 LocalizedStrings.LS_LOGOUT +
                 "</td></tr></table>");
         }
-        s.append(content)
-         .append("</body></html>");
+        s.append("<div id=\"content\" class=\"content\">")
+         .append(content)
+         .append("</div></body></html>");
         return s.toString();
     }
     

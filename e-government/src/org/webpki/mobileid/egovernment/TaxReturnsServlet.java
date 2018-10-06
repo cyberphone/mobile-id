@@ -38,9 +38,7 @@ public class TaxReturnsServlet extends HttpServlet {
         }
         HTML.resultPage(response, userData,
             new StringBuilder(
-                "<table id=\"content\" style=\"position:absolute\">" +
-                "<tr><td class=\"header\">Tax Returns</td></tr>" +
-                "<tr><td>Not yet implemented...</td></tr>" +
-                "</table>"));
+                "<div class=\"header\">Tax Returns</div>" +
+                "<div>Not yet</div>"));
     }
 }

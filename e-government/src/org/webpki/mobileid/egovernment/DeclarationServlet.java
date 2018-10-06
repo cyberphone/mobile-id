@@ -41,15 +41,15 @@ public class DeclarationServlet extends ProtectedServlet {
         }
         StringBuilder html = AvailableServices.DECLARATION.addSelfForm()
         .append(
-            "<table id=\"content\" class=\"content\">" +
-            "<tr><td class=\"header\">")
+            "<div class=\"header\">")
         .append(LocalizedStrings.LS_DECLARATION_HEADER
             .replace("@", 
                      Integer.toString(new GregorianCalendar().get(GregorianCalendar.YEAR) - 1)))
-        .append("</td></tr>" +
-            "<tr><td style=\"text-align:center\">" +
+        .append(
+            "</div>" +
+            "<div>" +
             "<div class=\"stdbtn\" onclick=\"document.forms.shoot.submit()\">Submit</div>" +
-            "</td></tr></table></form>");
+            "</div></form>");
         HTML.resultPage(response, userData, html);
     }
 
@@ -59,11 +59,10 @@ public class DeclarationServlet extends ProtectedServlet {
                        HttpServletResponse response) throws IOException, ServletException {
         String emailSubject = userData.userName.toLowerCase().replace(' ', '.');
         StringBuilder html = new StringBuilder(
-            "<table id=\"content\" style=\"position:absolute\">" +
-            "<tr><td class=\"header\">" +
+            "<div class=\"header\">" +
             LocalizedStrings.LS_DECLARATION_RECEIVED +
-            "</td></tr>" +
-            "<tr><td><table class=\"tftable\"><tr><th>" +
+            "</div>" +
+            "<div><table class=\"tftable\"><tr><th>" +
             LocalizedStrings.LS_TIME_STAMP +
             "</th><td>")
         .append(getDateString(new GregorianCalendar().getTime()))
@@ -74,13 +73,12 @@ public class DeclarationServlet extends ProtectedServlet {
             "</th><td>")
         .append(String.format("%08d", referenceId++))
         .append(
-            "</td></tr></table></td></tr>" +
-            "<tr><td style=\"text-align:center\">" +
-            "<div class=\"emailmsg\">" +
+            "</td></tr></table></div>" +
+            "<div class=\"footer\">" +
             LocalizedStrings.LS_CONFIRMATION +
-            ":<br><b>")
+            ": <b>")
         .append(emailSubject)
-        .append("@gmail.com</b></div></td></tr></table>");
+        .append("@gmail.com</b></div>");
         HTML.resultPage(response, userData, html);
     }
 }
