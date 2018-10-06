@@ -78,10 +78,10 @@ public class SubmitMessageServlet extends ProtectedServlet {
             "<div class=\"header\">" +
             LocalizedStrings.LS_MESSAGE_RECEIVED +
             "</div>" +
-            "<div>")
-        .append(HTML.prepareString(LocalizedStrings.LS_THANKS_FOR_MESSAGE))
+            "<div><table><tr><td style=\"text-align:left\">")
+        .append(LocalizedStrings.LS_THANKS_FOR_MESSAGE)
         .append(
-            "</div>");
+            "</td></tr></table></div>");
         HTML.resultPage(response, userData, html);  
     }
 }

@@ -175,10 +175,6 @@ public class HTML {
                              userData));
     }
 
-    static Object prepareString(String subjectToLineBreak) {
-        return subjectToLineBreak.replace(" ", "&nbsp;").replace('$', ' ');
-    }
-
 
     /*
 

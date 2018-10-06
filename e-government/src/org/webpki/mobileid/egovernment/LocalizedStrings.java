@@ -23,12 +23,12 @@ public interface LocalizedStrings {
     String LS_DECLARATION_HEADER   = "Declaration Year @";  // @ = Year placeholder
     String LS_DECLARATION_RECEIVED = "Declaration Received";
     
-    String LS_CONFIRMATION         = "A confirmation has been sent to"; // Followed by : email
+    String LS_CONFIRMATION         = "A confirmation message has been sent to"; // Followed by : email
 
     // Submit Message
     String LS_MESSAGE_RECEIVED     = "Message Received";
 
-    String LS_THANKS_FOR_MESSAGE   = "Thank you for your message,$" +
+    String LS_THANKS_FOR_MESSAGE   = "Thank you for your message, " +
                                      "we will process it as fast we can!";
 
     // Genenal purpose

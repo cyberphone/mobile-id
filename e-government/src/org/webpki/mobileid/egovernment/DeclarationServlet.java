@@ -74,11 +74,11 @@ public class DeclarationServlet extends ProtectedServlet {
         .append(String.format("%08d", referenceId++))
         .append(
             "</td></tr></table></div>" +
-            "<div class=\"footer\">" +
-            LocalizedStrings.LS_CONFIRMATION +
-            ": <b>")
+            "<div class=\"footer\"><table style=\"text-align:left;display:inline-block\"><tr><td>" +
+            LocalizedStrings.LS_CONFIRMATION + 
+            ":</td></tr><tr><td style=\"white-space:nowrap;font-weight:bold\">")
         .append(emailSubject)
-        .append("@gmail.com</b></div>");
+        .append("@gmail.com</td></tr></table></div>");
         HTML.resultPage(response, userData, html);
     }
 }
