@@ -4,13 +4,13 @@
   border-color:#B0B0B0;display:inline-block;padding:1.5pt 3pt 1pt 3pt;
 }
 
-.toasting {
+.toaster {
   border-color:red;
   border-style:solid;
   border-width:1pt;
   text-align:left;
   border-radius:7px;
-  z-index:8;
+  z-index:11;
   background-color:#f0f0f0;
   position:absolute;
   visibility:hidden;
@@ -59,6 +59,12 @@
   padding:4pt 8pt 4pt 8pt;
   background-color:#ffffe0;
   font-size:11pt;
+  text-align:left;
+}
+
+.msgtable {
+  border-collapse:collapse;
+  display:inline-block;
   text-align:left;
 }
 
@@ -117,6 +123,7 @@ li {
 }
 
 .content {
+  background-color:white;
   z-index:9;
   position:absolute;
   text-align:center;
@@ -199,7 +206,7 @@ li {
     font-size:8pt;
   }
 
-  .toasting {
+  .toaster {
     font-weight:bolder;
     padding:3pt 7pt;
   }

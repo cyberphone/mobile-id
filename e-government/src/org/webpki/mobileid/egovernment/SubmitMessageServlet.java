@@ -19,6 +19,8 @@ package org.webpki.mobileid.egovernment;
 
 import java.io.IOException;
 
+import java.util.logging.Logger;
+
 import javax.servlet.ServletException;
 
 import javax.servlet.http.HttpServletRequest;
@@ -28,6 +30,8 @@ public class SubmitMessageServlet extends ProtectedServlet {
 
     private static final long serialVersionUID = 1L;
     
+    static Logger logger = Logger.getLogger(SubmitMessageServlet.class.getCanonicalName());
+
     enum MessageTypes {
 
         NOT_SELECTED      ("Select subject..."),
@@ -55,7 +59,8 @@ public class SubmitMessageServlet extends ProtectedServlet {
         .append(
             "<div class=\"header\">Submit Message</div>" +
             "<div><table style=\"display:inline-block\">" +
-            "<tr><td style=\"text-align:left;padding-bottom:2pt\"><select autofocus name=\"type\">");
+            "<tr><td style=\"text-align:left;padding-bottom:2pt\">" +
+            "<select id=\"type\" autofocus name=\"type\">");
         for (MessageTypes type : MessageTypes.values()) {
             html.append("<option value=\"")
                 .append(type.toString())
@@ -66,19 +71,48 @@ public class SubmitMessageServlet extends ProtectedServlet {
         html.append(
             "</select></td></tr>" +
             "<tr><td><textarea id=\"message\" name=\"message\" placeholder=\"Your message...\" style=\"box-sizing:border-box\" rows=\"10\" cols=\"10\"></textarea>" +
-            "</td></tr></table></div><div style=\"padding-top:10pt\"><div class=\"stdbtn\" onclick=\"document.forms.shoot.submit()\">Submit</div></div>" +
+            "</td></tr></table></div><div style=\"padding-top:10pt\"><div class=\"stdbtn\" onclick=\"verify(this)\">Submit</div></div>" +
             "</form>");
-        HTML.resultPage(response, userData, html);
+        HTML.resultPage(response,
+            "function verify(fromElement) {\n" +
+            "  let type = document.getElementById('type');\n" +
+            "  if (type.value == '" +
+                        MessageTypes.NOT_SELECTED.toString() + "') {\n" +
+            "    type.focus();\n" +
+            "    toast('" +
+                       LocalizedStrings.LS_NO_SELECT +
+                       "', fromElement);\n" +
+            "    return;\n" +
+            "  }\n" +
+            "  let message = document.getElementById('message');\n\n" +
+            "  if (message.value.trim().length == 0) {\n" +
+            "    message.focus();\n" +
+            "    toast('" +
+                      LocalizedStrings.LS_NO_MESSAGE +
+                      "', fromElement);\n" +
+            "    return;\n" +
+            "  }\n" +
+            "  document.forms.shoot.submit();\n" +
+            "}\n"
+                        , 
+                        true, null, userData, html);
     }
 
     @Override
-    void protectedPost(UserData userData, HttpServletRequest request,
-            HttpServletResponse response) throws IOException, ServletException {
+    void protectedPost(UserData userData,
+                       HttpServletRequest request,
+                       HttpServletResponse response) throws IOException, ServletException {
+        String type = getString(request, "type");
+        String message = getString(request, "message");
+        if (eGovernmentService.logging) {
+            logger.info(type + "\n" + message);
+        }
+
         StringBuilder html = new StringBuilder(
             "<div class=\"header\">" +
             LocalizedStrings.LS_MESSAGE_RECEIVED +
             "</div>" +
-            "<div><table><tr><td style=\"text-align:left\">")
+            "<div><table class=\"msgtable\"><tr><td>")
         .append(LocalizedStrings.LS_THANKS_FOR_MESSAGE)
         .append(
             "</td></tr></table></div>");

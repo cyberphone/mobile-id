@@ -50,7 +50,7 @@ public class LoginServlet extends HttpServlet {
         .append(
             "\">" +
             "<div class=\"header\">This Service Requires Login</div>" +
-            "<div style=\"text-align:center\"><div class=\"stdbtn\" onclick=\"document.forms.shoot.submit()\">" +
+            "<div class=\"footer\"><div class=\"stdbtn\" onclick=\"document.forms.shoot.submit()\">" +
             "<span style=\"color:blue\">Mobile</span><span style=\"color:red\">ID</span> Login</div></div>" +
             "</form>");
         HTML.resultPage(response, null, html);

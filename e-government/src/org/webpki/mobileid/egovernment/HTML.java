@@ -18,11 +18,15 @@ package org.webpki.mobileid.egovernment;
 
 import java.io.IOException;
 
+import java.util.logging.Logger;
+
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 
 public class HTML {
+    
+    static Logger logger = Logger.getLogger(HTML.class.getCanonicalName());
 
     static final String STICK_TO_HOME_URL            =
                     "history.pushState(null, null, 'home');\n" +
@@ -33,7 +37,11 @@ public class HTML {
     static final String FONT_VERDANA = "Verdana,'Bitstream Vera Sans','DejaVu Sans',Arial,'Liberation Sans'";
     static final String FONT_ARIAL = "Arial,'Liberation Sans',Verdana,'Bitstream Vera Sans','DejaVu Sans'";
     
-    static String getHTML(String javascript, String onloadCall, String content, UserData userData) {
+    static String getHTML(String customJavaScript, 
+                          boolean toasterSupport,
+                          String customOnLoad, 
+                          String content, 
+                          UserData userData) {
         StringBuilder s = new StringBuilder(
             "<!DOCTYPE html>"+
             "<html lang=\"en\"><head>" +
@@ -46,6 +54,7 @@ public class HTML {
             "<title>Mobile ID/eGovernment Demo</title>" +
             "<script>\n" +
             "\"use strict\";\n" +
+            STICK_TO_HOME_URL +
             "function initUi() {\n" +
             "  let message = document.getElementById('message');\n" +
             "  if (message) {\n" +
@@ -64,9 +73,9 @@ public class HTML {
             "window.addEventListener('resize', () => { initUi() });\n" +
             "function initApplication() {\n" +
             "  initUi();\n");
-        if (onloadCall != null) {
+        if (customOnLoad != null) {
             s.append("  ")
-             .append(onloadCall)
+             .append(customOnLoad)
              .append(";\n");
         }
         s.append("}\n");
@@ -94,9 +103,25 @@ public class HTML {
                 "}\n");
               
         }
-        if (javascript != null) {
-            s.append(javascript)
-             .append("\n");
+        if (customJavaScript != null) {
+            s.append(customJavaScript);
+        }
+        if (toasterSupport){
+            s.append(
+                "function toast(message, fromElement) {\n" +
+                "  let toaster = document.getElementById('toaster');\n" +
+                "  toaster.innerHTML = message;\n" +
+                "  if (fromElement == undefined) {\n" +
+                "    toaster.style.top = ((window.innerHeight - toaster.offsetHeight) / 2) + 'px';\n" +
+                "  } else {\n" +
+                "    toaster.style.top = (fromElement.getBoundingClientRect().top - toaster.offsetHeight - 20) + 'px';\n" +
+                "  }\n" +
+                "  toaster.style.left = ((window.innerWidth - toaster.offsetWidth) / 2) + 'px';\n" +
+                "  toaster.style.visibility = 'visible';\n" +
+                "  setTimeout(function () {\n" +
+                "    toaster.style.visibility = 'hidden';\n" +
+                "  }, 1000);\n" +
+                "}\n");
         }
         s.append(
             "</script></head><body onload=\"initApplication()\">" +
@@ -131,6 +156,9 @@ public class HTML {
                 LocalizedStrings.LS_LOGOUT +
                 "</td></tr></table>");
         }
+        if (toasterSupport) {
+            s.append("<div id=\"toaster\" class=\"toaster\"></div>");
+        }
         s.append("<div id=\"content\" class=\"content\">")
          .append(content)
          .append("</div></body></html>");
@@ -138,7 +166,9 @@ public class HTML {
     }
     
     static void output(HttpServletResponse response, String html) throws IOException, ServletException {
-        System.out.println(html);
+        if (eGovernmentService.logging) {
+            logger.info(html);
+        }
         response.setContentType("text/html; charset=utf-8");
         response.setHeader("Pragma", "No-Cache");
         response.setDateHeader("EXPIRES", 0);
@@ -168,13 +198,28 @@ public class HTML {
     static void resultPage(HttpServletResponse response,
                            UserData userData,
                            StringBuilder stringBuilder) throws IOException, ServletException {
-        HTML.output(response, 
-                HTML.getHTML(STICK_TO_HOME_URL, 
-                             null,
-                             stringBuilder.toString(),
-                             userData));
+        resultPage(response,
+                   null,
+                   false,
+                   null,
+                   userData,
+                   stringBuilder);
     }
 
+    static void resultPage(HttpServletResponse response,
+                           String customJavaScript,
+                           boolean toasterSupport,
+                           String customOnLoad,
+                           UserData userData,
+                           StringBuilder stringBuilder)
+    throws IOException, ServletException {
+        HTML.output(response, 
+            HTML.getHTML(customJavaScript,
+                         toasterSupport,
+                         customOnLoad,
+                         stringBuilder.toString(),
+                         userData));
+    }
 
     /*
 

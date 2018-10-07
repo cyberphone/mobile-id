@@ -18,9 +18,12 @@ package org.webpki.mobileid.egovernment;
 
 import java.io.IOException;
 import java.io.InputStream;
+
 import java.security.GeneralSecurityException;
 import java.security.KeyStore;
+
 import java.security.cert.X509Certificate;
+
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -30,17 +33,21 @@ import javax.servlet.ServletContextListener;
 import org.webpki.crypto.CertificateUtil;
 import org.webpki.crypto.CustomCryptoProvider;
 import org.webpki.crypto.KeyStoreVerifier;
+
 import org.webpki.json.JSONArrayReader;
 import org.webpki.json.JSONDecoderCache;
 import org.webpki.json.JSONObjectReader;
 import org.webpki.json.JSONParser;
 import org.webpki.json.JSONX509Verifier;
+
 import org.webpki.keygen2.CredentialDiscoveryResponseDecoder;
 import org.webpki.keygen2.InvocationResponseDecoder;
 import org.webpki.keygen2.KeyCreationResponseDecoder;
 import org.webpki.keygen2.ProvisioningFinalizationResponseDecoder;
 import org.webpki.keygen2.ProvisioningInitializationResponseDecoder;
+
 import org.webpki.util.ArrayUtil;
+
 import org.webpki.webutil.InitPropertyReader;
 
 public class eGovernmentService extends InitPropertyReader implements ServletContextListener {

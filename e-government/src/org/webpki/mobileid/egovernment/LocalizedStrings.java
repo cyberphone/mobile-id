@@ -30,8 +30,10 @@ public interface LocalizedStrings {
 
     String LS_THANKS_FOR_MESSAGE   = "Thank you for your message, " +
                                      "we will process it as fast we can!";
+    String LS_NO_SELECT            = "Please select message subject";
+    String LS_NO_MESSAGE           = "Please provide a message";
 
-    // Genenal purpose
+    // General purpose
     String LS_REFERENCE_ID         = "Reference ID";  // SHORT table header
     String LS_TIME_STAMP           = "Time Stamp";    // SHORT table header
 
