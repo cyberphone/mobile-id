@@ -29,6 +29,12 @@
     </context-param>
 
     <context-param>
+        <description>Demo Mode</description>
+        <param-name>demo</param-name>
+        <param-value>@demo@</param-value>
+    </context-param>
+
+    <context-param>
         <description>Logging</description>
         <param-name>logging</param-name>
         <param-value>@logging@</param-value>

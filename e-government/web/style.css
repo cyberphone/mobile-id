@@ -157,6 +157,11 @@ li {
   box-shadow:3pt 3pt 3pt #D0D0D0;
 }
 
+.loginlogo {
+  cursor:pointer;
+  height:30pt;
+}
+
 .stdbtn {
   display:inline-block;
 }

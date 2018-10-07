@@ -62,6 +62,8 @@ public class eGovernmentService extends InitPropertyReader implements ServletCon
 
     static final String ISSUER_JSON           = "issuer";
 
+    static final String DEMO                  = "demo";  // No user auth
+
     static final String LOGGING               = "logging";
 
     static JSONDecoderCache keygen2JSONCache;
@@ -69,6 +71,8 @@ public class eGovernmentService extends InitPropertyReader implements ServletCon
     static String[] grantedVersions;
     
     static JSONX509Verifier trustedIssuers;
+    
+    static boolean demoMode;
     
     static boolean logging;
 
@@ -135,7 +139,12 @@ public class eGovernmentService extends InitPropertyReader implements ServletCon
             // Android WebPKI version check
             ////////////////////////////////////////////////////////////////////////////////////////////
             grantedVersions = getPropertyStringList(VERSION_CHECK);
- 
+
+            ////////////////////////////////////////////////////////////////////////////////////////////
+            // Are we in demo mode?
+            ////////////////////////////////////////////////////////////////////////////////////////////
+            demoMode = getPropertyBoolean(DEMO);
+
             ////////////////////////////////////////////////////////////////////////////////////////////
             // Are we logging?
             ////////////////////////////////////////////////////////////////////////////////////////////

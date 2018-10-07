@@ -49,9 +49,9 @@ public class LoginServlet extends HttpServlet {
         .append(request.getParameter(LOGIN_TARGET))
         .append(
             "\">" +
-            "<div class=\"header\">This Service Requires Login</div>" +
-            "<div class=\"footer\"><div class=\"stdbtn\" onclick=\"document.forms.shoot.submit()\">" +
-            "<span style=\"color:blue\">Mobile</span><span style=\"color:red\">ID</span> Login</div></div>" +
+            "<div class=\"header\">This Service Requires Login<br>Select Login Method</div>" +
+            "<div><img src=\"images/mobileidlogo.svg\" class=\"loginlogo\" alt=\"Mobile ID\" title=\"Mobile ID\" onclick=\"document.forms.shoot.submit()\"></div>" +
+            "<div class=\"footer\">In this demo there is only one method...</div>" +
             "</form>");
         HTML.resultPage(response, null, html);
     }

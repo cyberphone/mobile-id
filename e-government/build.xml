@@ -3,6 +3,7 @@
   <!-- set properties for this build -->
   <property file="../resources/common.properties"/>
   <property name="logging" value="false"/>
+  <property name="demo" value="false"/>
 
   <property name="src.dir" value="src"/>
   <property name="temp.dir" value=".tmp"/>
@@ -36,6 +37,9 @@
   </target>
 
   <target name="tomcat" depends="_init">
+  	
+    <property name="zip.common.lib.dir" value="${common.lib.dir}"/>
+    <property name="zip.bcprovider.lib.dir" value="${bcprovider.lib.dir}"/>
   	<delete dir="${temp.dir}"/>
     <fixcrlf srcdir="${src.dir}"
        tab="remove"
@@ -70,19 +74,20 @@
       <replacefilter token="@key-password@" value="${keypassword}"/>
       <replacefilter token="@android-webpki-versions@" value="${android.webpki.versions}"/>
       <replacefilter token="@bouncycastle-first@" value="${bouncycastle.first}"/>
+      <replacefilter token="@demo@" value="${demo}"/>
       <replacefilter token="@logging@" value="${logging}"/>
     </replace>
     <war destfile="${dist.dir}/${application}" webxml="${temp.dir}/web.xml">
       <classes dir="${temp.dir}">
          <exclude name="web.xml"/>
       </classes>
-      <lib dir="${common.lib.dir}">
+      <lib dir="${zip.common.lib.dir}">
          <include name="${webpki-libext.jar}"/>
       </lib>
-      <lib dir="${common.lib.dir}">
+      <lib dir="${zip.common.lib.dir}">
          <include name="${webpki-webutil.jar}"/>
       </lib>
-      <lib dir="${bcprovider.lib.dir}">
+      <lib dir="${zip.bcprovider.lib.dir}">
          <include name="${bcprovider.jar}"/>
       </lib>
       <zipfileset dir="${key.dir}" prefix="${class_war_path}">
