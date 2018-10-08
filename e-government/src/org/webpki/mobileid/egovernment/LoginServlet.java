@@ -50,7 +50,8 @@ public class LoginServlet extends HttpServlet {
         .append(
             "\">" +
             "<div class=\"header\">This Service Requires Login<br>Select Login Method</div>" +
-            "<div><img src=\"images/mobileidlogo.svg\" class=\"loginlogo\" alt=\"Mobile ID\" title=\"Mobile ID\" onclick=\"document.forms.shoot.submit()\"></div>" +
+            "<img src=\"images/mobileidlogo.svg\" title=\"Mobile ID\" alt=\"Mobile ID\"" +
+             " onclick=\"document.forms.shoot.submit()\" class=\"loginbtn\">" +
             "<div class=\"footer\">In this demo there is only one method...</div>" +
             "</form>");
         HTML.resultPage(response, null, html);

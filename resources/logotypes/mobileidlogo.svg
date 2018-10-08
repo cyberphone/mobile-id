@@ -1,15 +1,17 @@
-<svg width="142" height="48" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg">
- <!-- Created with SVG-edit - http://svg-edit.googlecode.com/ -->
- <defs>
-  <filter id="svg_4_blur" x="-50%" y="-50%" width="200%" height="200%">
-   <feGaussianBlur stdDeviation="2.2"/>
-  </filter>
- </defs>
+<svg width="130" height="25" xmlns="http://www.w3.org/2000/svg">
  <g>
-  <title>Layer 1</title>
-  <text id="svg_4" fill="#ffffff" stroke-dasharray="null" stroke-linejoin="null" text-anchor="end" stroke-linecap="null" x="100" y="35" font-size="30" font-family="Sans-serif" xml:space="preserve" stroke="#ffffff" font-weight="normal" filter="url(#svg_4_blur)">Mobile</text>
-  <text fill="#c8d5f7" stroke-width="1.3" stroke-opacity="0.7" stroke-dasharray="null" stroke-linejoin="null" text-anchor="end" stroke-linecap="null" x="100" y="35" font-size="30" font-family="Sans-serif" xml:space="preserve" stroke="#2343fc" font-weight="normal" id="svg_7">Mobile</text>
-  <text id="svg_9" fill="#ffffff" stroke-dasharray="null" stroke-linejoin="null" text-anchor="start" stroke-linecap="null" x="102" y="35" font-size="30" font-family="Sans-serif" xml:space="preserve" stroke="#ffffff" font-weight="normal" filter="url(#svg_4_blur)">ID</text>
-  <text fill="#f7c8d5" stroke-width="1.3" stroke-opacity="0.7" stroke-dasharray="null" stroke-linejoin="null" text-anchor="start" stroke-linecap="null" x="102" y="35" font-size="30" font-family="Sans-serif" xml:space="preserve" stroke="#fc0526" font-weight="normal" id="svg_10">ID</text>
+  <title>Mobile ID Logo</title>
+  <g stroke-opacity="0.7" stroke-width="1.3" stroke="#2343fc" fill="#c8d5f7" text-anchor="end" font-family="Sans-serif" font-size="30px" font-weight="normal">
+   <path d="m1.06543,1.62988l4.40918,0l5.58105,14.88282l5.61036,-14.88282l4.40918,0l0,21.87012l-2.88575,0l0,-19.2041l-5.63965,15l-2.97363,0l-5.63965,-15l0,19.2041l-2.87109,0l0,-21.87012z" stroke-opacity="0.7" stroke-width="1.3" stroke="#2343fc" fill="#c8d5f7"/>
+   <path d="m33.2041,8.9834q-2.16797,0 -3.42773,1.69922q-1.25977,1.68457 -1.25977,4.6289q0,2.94434 1.24512,4.64356q1.25976,1.68457 3.44238,1.68457q2.15332,0 3.41309,-1.69922q1.25976,-1.69922 1.25976,-4.62891q0,-2.91504 -1.25976,-4.61425q-1.25977,-1.71387 -3.41309,-1.71387zm0,-2.28516q3.51563,0 5.52246,2.28516q2.00684,2.28516 2.00684,6.32812q0,4.02832 -2.00684,6.32813q-2.00683,2.28515 -5.52246,2.28515q-3.53027,0 -5.53711,-2.28515q-1.99219,-2.29981 -1.99219,-6.32813q0,-4.04296 1.99219,-6.32812q2.00684,-2.28516 5.53711,-2.28516z" stroke-opacity="0.7" stroke-width="1.3" stroke="#2343fc" fill="#c8d5f7"/>
+   <path d="m56.96387,15.31152q0,-2.97363 -1.23047,-4.6582q-1.21582,-1.69922 -3.35449,-1.69922q-2.13868,0 -3.36914,1.69922q-1.21582,1.68457 -1.21582,4.6582q0,2.97364 1.21582,4.67286q1.23046,1.68457 3.36914,1.68457q2.13867,0 3.35449,-1.68457q1.23047,-1.69922 1.23047,-4.67286zm-9.16992,-5.72754q0.8496,-1.46484 2.13867,-2.16796q1.30371,-0.71778 3.10547,-0.71778q2.98828,0 4.84863,2.37305q1.875,2.37305 1.875,6.24023q0,3.86719 -1.875,6.24024q-1.86035,2.37304 -4.84863,2.37304q-1.80176,0 -3.10547,-0.70312q-1.28907,-0.71777 -2.13867,-2.18262l0,2.46094l-2.70997,0l0,-22.79297l2.70997,0l0,8.87695z" stroke-opacity="0.7" stroke-width="1.3" stroke="#2343fc" fill="#c8d5f7"/>
+   <path d="m64.22949,7.09375l2.69531,0l0,16.40625l-2.69531,0l0,-16.40625zm0,-6.38672l2.69531,0l0,3.41309l-2.69531,0l0,-3.41309z" stroke-opacity="0.7" stroke-width="1.3" stroke="#2343fc" fill="#c8d5f7"/>
+   <path d="m72.54981,0.70703l2.69531,0l0,22.79297l-2.69531,0l0,-22.79297z" stroke-opacity="0.7" stroke-width="1.3" stroke="#2343fc" fill="#c8d5f7"/>
+   <path d="m94.90332,14.62305l0,1.31836l-12.39258,0q0.17578,2.7832 1.66992,4.24804q1.50879,1.4502 4.18946,1.4502q1.55273,0 3.00293,-0.38086q1.46484,-0.38086 2.90039,-1.14258l0,2.54883q-1.4502,0.61523 -2.97363,0.9375q-1.52344,0.32226 -3.09083,0.32226q-3.92578,0 -6.22558,-2.28515q-2.28516,-2.28516 -2.28516,-6.18164q0,-4.02832 2.16797,-6.38672q2.18262,-2.37305 5.87402,-2.37305q3.31055,0 5.2295,2.13867q1.93359,2.12403 1.93359,5.78614zm-2.69531,-0.79102q-0.0293,-2.21191 -1.24512,-3.53027q-1.20117,-1.31836 -3.19336,-1.31836q-2.25586,0 -3.61816,1.27441q-1.34766,1.27442 -1.55274,3.58887l9.60938,-0.01465z" stroke-opacity="0.7" stroke-width="1.3" stroke="#2343fc" fill="#c8d5f7"/>
+  </g>
+  <g stroke-opacity="0.7" stroke-width="1.3" stroke="#fc0526" fill="#f7c8d5" text-anchor="start" font-family="Sans-serif" font-size="30px" font-weight="normal">
+   <path d="m101.44434,1.62988l2.95898,0l0,21.87012l-2.95898,0l0,-21.87012z" stroke-opacity="0.7" stroke-width="1.3" stroke="#fc0526" fill="#f7c8d5"/>
+   <path d="M 113.25098,4.0615234 V 21.068359 h 3.57422 q 4.52636,0 6.62109,-2.050781 2.10937,-2.050781 2.10937,-6.474609 0,-4.3945315 -2.10937,-6.4306643 -2.09473,-2.0507813 -6.62109,-2.0507813 z m -2.95899,-2.4316406 h 6.0791 q 6.35743,0 9.33106,2.6513672 2.97363,2.6367187 2.97363,8.261719 0,5.654297 -2.98828,8.305664 Q 122.69922,23.5 116.37109,23.5 h -6.0791 z" />
+  </g>
  </g>
 </svg>

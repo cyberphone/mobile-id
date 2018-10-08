@@ -157,11 +157,6 @@ li {
   box-shadow:3pt 3pt 3pt #D0D0D0;
 }
 
-.loginlogo {
-  cursor:pointer;
-  height:30pt;
-}
-
 .stdbtn {
   display:inline-block;
 }
@@ -170,6 +165,16 @@ li {
   margin-top:12pt;
 }
 
+.loginbtn {
+  display:inline-block;
+  cursor:pointer;
+  border-width:1px;
+  border-style:solid;
+  border-color:#a9a9a9;
+  border-radius:5pt;
+  padding:4pt 10pt;box-shadow:3pt 3pt 3pt #D0D0D0;
+  height:14pt;
+}
 @media (max-width:768px) {
 
   .xicon {
