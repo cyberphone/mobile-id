@@ -68,6 +68,7 @@ public class HTML {
             "    let left = (window.innerWidth - content.offsetWidth) / 2;\n" +
             "    if (left < 0) left = 0;\n" +
             "    content.style.left = left + 'px';\n" +
+            "    content.style.visibility = 'visible';\n" +
             "  }\n" +
             "}\n" +
             "window.addEventListener('resize', () => { initUi() });\n" +

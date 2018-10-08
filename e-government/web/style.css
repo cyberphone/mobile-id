@@ -128,6 +128,7 @@ li {
   position:absolute;
   text-align:center;
   padding:5pt;
+  visibility:hidden;
 }
 
 .header {
