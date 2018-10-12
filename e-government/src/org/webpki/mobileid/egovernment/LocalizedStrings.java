@@ -41,7 +41,6 @@ public interface LocalizedStrings {
     String LS_HT_SESSION           = "Click to show session data";
     String LS_HT_HOME              = "Home sweet home...";
     String LS_HT_LOGOUT            = "Click to logout";
-    String LS_LOGOUT               = "Logout";  // Logout button
-
+ 
 }
 

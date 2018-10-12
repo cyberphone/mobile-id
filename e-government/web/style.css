@@ -36,6 +36,10 @@
   background:linear-gradient(to bottom, #ffe0d0, #fffff0, #ffe0d0);
 }
 
+.logouticon {
+  height:40px;
+}
+
 .tftable {
   border-collapse:collapse;
   display:inline-block;
@@ -176,12 +180,17 @@ li {
   padding:4pt 10pt;box-shadow:3pt 3pt 3pt #D0D0D0;
   height:14pt;
 }
+
 @media (max-width:768px) {
 
   .xicon {
     width:16pt;
     padding:5pt;
   }
+
+.logouticon {
+  height:32px;
+}
 
   body {
     font-size:8pt;

@@ -154,7 +154,7 @@ public class HTML {
                 "</div></td><td>&nbsp;</td><td class=\"logout\" title=\"" +
                 LocalizedStrings.LS_HT_LOGOUT +
                 "\" onclick=\"document.location.href='logout'\">" +
-                LocalizedStrings.LS_LOGOUT +
+                "<img src=\"images/logout.svg\" class=\"logouticon\" alt=\"logout\">" +
                 "</td></tr></table>");
         }
         if (toasterSupport) {
