@@ -145,7 +145,7 @@ public class HTML {
                 "<div class=\"login\" title=\"" +
                 LocalizedStrings.LS_HT_SESSION +
                 "\" onclick=\"showSession()\">" +
-                "<div style=\"padding-bottom:4px\">")
+                "<div style=\"padding-bottom:4px;white-space:nowrap\">")
              .append(userData.userName)
              .append(
                 "</div><div>ID:\u2009")

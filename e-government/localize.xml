@@ -3,16 +3,40 @@
   <!-- set properties for this build -->
 
   <target name="help">
-      <echo message="help localize -Dlocale=fr"/>
+      <echo message="help localize -Dlocale=cc"/>
   </target>
 
   <target name="localize">
-     <delete dir="..\e-government.fr"/>
-     <copy todir="..\e-government.fr" preservelastmodified="true">
+  	<property name="localized.dir" location="../e-government/localized/${locale}"/>
+  	<condition property="foundlocalizeddata">
+  	  <available file="${localized.dir}" type="dir"/>
+  	</condition>
+  	<fail message="localized data not found!" unless="foundlocalizeddata"/>
+  	<property name="localized.egov-app.dir" location="../e-government.${locale}"/>
+  	<delete dir="${localized.egov-app.dir}"/>
+     <copy todir="${localized.egov-app.dir}" preservelastmodified="true">
        <fileset dir=".">
           <exclude name="localize.xml"/>
+          <exclude name="dist/**"/>
+          <exclude name="bin/**"/>
+          <exclude name=".tmp/**"/>
+          <exclude name="localized/**"/>
+          <exclude name=".project"/>
+          <exclude name=".classpath"/>
+          <exclude name="README.md"/>
        </fileset>
-   	  </copy>
-	</target>
+   	 </copy>
+     <copy todir="${localized.egov-app.dir}" preservelastmodified="true">
+      <fileset dir="${localized.dir}">
+         <include name="web/**"/>
+      </fileset>
+  	 </copy>
+	<ant antfile="${localized.dir}/${locale}.xml" target="localize" useNativeBasedir="true">
+	   <property name="app.dir" value="${localized.egov-app.dir}"/>
+	</ant>
+	<ant antfile="${localized.egov-app.dir}/build.xml" target="tomcat" useNativeBasedir="true">
+	   <property name="application.path" value="mobileid.fr#"/>
+	</ant>
+   </target>
    
 </project>
