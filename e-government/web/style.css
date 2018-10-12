@@ -18,7 +18,7 @@
 }
 
 .login, .logout {
-  display:inline-block;
+  display:inline;
   cursor:pointer;
   border-radius:5pt;
   vertical-align:middle;
@@ -30,6 +30,9 @@
 }
 
 .login {
+  display:flex;
+  justify-content:space-around;
+  flex-direction:column;
   background:linear-gradient(to bottom, #d0f0d0, #f0fff0, #d0f0d0);
 }
 
@@ -39,6 +42,9 @@
 }
 
 .logouticon {
+  position:relative;
+  top:50%;
+  transform:translateY(-50%);
   height:40px;
 }
 
@@ -55,13 +61,13 @@
 }
 
 .tftable th {
-  padding:4pt 10pt 4pt 10pt;
+  padding:4pt 10pt;
   background-color:#f8f8f8;
   text-align:center;
 }
 
 .tftable td {
-  padding:4pt 8pt 4pt 8pt;
+  padding:4pt 8pt;
   background-color:#ffffe0;
   font-size:11pt;
   text-align:left;
@@ -186,6 +192,7 @@ li {
 }
 
 .loginlogoutgroup {
+  display:flex;
   position:absolute;
   top:15px;
   right:15px;
@@ -193,6 +200,14 @@ li {
 }
 
 @media (max-width:768px) {
+
+  .stdbtn, .multibtn, .login, .logout, .tftable, .loginbtn {
+    box-shadow:2pt 2pt 2pt #d0d0d0;
+  }
+
+  .logout {
+    margin-left:6pt;
+  }
 
   .xicon {
     width:16pt;
