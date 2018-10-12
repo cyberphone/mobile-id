@@ -145,10 +145,10 @@ public class HTML {
                 "<div class=\"login\" title=\"" +
                 LocalizedStrings.LS_HT_SESSION +
                 "\" onclick=\"showSession()\">" +
-                "<div style=\"padding:3px 0px 1px 0px\">")
+                "<div style=\"padding-bottom:4px\">")
              .append(userData.userName)
              .append(
-                "</div><div style=\"padding:1px 0px 3px 0px\">ID:\u2009")
+                "</div><div>ID:\u2009")
              .append(id)
              .append(
                 "</div></div><div class=\"logout\" title=\"" +
