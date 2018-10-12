@@ -141,8 +141,8 @@ public class HTML {
             }
             s.append(
                 "<div id=\"session\" class=\"sessionview\"></div>" +
-                "<table id=\"login\" style=\"position:absolute;top:15px;right:15px;z-index:6;visibility:visible\">" +
-                "<tr><td class=\"login\" title=\"" +
+                "<div class=\"loginlogoutgroup\">" +
+                "<div class=\"login\" title=\"" +
                 LocalizedStrings.LS_HT_SESSION +
                 "\" onclick=\"showSession()\">" +
                 "<div style=\"padding:3px 0px 2px 0px\">")
@@ -151,11 +151,11 @@ public class HTML {
                 "</div><div style=\"padding:2px 0px 3px 0px\">ID:\u2009")
              .append(id)
              .append(
-                "</div></td><td>&nbsp;</td><td class=\"logout\" title=\"" +
+                "</div></div><div class=\"logout\" title=\"" +
                 LocalizedStrings.LS_HT_LOGOUT +
                 "\" onclick=\"document.location.href='logout'\">" +
                 "<img src=\"images/logout.svg\" class=\"logouticon\" alt=\"logout\">" +
-                "</td></tr></table>");
+                "</div></div>");
         }
         if (toasterSupport) {
             s.append("<div id=\"toaster\" class=\"toaster\"></div>");
