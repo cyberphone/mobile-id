@@ -50,18 +50,26 @@ public class ShowSessionServlet extends HttpServlet {
             "<div>" +
             "<div class=\"dialog\" style=\"font-size:8pt;cursor:pointer\"" +
             " onclick=\"document.getElementById('session').style.visibility='hidden'\">" +
-            "<img src=\"images/x.svg\" class=\"xicon\" alt=\"x\" title=\"Close session wiew\"></div>" + 
-            "<div class=\"dialog\">Session Data</div>" +
+            "<img src=\"images/x.svg\" class=\"xicon\" alt=\"x\" title=\"" +
+            LocalizedStrings.CLOSE_SESSION_VIEW +
+            "\"></div>" + 
+            "<div class=\"dialog\">" +
+            LocalizedStrings.SESSION_DATA +
+            "</div>" +
             "</div>" +
             "<div style=\"padding:10pt\">");
         UserData userData = UserData.getUserData(request);
         if (userData == null) {
-            s.append("The session appears to have terminated");
+            s.append(LocalizedStrings.SESSION_TERMINATED);
         } else {
             s.append("<table class=\"tftable\">" +
-                     "<tr><th>Session&nbsp;ID</th><td>")
+                     "<tr><th>" +
+            		LocalizedStrings.SESSION_ID +
+            		"</th><td>")
              .append(userData.sessionId)
-             .append("</td></tr><tr><th>Start&nbsp;Time</th><td>")
+             .append("</td></tr><tr><th>" +
+            		 LocalizedStrings.START_TIME +
+            		 "</th><td>")
              .append(ProtectedServlet.getDateString(new Date(userData.creationTime)))
              .append("</td></tr></table>" +
                      "<div style=\"padding:10pt 0px 3pt 0px\">" +

@@ -50,7 +50,9 @@ public class DeclarationServlet extends ProtectedServlet {
         .append(
             "</div>" +
             "<div>" +
-            "<div class=\"stdbtn\" onclick=\"document.forms.shoot.submit()\">Submit</div>" +
+            "<div class=\"stdbtn\" onclick=\"document.forms.shoot.submit()\">" +
+            LocalizedStrings.SUBMIT_BTN +
+            "</div>" +
             "</div></form>");
         HTML.resultPage(response, userData, html);
     }

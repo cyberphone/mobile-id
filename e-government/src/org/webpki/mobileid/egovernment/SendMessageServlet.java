@@ -37,10 +37,10 @@ public class SendMessageServlet extends ProtectedServlet {
     enum MessageTypes {
 
         NOT_SELECTED      (LocalizedStrings.NO_SELECT),
-        TAX_QUESTION      ("Question regarding taxation"),
-        FILE_COMPLAINT    ("File a complaint"),
-        TECHNICAL_SUPPORT ("Technical support"),
-        OTHER             ("Other topic");
+        TAX_QUESTION      (LocalizedStrings.SELECT_TAX_QUESTION),
+        FILE_COMPLAINT    (LocalizedStrings.SELECT_FILE_COMPLAINT),
+        TECHNICAL_SUPPORT (LocalizedStrings.SELECT_TECH_SUPPORT),
+        OTHER             (LocalizedStrings.SELECT_OTHER_TOPIC);
 
         String userText;
 
@@ -77,7 +77,10 @@ public class SendMessageServlet extends ProtectedServlet {
             "<tr><td><textarea id=\"message\" name=\"message\" placeholder=\"" +
             LocalizedStrings.YOUR_MESSAGE_TIP +
             "...\" style=\"box-sizing:border-box\" rows=\"10\" cols=\"10\"></textarea>" +
-            "</td></tr></table></div><div style=\"padding-top:10pt\"><div class=\"stdbtn\" onclick=\"verify(this)\">Submit</div></div>" +
+            "</td></tr></table></div><div style=\"padding-top:10pt\">" +
+            "<div class=\"stdbtn\" onclick=\"verify(this)\">" +
+            LocalizedStrings.SUBMIT_BTN +
+            "</div></div>" +
             "</form>");
         HTML.resultPage(response,
             "function verify(fromElement) {\n" +

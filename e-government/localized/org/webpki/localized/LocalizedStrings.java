@@ -38,8 +38,13 @@ public interface LocalizedStrings {
     String THANKS_FOR_MESSAGE       = "Thank you for your message, " +
                                       "we will process it as fast we can!";
     String NO_SELECT                = "Please select message subject";
+    String SELECT_TAX_QUESTION      = "Question regarding taxation";
+    String SELECT_FILE_COMPLAINT    = "File a complaint";
+    String SELECT_TECH_SUPPORT      = "Technical support";
+    String SELECT_OTHER_TOPIC       = "Other topic";
     String NO_MESSAGE               = "Please provide a message";
 	String YOUR_MESSAGE_TIP         = "Your message";
+	String SUBMIT_BTN               = "Submit";
 
     // General purpose
     String REFERENCE_ID             = "Reference ID";  // SHORT table header
@@ -54,10 +59,16 @@ public interface LocalizedStrings {
 	String ONLY_ONE_LOGIN_METHOD    = "In this demo there is only one method";
     
     // Session data
+	String SESSION_DATA             = "Session Data";
+	String SESSION_ID               = "Session ID";
+	String START_TIME               = "Start Time";
 	String SERIAL_NUMBER            = "Serial Number";
 	String ISSUER_NAME              = "Issuer Name";
 	String SUBJECT_NAME             = "Subject Name";
 	String VALIDITY                 = "Validity";
 	String USER_CERTIFICATE         = "User Certificate";
+	String CLOSE_SESSION_VIEW       = "Close session wiew";
+	String SESSION_TERMINATED       = "The session appears to have terminated";
+	String SESSION_TIMOUT           = "Session Timed Out";
  }
 
