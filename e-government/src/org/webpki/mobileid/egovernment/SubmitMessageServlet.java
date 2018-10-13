@@ -26,6 +26,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.webpki.localized.LocalizedStrings;
+
 public class SubmitMessageServlet extends ProtectedServlet {
 
     private static final long serialVersionUID = 1L;
@@ -80,7 +82,7 @@ public class SubmitMessageServlet extends ProtectedServlet {
                         MessageTypes.NOT_SELECTED.toString() + "') {\n" +
             "    type.focus();\n" +
             "    toast('" +
-                       LocalizedStrings.LS_NO_SELECT +
+                       HTML.javaScript(LocalizedStrings.LS_NO_SELECT) +
                        "', fromElement);\n" +
             "    return;\n" +
             "  }\n" +
@@ -88,7 +90,7 @@ public class SubmitMessageServlet extends ProtectedServlet {
             "  if (message.value.trim().length == 0) {\n" +
             "    message.focus();\n" +
             "    toast('" +
-                      LocalizedStrings.LS_NO_MESSAGE +
+                          HTML.javaScript(LocalizedStrings.LS_NO_MESSAGE) +
                       "', fromElement);\n" +
             "    return;\n" +
             "  }\n" +

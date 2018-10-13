@@ -30,6 +30,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.webpki.crypto.CertificateInfo;
 
+import org.webpki.localized.LocalizedStrings;
+
 public class LoginServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
@@ -49,7 +51,11 @@ public class LoginServlet extends HttpServlet {
         .append(request.getParameter(LOGIN_TARGET))
         .append(
             "\">" +
-            "<div class=\"header\">This Service Requires Login<br>Select Login Method</div>" +
+            "<div class=\"header\">" +
+            LocalizedStrings.LS_REQUIRES_LOGIN +
+            "<br>" +
+            LocalizedStrings.LS_SELECT_LOGIN_METHOD +
+            "</div>" +
             "<img src=\"images/mobileidlogo.svg\" title=\"Mobile ID\" alt=\"Mobile ID\"" +
              " onclick=\"document.forms.shoot.submit()\" class=\"loginbtn\">" +
             "<div class=\"footer\">In this demo there is only one method...</div>" +

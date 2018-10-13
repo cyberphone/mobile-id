@@ -22,7 +22,10 @@ import java.util.logging.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
+
 import javax.servlet.http.HttpServletResponse;
+
+import org.webpki.localized.LocalizedStrings;
 
 public class HTML {
     

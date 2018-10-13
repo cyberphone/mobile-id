@@ -1,0 +1,13 @@
+<project name="Make a French version of the source" default="help" basedir=".">
+
+  <!-- set french specialtes  -->
+
+  <target name="help">
+      <echo message="help localize"/>
+  </target>
+      	
+  <target name="localize">
+  	<echo message="No special french features yet..."/> 
+  </target>
+   
+</project>

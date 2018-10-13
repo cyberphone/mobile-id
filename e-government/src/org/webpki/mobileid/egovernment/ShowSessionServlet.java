@@ -29,6 +29,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.webpki.crypto.CertificateInfo;
 
+import org.webpki.localized.LocalizedStrings;
+
 public class ShowSessionServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
@@ -62,14 +64,16 @@ public class ShowSessionServlet extends HttpServlet {
              .append("</td></tr><tr><th>Start&nbsp;Time</th><td>")
              .append(ProtectedServlet.getDateString(new Date(userData.creationTime)))
              .append("</td></tr></table>" +
-                     "<div style=\"padding:10pt 0px 3px 0px\">User Certificate:</div>" +
+                     "<div style=\"padding:10pt 0px 3pt 0px\">" +
+            		 LocalizedStrings.LS_USER_CERTIFICATE +
+            		 ":</div>" +
                      "<table class=\"tftable\">");
             CertificateInfo certInfo = new CertificateInfo(userData.certificate);
-            addEntry(s, "Serial", certInfo.getSerialNumber() +
+            addEntry(s, LocalizedStrings.LS_SERIAL_NUMBER, certInfo.getSerialNumber() +
                      " (" + certInfo.getSerialNumberInHex() + ")");
-            addEntry(s, "Issuer", certInfo.getIssuer());
-            addEntry(s, "Subject", certInfo.getSubject());
-            addEntry(s, "Validity",
+            addEntry(s, LocalizedStrings.LS_ISSUER_NAME, certInfo.getIssuer());
+            addEntry(s, LocalizedStrings.LS_SUBJECT_NAME, certInfo.getSubject());
+            addEntry(s, LocalizedStrings.LS_VALIDITY,
                      ProtectedServlet.getDateString(userData.certificate.getNotBefore()) + 
                      " - " +
                      ProtectedServlet.getDateString(userData.certificate.getNotAfter()));

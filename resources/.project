@@ -5,7 +5,20 @@
 	<projects>
 	</projects>
 	<buildSpec>
+		<buildCommand>
+			<name>org.eclipse.jdt.core.javabuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
 	</buildSpec>
 	<natures>
+		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>localized</name>
+			<type>2</type>
+			<location>C:/github.repositories/mobile-id/e-government/localized</location>
+		</link>
+	</linkedResources>
 </projectDescription>

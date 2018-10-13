@@ -1,0 +1,82 @@
+<project name="Localization Support" default="help" basedir=".">
+
+  <!-- set properties for this build -->
+  
+  <property file="common.properties"/>
+
+  <property name="javaversion" value="1.8" />
+  <property name="debug" value="on"/>
+
+  <property name="src.dir" value="src"/>
+  <property name="temp.dir" value=".tmp"/>
+
+  <path id="lib.classpath">
+     <fileset dir="${common.lib.dir}">
+       <include name="*.jar"/>
+    </fileset>
+  </path>
+  
+  <target name="help">
+    <echo message="localize -Dapp-sub-dir=e-government -Dlocale=fr"/>
+  </target>
+  
+   <target name="localize">
+   	<fail message="&quot;app-sub-dir&quot; not defined!" unless="app-sub-dir"/>
+   	<fail message="&quot;locale&quot; not defined!" unless="locale"/>
+    <property name="app.dir" location="../${app-sub-dir}"/>
+  	<property name="localization.dir" location="${app.dir}/localization/${locale}"/>
+  	<condition property="foundlocalizeddata">
+  	  <available file="${localization.dir}" type="dir"/>
+  	</condition>
+  	<fail message="localized data not found in &quot;${localization.dir}&quot;!" unless="foundlocalizeddata"/>
+  	<property name="localized.egov-app.dir" location="../${app-sub-dir}.${locale}"/>
+  	<delete dir="${localized.egov-app.dir}"/>
+    <copy todir="${localized.egov-app.dir}" preservelastmodified="true">
+       <fileset dir="${app.dir}">
+          <exclude name="dist/**"/>
+          <exclude name="bin/**"/>
+          <exclude name=".tmp/**"/>
+          <exclude name="localization/**"/>
+          <exclude name="'**/LocalizedStrings.java"/>
+          <exclude name=".project"/>
+          <exclude name=".classpath"/>
+          <exclude name="README.md"/>
+       </fileset>
+   	</copy>
+    <copy todir="${localized.egov-app.dir}" preservelastmodified="true">
+      <fileset dir="${localization.dir}">
+         <include name="web/**"/>
+      </fileset>
+  	</copy>
+  	<delete dir="${temp.dir}"/>
+    <mkdir dir="${temp.dir}"/>
+  	<!-- Compile -->
+    <javac debug="on"
+           srcdir="${app.dir}/localized:src"
+           destdir="${temp.dir}" 
+           classpathref="lib.classpath"
+           includeAntRuntime="false">
+       <compilerarg value="-Xlint:all,-path"/>
+    </javac>
+    <!-- Localize -->
+    <java fork="yes"
+          classname="org.webpki.localize.Localizer"
+    	  dir="${temp.dir}"
+          failonerror="true">
+    	<classpath>
+            <pathelement path="${temp.dir}"/>
+       	    <path refid="lib.classpath"/>
+    	</classpath>
+        <arg value="${localized.egov-app.dir}"/>
+        <arg value="${localization.dir}/${locale}.properties"/>
+        <jvmarg value="-Dfile.encoding=UTF-8"/>
+    </java>
+	<ant antfile="${localization.dir}/${locale}.xml" target="localize" useNativeBasedir="true">
+	   <property name="app.dir" value="${localized.egov-app.dir}"/>
+	</ant>
+	<ant antfile="${localized.egov-app.dir}/build.xml" target="tomcat" useNativeBasedir="true">
+	   <property name="application.path" value="mobileid.fr#"/>
+	</ant>
+   </target>
+  
+</project>

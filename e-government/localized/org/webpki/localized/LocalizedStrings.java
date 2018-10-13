@@ -15,7 +15,7 @@
  *
  */
 
-package org.webpki.mobileid.egovernment;
+package org.webpki.localized;
 
 public interface LocalizedStrings {
 
@@ -41,6 +41,15 @@ public interface LocalizedStrings {
     String LS_HT_SESSION           = "Click to show session data";
     String LS_HT_HOME              = "Home sweet home...";
     String LS_HT_LOGOUT            = "Click to logout";
+	String LS_REQUIRES_LOGIN       = "This Service Requires Login";
+	String LS_SELECT_LOGIN_METHOD  = "Select Login Method";
+    
+    // Session data
+	String LS_SERIAL_NUMBER        = "Serial Number";
+	String LS_ISSUER_NAME          = "Issuer Name";
+	String LS_SUBJECT_NAME         = "Subject Name";
+	String LS_VALIDITY             = "Validity";
+	String LS_USER_CERTIFICATE     = "User Certificate";
  
 }
 

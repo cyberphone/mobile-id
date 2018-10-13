@@ -6,6 +6,7 @@
   <property name="demo" value="false"/>
 
   <property name="src.dir" value="src"/>
+  <property name="localized.dir" value="localized"/>
   <property name="temp.dir" value=".tmp"/>
   <property name="class_war_path" value="WEB-INF/classes/org/webpki/mobileid/egovernment"/>
   
@@ -41,18 +42,19 @@
     <property name="zip.common.lib.dir" value="${common.lib.dir}"/>
     <property name="zip.bcprovider.lib.dir" value="${bcprovider.lib.dir}"/>
   	<delete dir="${temp.dir}"/>
-    <fixcrlf srcdir="${src.dir}"
+    <fixcrlf srcdir="."
        tab="remove"
        tablength="4"
        eol="lf"
        eof="remove"
-       includes="**/*.java"/>
+       includes="**/*.java, **/*.css"/>
     <copy file="web.xml" todir="${temp.dir}"/>
     <javac debug="${debug}"
            source="${javaversion}"
            target="${javaversion}"
-           srcdir="${src.dir}"
+           srcdir="${src.dir}:${localized.dir}"
            destdir="${temp.dir}"
+    	   encoding="UTF-8"
            includeAntRuntime="false">
     	<classpath>
 	      <fileset dir="${common.lib.dir}">
