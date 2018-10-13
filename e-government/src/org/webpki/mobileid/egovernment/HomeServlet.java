@@ -25,6 +25,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.webpki.localized.LocalizedStrings;
+
 public class HomeServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
@@ -33,7 +35,9 @@ public class HomeServlet extends HttpServlet {
     public void doGet(HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
         StringBuilder html = new StringBuilder(
-                "<div class=\"header\">Select Service</div>" +
+                "<div class=\"header\">" +
+                LocalizedStrings.SELECT_SERVICE +
+                "</div>" +
                 "<div><table style=\"display:inline-block\">");
         boolean first = true;
         for (AvailableServices service : AvailableServices.values()){

@@ -50,13 +50,13 @@
     </servlet>
 
     <servlet>
-        <servlet-name>TaxReturnsServlet</servlet-name>
-        <servlet-class>org.webpki.mobileid.egovernment.TaxReturnsServlet</servlet-class>
+        <servlet-name>TaxationHistoryServlet</servlet-name>
+        <servlet-class>org.webpki.mobileid.egovernment.TaxationHistoryServlet</servlet-class>
     </servlet>
 
     <servlet>
-        <servlet-name>SubmitMessageServlet</servlet-name>
-        <servlet-class>org.webpki.mobileid.egovernment.SubmitMessageServlet</servlet-class>
+        <servlet-name>SendMessageServlet</servlet-name>
+        <servlet-class>org.webpki.mobileid.egovernment.SendMessageServlet</servlet-class>
     </servlet>
 
     <servlet>
@@ -85,13 +85,13 @@
     </servlet-mapping>
 
     <servlet-mapping>
-        <servlet-name>TaxReturnsServlet</servlet-name>
-        <url-pattern>/taxreturns</url-pattern>
+        <servlet-name>TaxationHistoryServlet</servlet-name>
+        <url-pattern>/taxationhistory</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>
-        <servlet-name>SubmitMessageServlet</servlet-name>
-        <url-pattern>/submitmessage</url-pattern>
+        <servlet-name>SendMessageServlet</servlet-name>
+        <url-pattern>/sendmessage</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>

@@ -26,6 +26,8 @@ import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.webpki.localized.LocalizedStrings;
+
 
 public class LogoutServlet extends HttpServlet {
 
@@ -40,6 +42,8 @@ public class LogoutServlet extends HttpServlet {
         }
         HTML.resultPage(response, null,
             new StringBuilder(
-                "<div class=\"header\">Thank you, welcome back!</div>"));
+                "<div class=\"header\">" +
+                LocalizedStrings.THANK_YOU_WELCOME_BACK +
+                "</div>"));
     }
 }

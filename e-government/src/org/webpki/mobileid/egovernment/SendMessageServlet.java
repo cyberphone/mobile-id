@@ -28,15 +28,15 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.webpki.localized.LocalizedStrings;
 
-public class SubmitMessageServlet extends ProtectedServlet {
+public class SendMessageServlet extends ProtectedServlet {
 
     private static final long serialVersionUID = 1L;
     
-    static Logger logger = Logger.getLogger(SubmitMessageServlet.class.getCanonicalName());
+    static Logger logger = Logger.getLogger(SendMessageServlet.class.getCanonicalName());
 
     enum MessageTypes {
 
-        NOT_SELECTED      ("Select subject..."),
+        NOT_SELECTED      (LocalizedStrings.NO_SELECT),
         TAX_QUESTION      ("Question regarding taxation"),
         FILE_COMPLAINT    ("File a complaint"),
         TECHNICAL_SUPPORT ("Technical support"),
@@ -57,9 +57,11 @@ public class SubmitMessageServlet extends ProtectedServlet {
         if (userData == null) {
             return;
         }
-        StringBuilder html = AvailableServices.USER_MESSAGE.addSelfForm()
+        StringBuilder html = AvailableServices.SEND_MESSAGE.addSelfForm()
         .append(
-            "<div class=\"header\">Submit Message</div>" +
+            "<div class=\"header\">" +
+            LocalizedStrings.SEND_MESSAGE +
+            "</div>" +
             "<div><table style=\"display:inline-block\">" +
             "<tr><td style=\"text-align:left;padding-bottom:2pt\">" +
             "<select id=\"type\" autofocus name=\"type\">");
@@ -72,7 +74,9 @@ public class SubmitMessageServlet extends ProtectedServlet {
         }
         html.append(
             "</select></td></tr>" +
-            "<tr><td><textarea id=\"message\" name=\"message\" placeholder=\"Your message...\" style=\"box-sizing:border-box\" rows=\"10\" cols=\"10\"></textarea>" +
+            "<tr><td><textarea id=\"message\" name=\"message\" placeholder=\"" +
+            LocalizedStrings.YOUR_MESSAGE_TIP +
+            "...\" style=\"box-sizing:border-box\" rows=\"10\" cols=\"10\"></textarea>" +
             "</td></tr></table></div><div style=\"padding-top:10pt\"><div class=\"stdbtn\" onclick=\"verify(this)\">Submit</div></div>" +
             "</form>");
         HTML.resultPage(response,
@@ -82,7 +86,7 @@ public class SubmitMessageServlet extends ProtectedServlet {
                         MessageTypes.NOT_SELECTED.toString() + "') {\n" +
             "    type.focus();\n" +
             "    toast('" +
-                       HTML.javaScript(LocalizedStrings.LS_NO_SELECT) +
+                       HTML.javaScript(LocalizedStrings.NO_SELECT) +
                        "', fromElement);\n" +
             "    return;\n" +
             "  }\n" +
@@ -90,7 +94,7 @@ public class SubmitMessageServlet extends ProtectedServlet {
             "  if (message.value.trim().length == 0) {\n" +
             "    message.focus();\n" +
             "    toast('" +
-                          HTML.javaScript(LocalizedStrings.LS_NO_MESSAGE) +
+                          HTML.javaScript(LocalizedStrings.NO_MESSAGE) +
                       "', fromElement);\n" +
             "    return;\n" +
             "  }\n" +
@@ -112,10 +116,10 @@ public class SubmitMessageServlet extends ProtectedServlet {
 
         StringBuilder html = new StringBuilder(
             "<div class=\"header\">" +
-            LocalizedStrings.LS_MESSAGE_RECEIVED +
+            LocalizedStrings.MESSAGE_RECEIVED +
             "</div>" +
             "<div><table class=\"msgtable\"><tr><td>")
-        .append(LocalizedStrings.LS_THANKS_FOR_MESSAGE)
+        .append(LocalizedStrings.THANKS_FOR_MESSAGE)
         .append(
             "</td></tr></table></div>");
         HTML.resultPage(response, userData, html);  

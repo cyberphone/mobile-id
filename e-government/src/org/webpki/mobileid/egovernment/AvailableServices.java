@@ -17,11 +17,13 @@
 
 package org.webpki.mobileid.egovernment;
 
+import org.webpki.localized.LocalizedStrings;
+
 public enum AvailableServices {
     
-    DECLARATION  ("declaration",    "Income Declaration"),
-    TAX_RETURNS  ("taxreturns",     "Tax Returns"),
-    USER_MESSAGE ("submitmessage",  "Submit Message");
+    DECLARATION      ("declaration",     LocalizedStrings.INCOME_DECLARATION),
+    TAXATION_HISTORY ("taxationhistory", LocalizedStrings.TAXATION_HISTORY),
+    SEND_MESSAGE     ("sendmessage",     LocalizedStrings.SEND_MESSAGE);
 
     String userText;
     String urlPath;

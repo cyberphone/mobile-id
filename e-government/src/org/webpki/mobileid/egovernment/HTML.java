@@ -131,7 +131,7 @@ public class HTML {
             "</script></head><body onload=\"initApplication()\">" +
             "<img alt=\"home\" onclick=\"document.location.href='home'\"" +
             " title=\"" +
-            LocalizedStrings.LS_HT_HOME +
+            LocalizedStrings.HT_HOME +
             "\" style=\"cursor:pointer;position:absolute;top:15px;" +
             "left:15px;z-index:5;visibility:visible;width:120px\" src=\"images/egovlogo.svg\">");
         if (userData != null) {
@@ -146,7 +146,7 @@ public class HTML {
                 "<div id=\"session\" class=\"sessionview\"></div>" +
                 "<div class=\"loginlogoutgroup\">" +
                 "<div class=\"login\" title=\"" +
-                LocalizedStrings.LS_HT_SESSION +
+                LocalizedStrings.HT_SESSION +
                 "\" onclick=\"showSession()\">" +
                 "<div style=\"padding-bottom:4px;white-space:nowrap\">")
              .append(userData.userName)
@@ -155,7 +155,7 @@ public class HTML {
              .append(id)
              .append(
                 "</div></div><div class=\"logout\" title=\"" +
-                LocalizedStrings.LS_HT_LOGOUT +
+                LocalizedStrings.HT_LOGOUT +
                 "\" onclick=\"document.location.href='logout'\">" +
                 "<img src=\"images/logout.svg\" class=\"logouticon\" alt=\"logout\">" +
                 "</div></div>");

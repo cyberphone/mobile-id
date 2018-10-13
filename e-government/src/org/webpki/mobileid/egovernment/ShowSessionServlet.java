@@ -65,15 +65,15 @@ public class ShowSessionServlet extends HttpServlet {
              .append(ProtectedServlet.getDateString(new Date(userData.creationTime)))
              .append("</td></tr></table>" +
                      "<div style=\"padding:10pt 0px 3pt 0px\">" +
-            		 LocalizedStrings.LS_USER_CERTIFICATE +
+            		 LocalizedStrings.USER_CERTIFICATE +
             		 ":</div>" +
                      "<table class=\"tftable\">");
             CertificateInfo certInfo = new CertificateInfo(userData.certificate);
-            addEntry(s, LocalizedStrings.LS_SERIAL_NUMBER, certInfo.getSerialNumber() +
+            addEntry(s, LocalizedStrings.SERIAL_NUMBER, certInfo.getSerialNumber() +
                      " (" + certInfo.getSerialNumberInHex() + ")");
-            addEntry(s, LocalizedStrings.LS_ISSUER_NAME, certInfo.getIssuer());
-            addEntry(s, LocalizedStrings.LS_SUBJECT_NAME, certInfo.getSubject());
-            addEntry(s, LocalizedStrings.LS_VALIDITY,
+            addEntry(s, LocalizedStrings.ISSUER_NAME, certInfo.getIssuer());
+            addEntry(s, LocalizedStrings.SUBJECT_NAME, certInfo.getSubject());
+            addEntry(s, LocalizedStrings.VALIDITY,
                      ProtectedServlet.getDateString(userData.certificate.getNotBefore()) + 
                      " - " +
                      ProtectedServlet.getDateString(userData.certificate.getNotAfter()));

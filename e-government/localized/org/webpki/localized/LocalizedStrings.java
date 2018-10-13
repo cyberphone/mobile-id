@@ -19,37 +19,45 @@ package org.webpki.localized;
 
 public interface LocalizedStrings {
 
-    // Declaration
-    String LS_DECLARATION_HEADER   = "Declaration Year @";  // @ = Year placeholder
-    String LS_DECLARATION_RECEIVED = "Declaration Received";
+	// Main
+	String SELECT_SERVICE           = "Select Service";
+	String INCOME_DECLARATION       = "Income Declaration";
+	String TAXATION_HISTORY         = "Taxation History";
+	String SEND_MESSAGE             = "Send Message";
+	String THANK_YOU_WELCOME_BACK   = "Thank you, welcome back!";
+
+	// Declaration
+    String DECLARATION_HEADER       = "Declaration Year @";  // @   = Year placeholder
+    String DECLARATION_RECEIVED     = "Declaration Received";
     
-    String LS_CONFIRMATION         = "A confirmation message has been sent to"; // Followed by : email
+    String CONFIRMATION             = "A confirmation message has been sent to"; // Followed by : email
 
-    // Submit Message
-    String LS_MESSAGE_RECEIVED     = "Message Received";
+    // Send Message
+    String MESSAGE_RECEIVED         = "Message Received";
 
-    String LS_THANKS_FOR_MESSAGE   = "Thank you for your message, " +
-                                     "we will process it as fast we can!";
-    String LS_NO_SELECT            = "Please select message subject";
-    String LS_NO_MESSAGE           = "Please provide a message";
+    String THANKS_FOR_MESSAGE       = "Thank you for your message, " +
+                                      "we will process it as fast we can!";
+    String NO_SELECT                = "Please select message subject";
+    String NO_MESSAGE               = "Please provide a message";
+	String YOUR_MESSAGE_TIP         = "Your message";
 
     // General purpose
-    String LS_REFERENCE_ID         = "Reference ID";  // SHORT table header
-    String LS_TIME_STAMP           = "Time Stamp";    // SHORT table header
+    String REFERENCE_ID             = "Reference ID";  // SHORT table header
+    String TIME_STAMP               = "Time Stamp";    // SHORT table header
 
     // Login, logout, home
-    String LS_HT_SESSION           = "Click to show session data";
-    String LS_HT_HOME              = "Home sweet home...";
-    String LS_HT_LOGOUT            = "Click to logout";
-	String LS_REQUIRES_LOGIN       = "This Service Requires Login";
-	String LS_SELECT_LOGIN_METHOD  = "Select Login Method";
+    String HT_SESSION               = "Click to show session data";
+    String HT_HOME                  = "Home sweet home...";
+    String HT_LOGOUT                = "Click to logout";
+	String REQUIRES_LOGIN           = "This Service Requires Login";
+	String SELECT_LOGIN_METHOD      = "Select Login Method";
+	String ONLY_ONE_LOGIN_METHOD    = "In this demo there is only one method";
     
     // Session data
-	String LS_SERIAL_NUMBER        = "Serial Number";
-	String LS_ISSUER_NAME          = "Issuer Name";
-	String LS_SUBJECT_NAME         = "Subject Name";
-	String LS_VALIDITY             = "Validity";
-	String LS_USER_CERTIFICATE     = "User Certificate";
- 
-}
+	String SERIAL_NUMBER            = "Serial Number";
+	String ISSUER_NAME              = "Issuer Name";
+	String SUBJECT_NAME             = "Subject Name";
+	String VALIDITY                 = "Validity";
+	String USER_CERTIFICATE         = "User Certificate";
+ }
 

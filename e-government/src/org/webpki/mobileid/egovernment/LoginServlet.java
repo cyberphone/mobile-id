@@ -52,13 +52,15 @@ public class LoginServlet extends HttpServlet {
         .append(
             "\">" +
             "<div class=\"header\">" +
-            LocalizedStrings.LS_REQUIRES_LOGIN +
+            LocalizedStrings.REQUIRES_LOGIN +
             "<br>" +
-            LocalizedStrings.LS_SELECT_LOGIN_METHOD +
+            LocalizedStrings.SELECT_LOGIN_METHOD +
             "</div>" +
             "<img src=\"images/mobileidlogo.svg\" title=\"Mobile ID\" alt=\"Mobile ID\"" +
              " onclick=\"document.forms.shoot.submit()\" class=\"loginbtn\">" +
-            "<div class=\"footer\">In this demo there is only one method...</div>" +
+            "<div class=\"footer\">" +
+             LocalizedStrings.ONLY_ONE_LOGIN_METHOD + 
+             "...</div>" +
             "</form>");
         HTML.resultPage(response, null, html);
     }

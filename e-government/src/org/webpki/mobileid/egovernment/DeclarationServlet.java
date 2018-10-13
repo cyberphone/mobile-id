@@ -44,7 +44,7 @@ public class DeclarationServlet extends ProtectedServlet {
         StringBuilder html = AvailableServices.DECLARATION.addSelfForm()
         .append(
             "<div class=\"header\">")
-        .append(LocalizedStrings.LS_DECLARATION_HEADER
+        .append(LocalizedStrings.DECLARATION_HEADER
             .replace("@", 
                      Integer.toString(new GregorianCalendar().get(GregorianCalendar.YEAR) - 1)))
         .append(
@@ -62,22 +62,22 @@ public class DeclarationServlet extends ProtectedServlet {
         String emailSubject = userData.userName.toLowerCase().replace(' ', '.');
         StringBuilder html = new StringBuilder(
             "<div class=\"header\">" +
-            LocalizedStrings.LS_DECLARATION_RECEIVED +
+            LocalizedStrings.DECLARATION_RECEIVED +
             "</div>" +
             "<div><table class=\"tftable\"><tr><th>" +
-            LocalizedStrings.LS_TIME_STAMP +
+            LocalizedStrings.TIME_STAMP +
             "</th><td>")
         .append(getDateString(new GregorianCalendar().getTime()))
         .append(
             "</td></tr>" +
             "<tr><th>" +
-            LocalizedStrings.LS_REFERENCE_ID +
+            LocalizedStrings.REFERENCE_ID +
             "</th><td>")
         .append(String.format("%08d", referenceId++))
         .append(
             "</td></tr></table></div>" +
             "<div class=\"footer\"><table class=\"msgtable\"><tr><td>" +
-            LocalizedStrings.LS_CONFIRMATION + 
+            LocalizedStrings.CONFIRMATION + 
             ":</td></tr><tr><td style=\"white-space:nowrap;font-weight:bold\">")
         .append(emailSubject)
         .append("@gmail.com</td></tr></table></div>");

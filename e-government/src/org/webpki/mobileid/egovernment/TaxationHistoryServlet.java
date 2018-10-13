@@ -25,7 +25,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class TaxReturnsServlet extends HttpServlet {
+import org.webpki.localized.LocalizedStrings;
+
+public class TaxationHistoryServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
     
@@ -38,7 +40,9 @@ public class TaxReturnsServlet extends HttpServlet {
         }
         HTML.resultPage(response, userData,
             new StringBuilder(
-                "<div class=\"header\">Tax Returns</div>" +
+                "<div class=\"header\">" +
+                LocalizedStrings.TAXATION_HISTORY +
+                "</div>" +
                 "<div>Not yet</div>"));
     }
 }
