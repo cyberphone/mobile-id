@@ -132,8 +132,7 @@ public class HTML {
             "<img alt=\"home\" onclick=\"document.location.href='home'\"" +
             " title=\"" +
             LocalizedStrings.HT_HOME +
-            "\" style=\"cursor:pointer;position:absolute;top:15px;" +
-            "left:15px;z-index:5;visibility:visible;width:120px\" src=\"images/egovlogo.svg\">");
+            "\" class=\"egovlogo\" src=\"images/egovlogo.svg\">");
         if (userData != null) {
             StringBuilder id = new StringBuilder();
             for (int q = 0; q < 12; q += 4) {

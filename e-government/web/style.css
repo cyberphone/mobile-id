@@ -4,6 +4,15 @@
   border-color:#B0B0B0;display:inline-block;padding:1.5pt 3pt 1pt 3pt;
 }
 
+.egovlogo {
+  cursor:pointer;
+  position:absolute;
+  top:12px;
+  left:12px;
+  visibility:visible;
+  height:40pt;
+}
+
 .toaster {
   border-color:red;
   border-style:solid;
