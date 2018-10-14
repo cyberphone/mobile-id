@@ -64,17 +64,17 @@ public class ShowSessionServlet extends HttpServlet {
         } else {
             s.append("<table class=\"tftable\">" +
                      "<tr><th>" +
-            		LocalizedStrings.SESSION_ID +
-            		"</th><td>")
+                    LocalizedStrings.SESSION_ID +
+                    "</th><td>")
              .append(userData.sessionId)
              .append("</td></tr><tr><th>" +
-            		 LocalizedStrings.START_TIME +
-            		 "</th><td>")
+                     LocalizedStrings.START_TIME +
+                     "</th><td>")
              .append(ProtectedServlet.getDateString(new Date(userData.creationTime)))
              .append("</td></tr></table>" +
                      "<div style=\"padding:10pt 0px 3pt 0px\">" +
-            		 LocalizedStrings.USER_CERTIFICATE +
-            		 ":</div>" +
+                     LocalizedStrings.USER_CERTIFICATE +
+                     ":</div>" +
                      "<table class=\"tftable\">");
             CertificateInfo certInfo = new CertificateInfo(userData.certificate);
             addEntry(s, LocalizedStrings.SERIAL_NUMBER, certInfo.getSerialNumber() +

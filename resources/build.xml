@@ -51,7 +51,7 @@
     <condition property="self.root.signalg" value="ECDSA_SHA512" else="RSA_SHA512">
       <equals arg1="${issuer-key-alg}" arg2="P521"/>
     </condition>
-  	<antcall target="_createcert">
+    <antcall target="_createcert">
        <param name="cmd" value="-out/keyalias mykey -selfsigned -entity/ca -subject &quot;${issuer-root-dn}&quot; -validity/start 2010-07-10T10:00:00 -validity/end 2030-07-10T09:59:59 -out/storetype PKCS12 -out/keystore ${issuer-key}-root-ca.p12 -out/storepass ${keypassword} -out/keypass ${keypassword} ${self.root.alg} -sigalg ${self.root.signalg} -serial 1"/>
     </antcall>
     <antcall target="_getroot">
@@ -77,18 +77,18 @@
   
   <target name="createcacerts">
     <antcall target="_createcacerts">
-    	<param name="issuer-key"      value="laposte"/>
-    	<param name="issuer-key-alg"  value="P521"/>
-    	<param name="issuer-root-dn"  value="CN=La Poste Root CA1, C=FR"/>
-    	<param name="issuer-sub-dn"   value="CN=La Poste Sub CA3, C=FR"/>
-    	<param name="issuer-kmk-dn"   value="CN=La Poste KMK"/>
+        <param name="issuer-key"      value="laposte"/>
+        <param name="issuer-key-alg"  value="P521"/>
+        <param name="issuer-root-dn"  value="CN=La Poste Root CA1, C=FR"/>
+        <param name="issuer-sub-dn"   value="CN=La Poste Sub CA3, C=FR"/>
+        <param name="issuer-kmk-dn"   value="CN=La Poste KMK"/>
     </antcall>
     <antcall target="_createcacerts">
-    	<param name="issuer-key"      value="bankid"/>
-    	<param name="issuer-key-alg"  value="RSA"/>
-    	<param name="issuer-root-dn"  value="CN=BankID Root CA1, C=FR"/>
-    	<param name="issuer-sub-dn"   value="CN=BankID Sub CA3, C=FR"/>
-    	<param name="issuer-kmk-dn"   value="CN=BankID KMK"/>
+        <param name="issuer-key"      value="bankid"/>
+        <param name="issuer-key-alg"  value="RSA"/>
+        <param name="issuer-root-dn"  value="CN=BankID Root CA1, C=FR"/>
+        <param name="issuer-sub-dn"   value="CN=BankID Sub CA3, C=FR"/>
+        <param name="issuer-kmk-dn"   value="CN=BankID KMK"/>
     </antcall>
   </target>
   

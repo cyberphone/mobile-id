@@ -32,49 +32,49 @@ import org.webpki.util.ArrayUtil;
 public class Localizer {
 
     public static void main(String[] args) {
-    	// 0 pathToLocalizedApplication
-    	// 1 pathToPropertyFile
-    	Properties properties = new Properties();
-    	StringBuilder java = new StringBuilder("package org.webpki.localized;\n" +
-    	"// Auto localized...\n" +
-    	"public interface LocalizedStrings {\n");
-    	try {
-			properties.load(new InputStreamReader(new FileInputStream(args[1])));
-	        for (Field field : LocalizedStrings.class.getDeclaredFields()) {
-	        	String property = field.getName();
-	        	String value = properties.getProperty(property);
-	        	if (value == null) {
-	        		throw new IOException("Missing property: " + property);
-	        	}
-	        	properties.remove(property);
-	        	java.append("    String ")
-	        	    .append(property);
-	        	for (int q = property.length(); q < 30; q++) {
-	        		java.append(' ');
-	        	}
-	        	java.append(" = \"")
-	        	    .append(value)
-	        	    .append("\";\n");
-	        }
-	        for (String key : properties.stringPropertyNames()) {
-	        	throw new IOException("Unexpected property: " + key);
-	        }
-	        ArrayUtil.writeFile(args[0] + 
-	        		            File.separatorChar +
-	        		            "localized" +
-	        		            File.separatorChar +
-	        		            "org" +
-	        		            File.separatorChar +
-	        		            "webpki" +
-	        		            File.separatorChar +
-	        		            "localized" +
-	        		            File.separatorChar +
-	        		            "LocalizedStrings.java",
-	        		            java.append("}\n").toString().getBytes("utf-8"));
-		    System.out.println(args[0]);
-		} catch (Exception e) {
-			System.out.println(e.getMessage());
-			System.exit(3);
-		}
+        // 0 pathToLocalizedApplication
+        // 1 pathToPropertyFile
+        Properties properties = new Properties();
+        StringBuilder java = new StringBuilder("package org.webpki.localized;\n" +
+        "// Auto localized...\n" +
+        "public interface LocalizedStrings {\n");
+        try {
+            properties.load(new InputStreamReader(new FileInputStream(args[1])));
+            for (Field field : LocalizedStrings.class.getDeclaredFields()) {
+                String property = field.getName();
+                String value = properties.getProperty(property);
+                if (value == null) {
+                    throw new IOException("Missing property: " + property);
+                }
+                properties.remove(property);
+                java.append("    String ")
+                    .append(property);
+                for (int q = property.length(); q < 30; q++) {
+                    java.append(' ');
+                }
+                java.append(" = \"")
+                    .append(value)
+                    .append("\";\n");
+            }
+            for (String key : properties.stringPropertyNames()) {
+                throw new IOException("Unexpected property: " + key);
+            }
+            ArrayUtil.writeFile(args[0] + 
+                                File.separatorChar +
+                                "localized" +
+                                File.separatorChar +
+                                "org" +
+                                File.separatorChar +
+                                "webpki" +
+                                File.separatorChar +
+                                "localized" +
+                                File.separatorChar +
+                                "LocalizedStrings.java",
+                                java.append("}\n").toString().getBytes("utf-8"));
+            System.out.println(args[0]);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            System.exit(3);
+        }
     }
  }

@@ -17,40 +17,46 @@
   </path>
   
   <target name="help">
-    <echo message="localize -Dapp-sub-dir=e-government -Dlocale=fr"/>
+    <echo message="localize -Dapp-sub-dir=e-government -Dlocale=fr [-Dlocalized.egov-app.dir=adirectory]"/>
   </target>
   
    <target name="localize">
-   	<fail message="&quot;app-sub-dir&quot; not defined!" unless="app-sub-dir"/>
-   	<fail message="&quot;locale&quot; not defined!" unless="locale"/>
+    <fail message="&quot;app-sub-dir&quot; not defined!" unless="app-sub-dir"/>
+    <fail message="&quot;locale&quot; not defined!" unless="locale"/>
     <property name="app.dir" location="../${app-sub-dir}"/>
-  	<property name="localization.dir" location="${app.dir}/localization/${locale}"/>
-  	<condition property="foundlocalizeddata">
-  	  <available file="${localization.dir}" type="dir"/>
-  	</condition>
-  	<fail message="localized data not found in &quot;${localization.dir}&quot;!" unless="foundlocalizeddata"/>
-  	<property name="localized.egov-app.dir" location="../${app-sub-dir}.${locale}"/>
-  	<delete dir="${localized.egov-app.dir}"/>
+    <property name="localization.dir" location="${app.dir}/localization/${locale}"/>
+    <condition property="foundlocalizeddata">
+      <available file="${localization.dir}" type="dir"/>
+    </condition>
+    <fail message="localized data not found in &quot;${localization.dir}&quot;!" unless="foundlocalizeddata"/>
+    <property name="localized.egov-app.dir" location="../${app-sub-dir}.${locale}"/>
+    <delete dir="${localized.egov-app.dir}"/>
+    <fixcrlf srcdir="."
+       tab="remove"
+       tablength="4"
+       eol="lf"
+       eof="remove"
+       includes="**/*.java, **/*.css, **/*.xml, **/*.properties"/>
+    <!-- Copy core application to a new directory --> 
     <copy todir="${localized.egov-app.dir}" preservelastmodified="true">
        <fileset dir="${app.dir}">
           <exclude name="dist/**"/>
           <exclude name="bin/**"/>
-          <exclude name=".tmp/**"/>
+          <exclude name=".*/**"/>
           <exclude name="localization/**"/>
           <exclude name="'**/LocalizedStrings.java"/>
-          <exclude name=".project"/>
-          <exclude name=".classpath"/>
           <exclude name="README.md"/>
        </fileset>
-   	</copy>
+    </copy>
+    <!-- Localize static Web resources like images --> 
     <copy todir="${localized.egov-app.dir}" preservelastmodified="true">
       <fileset dir="${localization.dir}">
          <include name="web/**"/>
       </fileset>
-  	</copy>
-  	<delete dir="${temp.dir}"/>
+    </copy>
+    <delete dir="${temp.dir}"/>
     <mkdir dir="${temp.dir}"/>
-  	<!-- Compile -->
+    <!-- Compile -->
     <javac debug="on"
            srcdir="${app.dir}/localized:src"
            destdir="${temp.dir}" 
@@ -61,22 +67,26 @@
     <!-- Localize -->
     <java fork="yes"
           classname="org.webpki.localize.Localizer"
-    	  dir="${temp.dir}"
+          dir="${temp.dir}"
           failonerror="true">
-    	<classpath>
+        <classpath>
             <pathelement path="${temp.dir}"/>
-       	    <path refid="lib.classpath"/>
-    	</classpath>
+            <path refid="lib.classpath"/>
+        </classpath>
         <arg value="${localized.egov-app.dir}"/>
         <arg value="${localization.dir}/${locale}.properties"/>
         <jvmarg value="-Dfile.encoding=UTF-8"/>
     </java>
-	<ant antfile="${localization.dir}/${locale}.xml" target="localize" useNativeBasedir="true">
-	   <property name="app.dir" value="${localized.egov-app.dir}"/>
-	</ant>
-	<ant antfile="${localized.egov-app.dir}/build.xml" target="tomcat" useNativeBasedir="true">
-	   <property name="application.path" value="mobileid.fr#"/>
-	</ant>
+    <!-- Possible code or CSS changes -->
+    <ant antfile="${localization.dir}/${locale}.xml" target="localize" useNativeBasedir="true">
+       <property name="app.dir" value="${localized.egov-app.dir}"/>
+    </ant>
+    <!-- Finally, build localized application -->
+    <ant antfile="${localized.egov-app.dir}/build.xml" target="tomcat" useNativeBasedir="true" inheritAll="false">
+       <property name="application.path" value="mobileid.fr#"/>
+       <property name="saturn.dir" location="${saturn.home}"/>
+       <property name="resource.dir" location="."/>
+    </ant>
    </target>
   
 </project>

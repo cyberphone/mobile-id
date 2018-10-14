@@ -5,9 +5,9 @@
   <target name="help">
       <echo message="help localize"/>
   </target>
-      	
+        
   <target name="localize">
-  	<echo message="No special french features yet..."/> 
+    <echo message="No special french features yet..."/> 
   </target>
    
 </project>

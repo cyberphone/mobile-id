@@ -36,11 +36,11 @@ public class SendMessageServlet extends ProtectedServlet {
 
     enum MessageTypes {
 
-        NOT_SELECTED      (LocalizedStrings.NO_SELECT),
-        TAX_QUESTION      (LocalizedStrings.SELECT_TAX_QUESTION),
-        FILE_COMPLAINT    (LocalizedStrings.SELECT_FILE_COMPLAINT),
-        TECHNICAL_SUPPORT (LocalizedStrings.SELECT_TECH_SUPPORT),
-        OTHER             (LocalizedStrings.SELECT_OTHER_TOPIC);
+        NOT_SELECTED      (LocalizedStrings.MSG_NO_SELECT),
+        TAX_QUESTION      (LocalizedStrings.MSG_SELECT_TAX_QUESTION),
+        FILE_COMPLAINT    (LocalizedStrings.MSG_SELECT_FILE_COMPLAINT),
+        TECHNICAL_SUPPORT (LocalizedStrings.MSG_SELECT_TECH_SUPPORT),
+        OTHER             (LocalizedStrings.MSG_SELECT_OTHER_TOPIC);
 
         String userText;
 
@@ -75,7 +75,7 @@ public class SendMessageServlet extends ProtectedServlet {
         html.append(
             "</select></td></tr>" +
             "<tr><td><textarea id=\"message\" name=\"message\" placeholder=\"" +
-            LocalizedStrings.YOUR_MESSAGE_TIP +
+            LocalizedStrings.MSG_YOUR_MESSAGE_TIP +
             "...\" style=\"box-sizing:border-box\" rows=\"10\" cols=\"10\"></textarea>" +
             "</td></tr></table></div><div style=\"padding-top:10pt\">" +
             "<div class=\"stdbtn\" onclick=\"verify(this)\">" +
@@ -89,7 +89,7 @@ public class SendMessageServlet extends ProtectedServlet {
                         MessageTypes.NOT_SELECTED.toString() + "') {\n" +
             "    type.focus();\n" +
             "    toast('" +
-                       HTML.javaScript(LocalizedStrings.NO_SELECT) +
+                       HTML.javaScript(LocalizedStrings.MSG_NO_SELECT) +
                        "', fromElement);\n" +
             "    return;\n" +
             "  }\n" +
@@ -97,8 +97,8 @@ public class SendMessageServlet extends ProtectedServlet {
             "  if (message.value.trim().length == 0) {\n" +
             "    message.focus();\n" +
             "    toast('" +
-                          HTML.javaScript(LocalizedStrings.NO_MESSAGE) +
-                      "', fromElement);\n" +
+                       HTML.javaScript(LocalizedStrings.MSG_NO_MESSAGE) +
+                       "', fromElement);\n" +
             "    return;\n" +
             "  }\n" +
             "  document.forms.shoot.submit();\n" +

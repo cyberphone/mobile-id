@@ -1,7 +1,8 @@
 <project name="MobileID (Demo) e-Government Application" default="help" basedir=".">
 
   <!-- set properties for this build -->
-  <property file="../resources/common.properties"/>
+  <property name="resource.dir" location="../resources"/>
+  <property file="${resource.dir}/common.properties"/>
   <property name="logging" value="false"/>
   <property name="demo" value="false"/>
 
@@ -38,38 +39,37 @@
   </target>
 
   <target name="tomcat" depends="_init">
-  	
     <property name="zip.common.lib.dir" value="${common.lib.dir}"/>
     <property name="zip.bcprovider.lib.dir" value="${bcprovider.lib.dir}"/>
-  	<delete dir="${temp.dir}"/>
+    <delete dir="${temp.dir}"/>
     <fixcrlf srcdir="."
        tab="remove"
        tablength="4"
        eol="lf"
        eof="remove"
-       includes="**/*.java, **/*.css"/>
+       includes="**/*.java, **/*.css, **/*.xml, **/*.properties"/>
     <copy file="web.xml" todir="${temp.dir}"/>
     <javac debug="${debug}"
            source="${javaversion}"
            target="${javaversion}"
            srcdir="${src.dir}:${localized.dir}"
            destdir="${temp.dir}"
-    	   encoding="UTF-8"
+           encoding="UTF-8"
            includeAntRuntime="false">
-    	<classpath>
-	      <fileset dir="${common.lib.dir}">
-	         <include name="${webpki-libext.jar}"/>
-	      </fileset>
-	      <fileset dir="${common.lib.dir}">
-	         <include name="${webpki-webutil.jar}"/>
-	      </fileset>
-	      <fileset dir="${bcprovider.lib.dir}">
-	         <include name="${bcprovider.jar}"/>
-	      </fileset>
-	      <fileset dir="${reference.lib.dir}">
-	         <include name="*.jar"/>
-	      </fileset>
-    	</classpath>
+        <classpath>
+          <fileset dir="${common.lib.dir}">
+             <include name="${webpki-libext.jar}"/>
+          </fileset>
+          <fileset dir="${common.lib.dir}">
+             <include name="${webpki-webutil.jar}"/>
+          </fileset>
+          <fileset dir="${bcprovider.lib.dir}">
+             <include name="${bcprovider.jar}"/>
+          </fileset>
+          <fileset dir="${reference.lib.dir}">
+             <include name="*.jar"/>
+          </fileset>
+        </classpath>
     </javac>
     <replace file="${temp.dir}/web.xml">
       <replacefilter token="@keyprov-base-url@" value="${keyprov.base.url}"/>
@@ -99,7 +99,7 @@
         <include name="card-*"/>
       </zipfileset>
       <zipfileset file="${logotype.dir}/mobileidlogo.svg" prefix="images"/>
-      <zipfileset file="../resources/issuers.json" prefix="${class_war_path}"/>
+      <zipfileset file="${resource.dir}/issuers.json" prefix="${class_war_path}"/>
       <zipfileset file="${tls_cert_path}" prefix="${class_war_path}"/>
 <!-- Remove next line and the democert directory when ready... -->
       <zipfileset file="democert/lukeskywalker.cer" prefix="${class_war_path}"/>

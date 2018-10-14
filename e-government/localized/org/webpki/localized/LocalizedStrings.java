@@ -19,56 +19,56 @@ package org.webpki.localized;
 
 public interface LocalizedStrings {
 
-	// Main
-	String SELECT_SERVICE           = "Select Service";
-	String INCOME_DECLARATION       = "Income Declaration";
-	String TAXATION_HISTORY         = "Taxation History";
-	String SEND_MESSAGE             = "Send Message";
-	String THANK_YOU_WELCOME_BACK   = "Thank you, welcome back!";
+    // Main
+    String SELECT_SERVICE             = "Select Service";
+    String INCOME_DECLARATION         = "Income Declaration";
+    String TAXATION_HISTORY           = "Taxation History";
+    String SEND_MESSAGE               = "Send Message";
+    String THANK_YOU_WELCOME_BACK     = "Thank you, welcome back!";
 
-	// Declaration
-    String DECLARATION_HEADER       = "Declaration Year @";  // @   = Year placeholder
-    String DECLARATION_RECEIVED     = "Declaration Received";
+    // Declaration
+    String DECLARATION_HEADER         = "Declaration Year @";  // @ = Year placeholder
+    String DECLARATION_RECEIVED       = "Declaration Received";
     
-    String CONFIRMATION             = "A confirmation message has been sent to"; // Followed by : email
+    String CONFIRMATION               = "A confirmation message has been sent to"; // Followed by : email
 
     // Send Message
-    String MESSAGE_RECEIVED         = "Message Received";
+    String MESSAGE_RECEIVED           = "Message Received";
 
-    String THANKS_FOR_MESSAGE       = "Thank you for your message, " +
-                                      "we will process it as fast we can!";
-    String NO_SELECT                = "Please select message subject";
-    String SELECT_TAX_QUESTION      = "Question regarding taxation";
-    String SELECT_FILE_COMPLAINT    = "File a complaint";
-    String SELECT_TECH_SUPPORT      = "Technical support";
-    String SELECT_OTHER_TOPIC       = "Other topic";
-    String NO_MESSAGE               = "Please provide a message";
-	String YOUR_MESSAGE_TIP         = "Your message";
-	String SUBMIT_BTN               = "Submit";
+    String THANKS_FOR_MESSAGE         = "Thank you for your message, " +
+                                         "we will process it as fast we can!";
+    String MSG_NO_SELECT              = "Please select message subject";
+    String MSG_SELECT_TAX_QUESTION    = "Question regarding taxation";
+    String MSG_SELECT_FILE_COMPLAINT  = "File a complaint";
+    String MSG_SELECT_TECH_SUPPORT    = "Technical support";
+    String MSG_SELECT_OTHER_TOPIC     = "Other topic";
+    String MSG_NO_MESSAGE             = "Please provide a message";
+    String MSG_YOUR_MESSAGE_TIP       = "Your message";
+    String SUBMIT_BTN                 = "Submit";
 
     // General purpose
-    String REFERENCE_ID             = "Reference ID";  // SHORT table header
-    String TIME_STAMP               = "Time Stamp";    // SHORT table header
+    String REFERENCE_ID               = "Reference ID";  // SHORT table header
+    String TIME_STAMP                 = "Time Stamp";    // SHORT table header
 
     // Login, logout, home
-    String HT_SESSION               = "Click to show session data";
-    String HT_HOME                  = "Home sweet home...";
-    String HT_LOGOUT                = "Click to logout";
-	String REQUIRES_LOGIN           = "This Service Requires Login";
-	String SELECT_LOGIN_METHOD      = "Select Login Method";
-	String ONLY_ONE_LOGIN_METHOD    = "In this demo there is only one method";
+    String HT_SESSION                 = "Click to show session data";
+    String HT_HOME                    = "Home sweet home...";
+    String HT_LOGOUT                  = "Click to logout";
+    String REQUIRES_LOGIN             = "This Service Requires Login";
+    String SELECT_LOGIN_METHOD        = "Select Login Method";
+    String ONLY_ONE_LOGIN_METHOD      = "In this demo there is only one method";
     
     // Session data
-	String SESSION_DATA             = "Session Data";
-	String SESSION_ID               = "Session ID";
-	String START_TIME               = "Start Time";
-	String SERIAL_NUMBER            = "Serial Number";
-	String ISSUER_NAME              = "Issuer Name";
-	String SUBJECT_NAME             = "Subject Name";
-	String VALIDITY                 = "Validity";
-	String USER_CERTIFICATE         = "User Certificate";
-	String CLOSE_SESSION_VIEW       = "Close session wiew";
-	String SESSION_TERMINATED       = "The session appears to have terminated";
-	String SESSION_TIMOUT           = "Session Timed Out";
+    String SESSION_DATA               = "Session Data";
+    String SESSION_ID                 = "Session ID";
+    String START_TIME                 = "Start Time";
+    String SERIAL_NUMBER              = "Serial Number";
+    String ISSUER_NAME                = "Issuer Name";
+    String SUBJECT_NAME               = "Subject Name";
+    String VALIDITY                   = "Validity";
+    String USER_CERTIFICATE           = "User Certificate";
+    String CLOSE_SESSION_VIEW         = "Close session wiew";
+    String SESSION_TERMINATED         = "The session appears to have terminated";
+    String SESSION_TIMOUT             = "Session Timed Out";
  }
 
