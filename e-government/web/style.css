@@ -11,6 +11,7 @@
   left:12px;
   visibility:visible;
   height:40pt;
+  filter: drop-shadow(3pt 3pt 3pt #d0d0d0);
 }
 
 .toaster {
@@ -205,6 +206,10 @@ li {
 
   .stdbtn, .multibtn, .login, .logout, .tftable, .loginbtn {
     box-shadow:2pt 2pt 2pt #d0d0d0;
+  }
+
+ .egovlogo {
+   filter: drop-shadow(2pt 2pt 2pt #d0d0d0);
   }
 
   .logout {

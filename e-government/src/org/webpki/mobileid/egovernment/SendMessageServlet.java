@@ -90,7 +90,7 @@ public class SendMessageServlet extends ProtectedServlet {
             "    type.focus();\n" +
             "    toast('" +
                        HTML.javaScript(LocalizedStrings.MSG_NO_SELECT) +
-                       "', fromElement);\n" +
+                       "!', fromElement);\n" +
             "    return;\n" +
             "  }\n" +
             "  let message = document.getElementById('message');\n\n" +
@@ -98,7 +98,7 @@ public class SendMessageServlet extends ProtectedServlet {
             "    message.focus();\n" +
             "    toast('" +
                        HTML.javaScript(LocalizedStrings.MSG_NO_MESSAGE) +
-                       "', fromElement);\n" +
+                       "!', fromElement);\n" +
             "    return;\n" +
             "  }\n" +
             "  document.forms.shoot.submit();\n" +

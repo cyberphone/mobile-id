@@ -19,6 +19,8 @@ package org.webpki.localized;
 
 public interface LocalizedStrings {
 
+    String TITLE                      = "Mobile ID/eGovernment Demo";
+
     // Main
     String SELECT_SERVICE             = "Select Service";
     String INCOME_DECLARATION         = "Income Declaration";

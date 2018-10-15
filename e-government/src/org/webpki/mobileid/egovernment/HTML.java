@@ -37,9 +37,6 @@ public class HTML {
                     "    history.pushState(null, null, 'home');\n" +
                     "});\n";
     
-    static final String FONT_VERDANA = "Verdana,'Bitstream Vera Sans','DejaVu Sans',Arial,'Liberation Sans'";
-    static final String FONT_ARIAL = "Arial,'Liberation Sans',Verdana,'Bitstream Vera Sans','DejaVu Sans'";
-    
     static String getHTML(String customJavaScript, 
                           boolean toasterSupport,
                           String customOnLoad, 
@@ -54,7 +51,9 @@ public class HTML {
             "<meta name=\"format-detection\" content=\"telephone=no\">" +
             "<link rel=\"icon\" href=\"favicon.png\" sizes=\"192x192\">"+
             "<link rel=\"stylesheet\" type=\"text/css\" href=\"style.css\">" +
-            "<title>Mobile ID/eGovernment Demo</title>" +
+            "<title>" +
+            LocalizedStrings.TITLE +
+            "</title>" +
             "<script>\n" +
             "\"use strict\";\n" +
             STICK_TO_HOME_URL +
