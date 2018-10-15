@@ -48,11 +48,11 @@ public class ShowSessionServlet extends HttpServlet {
             throws IOException, ServletException {
         StringBuilder s = new StringBuilder(
             "<div>" +
-            "<div class=\"dialog\" style=\"font-size:8pt;cursor:pointer\"" +
-            " onclick=\"document.getElementById('session').style.visibility='hidden'\">" +
+            "<div class=\"dialog\" style=\"font-size:8pt\">" +
             "<img src=\"images/x.svg\" class=\"xicon\" alt=\"x\" title=\"" +
-            LocalizedStrings.CLOSE_SESSION_VIEW +
-            "\"></div>" + 
+            LocalizedStrings.CLOSE_VIEW +
+            "\" onclick=\"document.getElementById('session').style.visibility='hidden'\">" +
+            "</div>" + 
             "<div class=\"dialog\">" +
             LocalizedStrings.SESSION_DATA +
             "</div>" +

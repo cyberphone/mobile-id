@@ -21,6 +21,7 @@ import java.io.IOException;
 
 import javax.servlet.ServletException;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -31,9 +32,31 @@ public class HomeServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
 
+    private static final String DISMISSED_FOOTER = "dismiss";
+    
+    private static final String WEB_LINK =
+            "<a href=\"" +
+            LocalizedStrings.URL_TO_DESCRIPTION + 
+            "\" target=\"_blank\">Mobile&nbsp;ID</a>";
+
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
+        boolean footerDismissed = false;
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) for (Cookie cookie : cookies) {
+            if (cookie.getName().equals(DISMISSED_FOOTER)) {
+                footerDismissed = true;
+            }
+        }
+        if (footerDismissed) {
+            System.out.println("BEEN!");
+        } else {
+            Cookie cookie = new Cookie(DISMISSED_FOOTER, "true");
+            cookie.setPath(request.getPathInfo());
+            cookie.setMaxAge(60*60000);  // Thousand hours
+//          response.addCookie(cookie);
+        }
         StringBuilder html = new StringBuilder(
                 "<div class=\"header\">" +
                 LocalizedStrings.SELECT_SERVICE +
@@ -53,8 +76,31 @@ public class HomeServlet extends HttpServlet {
                 .append(service.userText)
                 .append("</div></td></tr>");
         }
+        html.append("</table></div>");
+        String javaScript;
+        if (footerDismissed) {
+            javaScript = null;
+        } else {
+            html.append("</div>" +
+                        "<div id=\"sitefooter\" class=\"sitefooter\">" +
+                        "<img src=\"images/x.svg\" class=\"xicon\" alt=\"x\" title=\"" +
+                        LocalizedStrings.CLOSE_VIEW +
+                        "\" onclick=\"closeDescription()\">" +
+                        "<div style=\"padding:1em 1em 1em 0\">")
+                .append(LocalizedStrings.DEMO_TEXT
+                   .replace("@", WEB_LINK))
+                .append("</div>");
+            javaScript = "function closeDescription() {\n" +
+                         "  let sitefooter = document.getElementById('sitefooter');\n" +
+                         "  sitefooter.style.visibility = 'hidden';\n" +
+                         "  document.cookie = '" + DISMISSED_FOOTER + " = true;Max-Age=6000';\n" +
+                         "}\n";
+        }
         HTML.resultPage(response,
+                        javaScript,
+                        false,
+                        null,
                         UserData.getUserData(request),
-                        html.append("</table></div>"));
+                        html);
     }
 }

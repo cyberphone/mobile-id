@@ -85,7 +85,6 @@
 }
 
 body {
-  -webkit-user-select:none;
   margin:0pt;
   font-size:10pt;
   font-family:Verdana,'Bitstream Vera Sans','DejaVu Sans',Arial,'Liberation Sans';
@@ -100,8 +99,7 @@ body {
 }
 
 a {
-  font-weight:bold;
-  color:blue;
+  color:#007fff;
   text-decoration:none;
 }
 
@@ -127,8 +125,9 @@ li {
 }
 
 .xicon {
-  width:20pt;
+  height:20pt;
   padding:5pt;
+  cursor:pointer;
 }
 
 .dialog {
@@ -137,8 +136,6 @@ li {
 }
 
 .content {
-  background-color:white;
-  z-index:9;
   position:absolute;
   text-align:center;
   padding:5pt;
@@ -202,6 +199,19 @@ li {
   z-index:6;
 }
 
+.sitefooter {
+  display:flex;
+  align-items:center;
+  border-width:1px 0 0 0;
+  border-style:solid;
+  border-color:#a9a9a9;
+  position:absolute;z-index:5;
+  left:0px;
+  bottom:0px;
+  background-color:#ffffe0;
+  width:100%;
+}
+
 @media (max-width:768px) {
 
   .stdbtn, .multibtn, .login, .logout, .tftable, .loginbtn {
@@ -217,7 +227,7 @@ li {
   }
 
   .xicon {
-    width:16pt;
+    height:16pt;
     padding:5pt;
   }
 

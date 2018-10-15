@@ -20,6 +20,10 @@ package org.webpki.localized;
 public interface LocalizedStrings {
 
     String TITLE                      = "Mobile ID/eGovernment Demo";
+    String DEMO_TEXT                  = "This is a proof of concept site " +
+                                        "hosting a minute e-government application " +
+                                        "powered by the @ system";
+    String URL_TO_DESCRIPTION         = "https://github.com/cyberphone/mobile-id";
 
     // Main
     String SELECT_SERVICE             = "Select Service";
@@ -51,6 +55,7 @@ public interface LocalizedStrings {
     // General purpose
     String REFERENCE_ID               = "Reference ID";  // SHORT table header
     String TIME_STAMP                 = "Time Stamp";    // SHORT table header
+    String CLOSE_VIEW                 = "Click to close";
 
     // Login, logout, home
     String HT_SESSION                 = "Click to show session data";
@@ -69,7 +74,6 @@ public interface LocalizedStrings {
     String SUBJECT_NAME               = "Subject Name";
     String VALIDITY                   = "Validity";
     String USER_CERTIFICATE           = "User Certificate";
-    String CLOSE_SESSION_VIEW         = "Close session wiew";
     String SESSION_TERMINATED         = "The session appears to have terminated";
     String SESSION_TIMOUT             = "Session Timed Out";
  }

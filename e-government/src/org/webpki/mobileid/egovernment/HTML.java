@@ -64,8 +64,9 @@ public class HTML {
             "  }\n" +
             "  let content = document.getElementById('content');\n" +
             "  if (content) {\n" +
+            "    let minTop = document.getElementById('egovlogo').getBoundingClientRect().bottom;\n" +
             "    let top = (window.innerHeight - content.offsetHeight) / 2;\n" +
-            "    if (top < 0) top = 0;\n" +
+            "    if (top < minTop) top = minTop;\n" +
             "    content.style.top = top + 'px';\n" +
             "    let left = (window.innerWidth - content.offsetWidth) / 2;\n" +
             "    if (left < 0) left = 0;\n" +
@@ -131,7 +132,7 @@ public class HTML {
             "<img alt=\"home\" onclick=\"document.location.href='home'\"" +
             " title=\"" +
             LocalizedStrings.HT_HOME +
-            "\" class=\"egovlogo\" src=\"images/egovlogo.svg\">");
+            "\" id=\"egovlogo\" class=\"egovlogo\" src=\"images/egovlogo.svg\">");
         if (userData != null) {
             StringBuilder id = new StringBuilder();
             for (int q = 0; q < 12; q += 4) {

@@ -7,10 +7,10 @@
   </target>
         
   <target name="localize">
-  	<replace file="${localized.egov-app.dir}/build.xml" failOnNoReplacements="true">
-  	  <replacetoken>}egov.war</replacetoken>
-  	  <replacevalue>}egouv.war</replacevalue>
-  	</replace>
+    <replace file="${localized.egov-app.dir}/build.xml" failOnNoReplacements="true">
+      <replacetoken>}egov.war</replacetoken>
+      <replacevalue>}egouv.war</replacevalue>
+    </replace>
   </target>
    
 </project>
