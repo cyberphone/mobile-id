@@ -36,7 +36,7 @@ public class SendMessageServlet extends ProtectedServlet {
 
     enum MessageTypes {
 
-        NOT_SELECTED      (LocalizedStrings.MSG_NO_SELECT),
+        NOT_SELECTED      (LocalizedStrings.MSG_NO_SELECT + "..."),
         TAX_QUESTION      (LocalizedStrings.MSG_SELECT_TAX_QUESTION),
         FILE_COMPLAINT    (LocalizedStrings.MSG_SELECT_FILE_COMPLAINT),
         TECHNICAL_SUPPORT (LocalizedStrings.MSG_SELECT_TECH_SUPPORT),
