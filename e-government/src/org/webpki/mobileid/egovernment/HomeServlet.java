@@ -32,7 +32,8 @@ public class HomeServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
 
-    private static final String DISMISSED_FOOTER = "dismiss";
+    static final String DISMISSED_FOOTER = "dismiss";
+    static final int DISMISS_TIME = 60 * 60 * 8; // 8 hours
     
     private static final String WEB_LINK =
             "<a href=\"" +
@@ -48,14 +49,6 @@ public class HomeServlet extends HttpServlet {
             if (cookie.getName().equals(DISMISSED_FOOTER)) {
                 footerDismissed = true;
             }
-        }
-        if (footerDismissed) {
-            System.out.println("BEEN!");
-        } else {
-            Cookie cookie = new Cookie(DISMISSED_FOOTER, "true");
-            cookie.setPath(request.getPathInfo());
-            cookie.setMaxAge(60*60000);  // Thousand hours
-//          response.addCookie(cookie);
         }
         StringBuilder html = new StringBuilder(
                 "<div class=\"header\">" +
@@ -93,7 +86,8 @@ public class HomeServlet extends HttpServlet {
             javaScript = "function closeDescription() {\n" +
                          "  let sitefooter = document.getElementById('sitefooter');\n" +
                          "  sitefooter.style.visibility = 'hidden';\n" +
-                         "  document.cookie = '" + DISMISSED_FOOTER + " = true;Max-Age=6000';\n" +
+                         "  document.cookie = '" + DISMISSED_FOOTER + 
+                         " = true;Max-Age=" + DISMISS_TIME + "';\n" +
                          "}\n";
         }
         HTML.resultPage(response,

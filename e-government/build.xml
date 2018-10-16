@@ -24,7 +24,7 @@
   <property name="catalina.home" value="${env.CATALINA_HOME}"/>
 
   <target name="help">
-      <echo message="tomcat"/>
+      <echo message="tomcat [-Ddemo=true -Dlogging=true]"/>
   </target>
 
   <target name="_init" unless="app_path">
