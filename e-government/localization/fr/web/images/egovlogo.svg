@@ -1,14 +1,16 @@
 <svg width="104" height="62" xmlns="http://www.w3.org/2000/svg">
  <defs>
-  <linearGradient x2="1" x1="0" id="goldenPillar">
-   <stop stop-color="#080808" offset="0"/>
-   <stop stop-color="#aea616" offset="0.1"/>
-   <stop stop-color="#ece22a" offset="0.3"/>
-   <stop stop-color="#ffffff" offset="0.4"/>
-   <stop stop-color="#ffffff" offset="0.6"/>
-   <stop stop-color="#ece22a" offset="0.7"/>
-   <stop stop-color="#aea616" offset="0.9"/>
-   <stop stop-color="#080808" offset="1"/>
+  <linearGradient y2="0" y1="0" id="goldenPillar" x1="0" x2="1">
+   <stop offset="0" stop-color="#38270b"/>
+   <stop offset="0.1" stop-color="#c1ad45"/>
+   <stop offset="0.2" stop-color="#d1c23e"/>
+   <stop offset="0.33" stop-color="#eddb3b"/>
+   <stop offset="0.45" stop-color="#ffffff"/>
+   <stop offset="0.55" stop-color="#ffffff"/>
+   <stop offset="0.67" stop-color="#eddb3b"/>
+   <stop offset="0.8" stop-color="#d1c23e"/>
+   <stop offset="0.9" stop-color="#c1ad45"/>
+   <stop offset="1" stop-color="#38270b"/>
   </linearGradient>
   <filter height="1.18839" y="-0.09419" width="1.0445" x="-0.02225" id="textGlow" color-interpolation-filters="sRGB">
    <feGaussianBlur stdDeviation="0.71244"/>
