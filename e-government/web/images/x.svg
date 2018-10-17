@@ -1,9 +1,8 @@
-<svg width="40" height="40" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg">
- <!-- Created with SVG-edit - http://svg-edit.googlecode.com/ -->
- <g>
-  <title>Layer 1</title>
-  <rect fill="#ffffff" stroke="#007fff" stroke-width="2.5" x="3" y="3" width="34" height="34" id="svg_1" rx="5" ry="5"/>
-  <line fill="none" stroke="#007fff" stroke-width="2.5" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="round" x1="10" y1="10" x2="30" y2="30" id="svg_2"/>
-  <line fill="none" stroke="#007fff" stroke-width="2.5" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="round" x1="10" y1="30" x2="30" y2="10" id="svg_3"/>
+<svg width="40" height="40" xmlns="http://www.w3.org/2000/svg">
+ <g stroke="#007fff" stroke-width="2.5">
+  <title>Close icon</title>
+  <rect fill="#ffffff" x="3" y="3" width="34" height="34" rx="5" ry="5"/>
+  <line stroke-linecap="round" x1="10" y1="10" x2="30" y2="30"/>
+  <line stroke-linecap="round" x1="10" y1="30" x2="30" y2="10"/>
  </g>
 </svg>

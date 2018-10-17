@@ -49,7 +49,7 @@
        </fileset>
     </copy>
     <!-- Localize static Web resources like images --> 
-    <copy todir="${localized.egov-app.dir}" preservelastmodified="true">
+    <copy todir="${localized.egov-app.dir}" overwrite="true" preservelastmodified="true">
       <fileset dir="${localization.dir}">
          <include name="web/**"/>
       </fileset>
