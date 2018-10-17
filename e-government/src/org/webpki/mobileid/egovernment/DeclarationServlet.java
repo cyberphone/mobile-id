@@ -82,7 +82,7 @@ public class DeclarationServlet extends ProtectedServlet {
             LocalizedStrings.CONFIRMATION + 
             ":</td></tr><tr><td style=\"white-space:nowrap;font-weight:bold\">")
         .append(emailSubject)
-        .append("@gmail.com</td></tr></table></div>");
+        .append("@" + LocalizedStrings.DEMO_EMAIL_PROVIDER + "</td></tr></table></div>");
         HTML.resultPage(response, userData, html);
     }
 }

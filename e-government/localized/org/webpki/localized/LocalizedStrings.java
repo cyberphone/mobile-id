@@ -18,14 +18,17 @@
 package org.webpki.localized;
 
 public interface LocalizedStrings {
-	
-	String LANGUAGE_CODE              = "en";
+    
+    String LANGUAGE_CODE              = "en";
 
     String TITLE                      = "Mobile ID/eGovernment Demo";
+    String URL_TO_DESCRIPTION         = "http://cyberphone.github.io/doc/mobile-id";
+
+    // Demo data
     String DEMO_TEXT                  = "This is a proof of concept site " +
                                         "hosting a minute e-government application " +
                                         "powered by the @ system";
-    String URL_TO_DESCRIPTION         = "https://github.com/cyberphone/mobile-id";
+    String DEMO_EMAIL_PROVIDER        = "google.com";  // Pure UI demo feature
 
     // Main
     String SELECT_SERVICE             = "Select Service";
