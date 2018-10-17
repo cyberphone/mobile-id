@@ -18,6 +18,8 @@
 package org.webpki.localized;
 
 public interface LocalizedStrings {
+	
+	String LANGUAGE_CODE              = "en";
 
     String TITLE                      = "Mobile ID/eGovernment Demo";
     String DEMO_TEXT                  = "This is a proof of concept site " +

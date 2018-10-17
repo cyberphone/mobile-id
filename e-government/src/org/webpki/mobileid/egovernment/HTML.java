@@ -44,7 +44,9 @@ public class HTML {
                           UserData userData) {
         StringBuilder s = new StringBuilder(
             "<!DOCTYPE html>"+
-            "<html lang=\"en\"><head>" +
+            "<html lang=\"" +
+            LocalizedStrings.LANGUAGE_CODE +
+            "\"><head>" +
             "<meta charset=\"utf-8\">" +
             "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">" +
             // iOS thinks all numbers are telephone numbers!
