@@ -75,7 +75,7 @@
       <arg line="-exportcert -keystore ${democert.core.path}.p12 -alias ${issuer-key}-democert -storepass ${keypassword} -storetype PKCS12 -file ${democert.core.path}.cer"/>
     </exec>
   </target>
-	
+    
   <target name="srcclean">
     <fixcrlf srcdir="../"
        tab="remove"
@@ -101,20 +101,20 @@
         <param name="issuer-sub-dn"   value="CN=BankID Sub CA3, C=UK"/>
         <param name="issuer-kmk-dn"   value="CN=BankID KMK"/>
     </antcall>
-  	<antcall target="createdemocerts"/>
+    <antcall target="createdemocerts"/>
   </target>
-	
+    
   <target name="createdemocerts">
-  	<antcall target="_createdemocert">
+    <antcall target="_createdemocert">
         <param name="issuer-key"      value="laposte"/>
         <param name="user-dn"         value="cn=Luke Skywalker, serialNumber=345606782954"/>
         <param name="ocsp-url"        value="http://ocsp.laposte.fr/status"/>
-  	</antcall>
-  	<antcall target="_createdemocert">
+    </antcall>
+    <antcall target="_createdemocert">
         <param name="issuer-key"      value="bankid"/>
         <param name="user-dn"         value="cn=Luke Skywalker, serialNumber=345606782954"/>
         <param name="ocsp-url"        value="http://ocsp.bankid.co.uk/status"/>
-  	</antcall>
+    </antcall>
   </target>
   
 </project>

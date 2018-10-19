@@ -72,11 +72,11 @@ public class eGovernmentService extends InitPropertyReader implements ServletCon
     
     static JSONX509Verifier trustedIssuers;
     
-    static boolean demoMode;
-    
     static boolean logging;
 
     static X509Certificate demoCertificate; // UI demo mode flag as well
+    
+    static String demoCard;
 
     void addIssuer(KeyStore keyStore, JSONObjectReader issuerObject) throws IOException, GeneralSecurityException {
         String issuerBase = issuerObject.getString(ISSUER_JSON);
@@ -143,17 +143,15 @@ public class eGovernmentService extends InitPropertyReader implements ServletCon
             ////////////////////////////////////////////////////////////////////////////////////////////
             // Are we in demo mode?
             ////////////////////////////////////////////////////////////////////////////////////////////
-            demoMode = getPropertyBoolean(UIDEMO);
+            if (getPropertyBoolean(UIDEMO)) {
+                demoCertificate = CertificateUtil.getCertificateFromBlob(getResourceBytes("democert.cer"));
+                demoCard = getResourceString("democard.svg");
+            }
 
             ////////////////////////////////////////////////////////////////////////////////////////////
             // Are we logging?
             ////////////////////////////////////////////////////////////////////////////////////////////
             logging = getPropertyBoolean(LOGGING);
-
-            ////////////////////////////////////////////////////////////////////////////////////////////
-            // Demo certificate in the waiting for the full solution
-            ////////////////////////////////////////////////////////////////////////////////////////////
-            demoCertificate = CertificateUtil.getCertificateFromBlob(getResourceBytes("lukeskywalker.cer"));
 
             logger.info("Mobile ID eGovernment server initiated");
         } catch (Exception e) {

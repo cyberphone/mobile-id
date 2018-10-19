@@ -2,7 +2,7 @@
 
   <!-- set properties for this build -->
   <property name="resource.dir" location="../resources"/>
-  <property name="${demo.issuer}" value="laposte"/>
+  <property name="demo.issuer" value="laposte"/>
   <property file="${resource.dir}/common.properties"/>
   <property name="logging" value="false"/>
   <property name="uidemo" value="false"/>
@@ -78,7 +78,6 @@
       <replacefilter token="@android-webpki-versions@" value="${android.webpki.versions}"/>
       <replacefilter token="@bouncycastle-first@" value="${bouncycastle.first}"/>
       <replacefilter token="@uidemo@" value="${uidemo}"/>
-      <replacefilter token="@demo-issuer@" value="${demo.issuer}"/>
       <replacefilter token="@logging@" value="${logging}"/>
     </replace>
     <war destfile="${dist.dir}/${application}" webxml="${temp.dir}/web.xml">
@@ -94,7 +93,7 @@
       <lib dir="${zip.bcprovider.lib.dir}">
          <include name="${bcprovider.jar}"/>
       </lib>
-      <zipfileset dir="${key.dir}" prefix="${class_war_path}">
+      <zipfileset dir="${cakey.dir}" prefix="${class_war_path}">
          <include name="*-root-ca.cer"/>
       </zipfileset>
       <zipfileset dir="${logotype.dir}" prefix="${class_war_path}">
@@ -103,9 +102,9 @@
       <zipfileset file="${logotype.dir}/mobileidlogo.svg" prefix="images"/>
       <zipfileset file="${resource.dir}/issuers.json" prefix="${class_war_path}"/>
       <zipfileset file="${tls_cert_path}" prefix="${class_war_path}"/>
-<!-- Remove next two line and the democert directory when ready... -->
-      <zipfileset file="democert/${demo.issuer}-demo-certificate.cer" prefix="${class_war_path}"/>
-      <zipfileset file="${resource.dir}/${demo.issuer}-card.svg" prefix="${class_war_path}"/>
+<!-- Remove next two line when ready... -->
+      <zipfileset file="${democert.dir}/${demo.issuer}-democert.cer" fullpath="${class_war_path}/democert.cer"/>
+      <zipfileset file="${resource.dir}/logotypes/${demo.issuer}-card.svg" fullpath="${class_war_path}/democard.svg"/>
       <fileset dir="web"/>
     </war>
     <copy file="${dist.dir}/${application}" todir="${env.CATALINA_HOME}/webapps" overwrite="true" preservelastmodified="true"/>

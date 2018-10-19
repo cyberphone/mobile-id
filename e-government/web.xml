@@ -35,12 +35,6 @@
     </context-param>
 
     <context-param>
-        <description>UI Demo Issuer</description>
-        <param-name>demo-issuer</param-name>
-        <param-value>@demo-issuer@</param-value>
-    </context-param>
-
-    <context-param>
         <description>Logging</description>
         <param-name>logging</param-name>
         <param-value>@logging@</param-value>
