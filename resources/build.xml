@@ -3,6 +3,7 @@
   <!-- set properties for this build -->
   
   <property file="common.properties"/>
+  <property name="subca-ec-type" value="NIST_P_256"/>
 
   <property name="javaversion" value="1.8" />
   <property name="debug" value="on"/>
@@ -27,10 +28,10 @@
   <target name="_createcert">
     <java fork="yes"
           classname="org.webpki.ca.CommandLineCA"
-          dir="${key.dir}"
+          dir="${cakey.dir}"
           failonerror="true">
         <classpath>
-             <fileset dir="${common.lib}">
+             <fileset dir="${common.lib.dir}">
                 <include name="*.jar"/>
              </fileset>
         </classpath>
@@ -39,8 +40,8 @@
   </target>
 
   <target name="_getroot">
-    <exec executable="keytool" failonerror="true" dir="${key.dir}">
-      <arg line="-exportcert -keystore ${rootfile}.p12 -alias mykey -storepass ${keypassword} -storetype PKCS12 -file ${rootfile}.cer"/>
+    <exec executable="keytool" failonerror="true" dir="${cakey.dir}">
+      <arg line="-exportcert -keystore ${rootfile}.p12 -alias ${rootfile} -storepass ${keypassword} -storetype PKCS12 -file ${rootfile}.cer"/>
     </exec>
   </target>
   
@@ -52,19 +53,29 @@
       <equals arg1="${issuer-key-alg}" arg2="P521"/>
     </condition>
     <antcall target="_createcert">
-       <param name="cmd" value="-out/keyalias mykey -selfsigned -entity/ca -subject &quot;${issuer-root-dn}&quot; -validity/start 2010-07-10T10:00:00 -validity/end 2030-07-10T09:59:59 -out/storetype PKCS12 -out/keystore ${issuer-key}-root-ca.p12 -out/storepass ${keypassword} -out/keypass ${keypassword} ${self.root.alg} -sigalg ${self.root.signalg} -serial 1"/>
+       <param name="cmd" value="-out/keyalias ${issuer-key}-root-ca -selfsigned -entity/ca -subject &quot;${issuer-root-dn}&quot; -validity/start 2010-07-10T10:00:00 -validity/end 2030-07-10T09:59:59 -out/storetype PKCS12 -out/keystore ${issuer-key}-root-ca.p12 -out/storepass ${keypassword} -out/keypass ${keypassword} ${self.root.alg} -sigalg ${self.root.signalg} -serial 1"/>
     </antcall>
     <antcall target="_getroot">
        <param name="rootfile" value="${issuer-key}-root-ca"/>
     </antcall>
     <antcall target="_createcert">
-       <param name="cmd" value="-out/keyalias mykey -ca/keypass ${keypassword} -ca/storetype PKCS12 -ca/storepass ${keypassword} -ca/keystore ${issuer-key}-root-ca.p12 -entity/ca -subject &quot;${issuer-sub-dn}&quot; -validity/start 2012-07-10T10:00:00 -validity/end 2025-07-10T09:59:59 -out/storetype PKCS12 -out/keystore ${issuer-key}-sub-ca.p12 -out/storepass ${keypassword} -out/keypass ${keypassword} -ecccurve NIST_P_256 -sigalg ${self.root.signalg} -serial 3"/>
+       <param name="cmd" value="-out/keyalias ${issuer-key}-sub-ca -ca/keypass ${keypassword} -ca/keyalias ${issuer-key}-root-ca -ca/storetype PKCS12 -ca/storepass ${keypassword} -ca/keystore ${issuer-key}-root-ca.p12 -entity/ca -subject &quot;${issuer-sub-dn}&quot; -validity/start 2012-07-10T10:00:00 -validity/end 2025-07-10T09:59:59 -out/storetype PKCS12 -out/keystore ${issuer-key}-sub-ca.p12 -out/storepass ${keypassword} -out/keypass ${keypassword} -ecccurve ${subca-ec-type} -sigalg ${self.root.signalg} -serial 3"/>
     </antcall>
     <antcall target="_createcert">
-       <param name="cmd" value="-out/keyalias mykey -selfsigned -entity/ee -subject &quot;${issuer-kmk-dn}&quot; -validity/start 2010-07-10T10:00:00 -validity/end 2030-07-10T09:59:59 -out/storetype PKCS12 -out/keystore ${issuer-key}-kmk.p12 -out/storepass ${keypassword} -out/keypass ${keypassword} -ecccurve NIST_P_256 -sigalg ECDSA_SHA256 -serial 1"/>
+       <param name="cmd" value="-out/keyalias ${issuer-key}-kmk -selfsigned -entity/ee -subject &quot;${issuer-kmk-dn}&quot; -validity/start 2010-07-10T10:00:00 -validity/end 2030-07-10T09:59:59 -out/storetype PKCS12 -out/keystore ${issuer-key}-kmk.p12 -out/storepass ${keypassword} -out/keypass ${keypassword} -ecccurve NIST_P_256 -sigalg ECDSA_SHA256 -serial 1"/>
     </antcall>
   </target>
 
+  <target name="_createdemocert">
+    <property name="democert.core.path" location="${democert.dir}/${issuer-key}-democert"/>
+    <antcall target="_createcert">
+       <param name="cmd" value="-out/keyalias ${issuer-key}-democert -ca/keypass ${keypassword} -ca/keyalias ${issuer-key}-sub-ca -ca/storetype PKCS12 -ca/storepass ${keypassword} -ca/keystore ${issuer-key}-sub-ca.p12 -ca/addpath 1 -entity/ee -subject &quot;${user-dn}&quot; -validity/start 2018-09-25T00:00:00 -validity/end 2020-09-24T23:59:59 -extension/ocsp ${ocsp-url} -extension/ku digitalSignature -out/storetype PKCS12 -out/keystore ${democert.core.path}.p12 -out/storepass ${keypassword} -out/keypass ${keypassword} -ecccurve NIST_P_256 -sigalg ECDSA_SHA256"/>
+    </antcall>
+    <exec executable="keytool" failonerror="true" dir="${cakey.dir}">
+      <arg line="-exportcert -keystore ${democert.core.path}.p12 -alias ${issuer-key}-democert -storepass ${keypassword} -storetype PKCS12 -file ${democert.core.path}.cer"/>
+    </exec>
+  </target>
+	
   <target name="srcclean">
     <fixcrlf srcdir="../"
        tab="remove"
@@ -86,10 +97,24 @@
     <antcall target="_createcacerts">
         <param name="issuer-key"      value="bankid"/>
         <param name="issuer-key-alg"  value="RSA"/>
-        <param name="issuer-root-dn"  value="CN=BankID Root CA1, C=FR"/>
-        <param name="issuer-sub-dn"   value="CN=BankID Sub CA3, C=FR"/>
+        <param name="issuer-root-dn"  value="CN=BankID Root CA1, C=UK"/>
+        <param name="issuer-sub-dn"   value="CN=BankID Sub CA3, C=UK"/>
         <param name="issuer-kmk-dn"   value="CN=BankID KMK"/>
     </antcall>
+  	<antcall target="createdemocerts"/>
+  </target>
+	
+  <target name="createdemocerts">
+  	<antcall target="_createdemocert">
+        <param name="issuer-key"      value="laposte"/>
+        <param name="user-dn"         value="cn=Luke Skywalker, serialNumber=345606782954"/>
+        <param name="ocsp-url"        value="http://ocsp.laposte.fr/status"/>
+  	</antcall>
+  	<antcall target="_createdemocert">
+        <param name="issuer-key"      value="bankid"/>
+        <param name="user-dn"         value="cn=Luke Skywalker, serialNumber=345606782954"/>
+        <param name="ocsp-url"        value="http://ocsp.bankid.co.uk/status"/>
+  	</antcall>
   </target>
   
 </project>
