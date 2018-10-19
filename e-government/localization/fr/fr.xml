@@ -7,9 +7,13 @@
   </target>
         
   <target name="localize">
-    <replace file="${localized.egov-app.dir}/build.xml" failOnNoReplacements="true">
-      <replacetoken>}egov.war</replacetoken>
-      <replacevalue>}egouv.war</replacevalue>
+    <condition property="application.path" value="middemo.fr#" else="mobileid.fr#">
+      <isset property="uidemo"/>
+    </condition>
+    <echo message="${application.path}"/>
+    <replace file="${app.dir}/build.xml" failOnNoReplacements="true">
+      <replacetoken expandProperties="false"><![CDATA[${application.path}egov.war]]></replacetoken>
+      <replacevalue expandProperties="true"><![CDATA[${application.path}egouv.war]]></replacevalue>
     </replace>
   </target>
    
