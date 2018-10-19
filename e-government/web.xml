@@ -29,9 +29,15 @@
     </context-param>
 
     <context-param>
-        <description>Demo Mode</description>
-        <param-name>demo</param-name>
-        <param-value>@demo@</param-value>
+        <description>UI Demo Mode</description>
+        <param-name>uidemo</param-name>
+        <param-value>@uidemo@</param-value>
+    </context-param>
+
+    <context-param>
+        <description>UI Demo Issuer</description>
+        <param-name>demo-issuer</param-name>
+        <param-value>@demo-issuer@</param-value>
     </context-param>
 
     <context-param>

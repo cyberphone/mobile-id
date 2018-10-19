@@ -62,7 +62,7 @@ public class eGovernmentService extends InitPropertyReader implements ServletCon
 
     static final String ISSUER_JSON           = "issuer";
 
-    static final String DEMO                  = "demo";  // No user auth
+    static final String UIDEMO                = "uidemo";  // No user auth
 
     static final String LOGGING               = "logging";
 
@@ -76,7 +76,7 @@ public class eGovernmentService extends InitPropertyReader implements ServletCon
     
     static boolean logging;
 
-    static X509Certificate demoCertificate;
+    static X509Certificate demoCertificate; // UI demo mode flag as well
 
     void addIssuer(KeyStore keyStore, JSONObjectReader issuerObject) throws IOException, GeneralSecurityException {
         String issuerBase = issuerObject.getString(ISSUER_JSON);
@@ -143,7 +143,7 @@ public class eGovernmentService extends InitPropertyReader implements ServletCon
             ////////////////////////////////////////////////////////////////////////////////////////////
             // Are we in demo mode?
             ////////////////////////////////////////////////////////////////////////////////////////////
-            demoMode = getPropertyBoolean(DEMO);
+            demoMode = getPropertyBoolean(UIDEMO);
 
             ////////////////////////////////////////////////////////////////////////////////////////////
             // Are we logging?
