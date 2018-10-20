@@ -43,7 +43,7 @@
     <property name="local.installation" value="true"/>
     <property name="desktop.wallet" value="true"/>
 
-  	<property name="zip.extra.lib.dir" value="${common.lib.dir}"/>
+    <property name="zip.extra.lib.dir" value="${common.lib.dir}"/>
     <property name="zip.common.lib.dir" value="${common.lib.dir}"/>
     <property name="zip.lib.dir" value="lib"/>
     
@@ -195,7 +195,7 @@
          </fileset>
      </copy>
 
-  	 <property name="zip.extra.lib.dir" value="extra.lib"/>
+     <property name="zip.extra.lib.dir" value="extra.lib"/>
      <property name="zip.common.lib.dir" value="empty.lib"/>
      <property name="zip.lib.dir" value="empty.lib"/>
    

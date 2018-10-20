@@ -18,23 +18,23 @@
 package org.webpki.mobileid.authenticate;
 
 class Synchronizer {
-	boolean touched;
+    boolean touched;
 
-	synchronized boolean perform(int timeout) {
-		boolean timeout_flag = false;
-		while (!touched && !timeout_flag) {
-			try {
-				wait(timeout);
-			} catch (InterruptedException e) {
-				return false;
-			}
-			timeout_flag = true;
-		}
-		return touched;
-	}
+    synchronized boolean perform(int timeout) {
+        boolean timeout_flag = false;
+        while (!touched && !timeout_flag) {
+            try {
+                wait(timeout);
+            } catch (InterruptedException e) {
+                return false;
+            }
+            timeout_flag = true;
+        }
+        return touched;
+    }
 
-	synchronized void haveData4You() {
-		touched = true;
-		notify();
-	}
+    synchronized void haveData4You() {
+        touched = true;
+        notify();
+    }
 }

@@ -145,7 +145,53 @@ public class eGovernmentService extends InitPropertyReader implements ServletCon
             ////////////////////////////////////////////////////////////////////////////////////////////
             if (getPropertyBoolean(UIDEMO)) {
                 demoCertificate = CertificateUtil.getCertificateFromBlob(getResourceBytes("democert.cer"));
-                demoCard = getResourceString("democard.svg");
+                StringBuilder svg = new StringBuilder(
+//                      "<svg width=\"310\" height=\"190\" xmlns=\"http://www.w3.org/2000/svg\">\n" +
+
+"<svg width=\"400\" height=\"300\" xmlns=\"http://www.w3.org/2000/svg\">\n" +
+"<svg x=\"50\" y=\"50\">\n" +
+
+                    "<defs>\n" +
+                    " <clipPath id=\"cardClip\">\n" +
+                    "  <rect rx=\"15\" ry=\"15\" height=\"180\" width=\"300\" y=\"0\" x=\"0\"/>\n" +
+                    " </clipPath>\n" +
+                    " <filter id=\"dropShaddow\">\n" +
+                    "  <feGaussianBlur stdDeviation=\"2.4\"/>\n" +
+                    " </filter>\n" +
+                    " <linearGradient y1=\"0\" x1=\"0\" y2=\"1\" x2=\"1\" id=\"innerCardBorder\">\n" +
+                    "  <stop offset=\"0\" stop-opacity=\"0.6\" stop-color=\"white\"/>\n" +
+                    "  <stop offset=\"0.48\" stop-opacity=\"0.6\" stop-color=\"white\"/>\n" +
+                    "  <stop offset=\"0.52\" stop-opacity=\"0.6\" stop-color=\"#b0b0b0\"/>\n" +
+                    "  <stop offset=\"1\" stop-opacity=\"0.6\" stop-color=\"#b0b0b0\"/>\n" +
+                    " </linearGradient>\n" +
+                    " <linearGradient y1=\"0\" x1=\"0\" y2=\"1\" x2=\"1\" id=\"outerCardBorder\">\n" +
+                    "  <stop offset=\"0\" stop-color=\"#b0b0b0\"/>\n" +
+                    "  <stop offset=\"0.48\" stop-color=\"#b0b0b0\"/>\n" +
+                    "  <stop offset=\"0.52\" stop-color=\"#808080\"/>\n" +
+                    "  <stop offset=\"1\" stop-color=\"#808080\"/>\n" +
+                    " </linearGradient>\n" +
+                    "</defs>\n" +
+                    "<rect filter=\"url(#dropShaddow)\" rx=\"16\" ry=\"16\" " +
+                      "height=\"182\" width=\"302\" y=\"4\" x=\"4\" fill=\"#b0b0b0\"/>\n" +
+                    "<svg x=\"1\" y=\"1\" clip-path=\"url(#cardClip)\"");
+                String card = getResourceString("democard.svg").replaceFirst("<title>.*<\\/title>\\s+", "");
+card = card.replace("@n", "Luke Skywalker").replace("@i", "ID:&#x2009;3456 0678 2954");
+                svg.append(card.substring(card.indexOf('>')))
+                   .append(
+                    "\n" +
+                    "<rect x=\"1.75\" y=\"1.75\" " +
+                    "width=\"298.5\" height=\"178.5\" " +
+                    "rx=\"14.7\" ry=\"14.7\" " +
+                    "fill=\"none\" " +
+                    "stroke=\"url(#innerCardBorder)\" stroke-width=\"1.5\"/>\n" +
+                    "<rect x=\"0.5\" y=\"0.5\" " +
+                    "width=\"301\" height=\"181\" " +
+                    "rx=\"16\" ry=\"16\" fill=\"none\" stroke=\"url(#outerCardBorder)\"/>\n" +
+
+"</svg>\n" +
+
+                    "</svg>\n");
+                logger.info(svg.toString());
             }
 
             ////////////////////////////////////////////////////////////////////////////////////////////

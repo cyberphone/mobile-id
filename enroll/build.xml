@@ -37,7 +37,7 @@
   </target>
 
   <target name="tomcat" depends="_init">
-  	<delete dir="${temp.dir}"/>
+    <delete dir="${temp.dir}"/>
     <fixcrlf srcdir="${src.dir}"
        tab="remove"
        tablength="4"
@@ -51,20 +51,20 @@
            srcdir="${src.dir}"
            destdir="${temp.dir}"
            includeAntRuntime="false">
-    	<classpath>
-	      <fileset dir="${common.lib.dir}">
-	         <include name="${webpki-libext.jar}"/>
-	      </fileset>
-	      <fileset dir="${common.lib.dir}">
-	         <include name="${webpki-webutil.jar}"/>
-	      </fileset>
-	      <fileset dir="${bcprovider.lib.dir}">
-	         <include name="${bcprovider.jar}"/>
-	      </fileset>
-	      <fileset dir="${reference.lib.dir}">
-	         <include name="*.jar"/>
-	      </fileset>
-    	</classpath>
+        <classpath>
+          <fileset dir="${common.lib.dir}">
+             <include name="${webpki-libext.jar}"/>
+          </fileset>
+          <fileset dir="${common.lib.dir}">
+             <include name="${webpki-webutil.jar}"/>
+          </fileset>
+          <fileset dir="${bcprovider.lib.dir}">
+             <include name="${bcprovider.jar}"/>
+          </fileset>
+          <fileset dir="${reference.lib.dir}">
+             <include name="*.jar"/>
+          </fileset>
+        </classpath>
     </javac>
     <replace file="${temp.dir}/web.xml">
       <replacefilter token="@keyprov-base-url@" value="${keyprov.base.url}"/>

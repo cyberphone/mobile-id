@@ -21,9 +21,9 @@
   <feGaussianBlur stdDeviation="2.5"/>
  </filter>
 </defs>
-<rect x="1" y="0" width="300" height="180" fill="url(#cardBackground)"/>
+<rect x="0" y="0" width="300" height="180" fill="url(#cardBackground)"/>
 <text x="31" y="140" font-family="Sans-serif" font-size="20">@n</text>
-<text font-weight="bold" x="31" y="160" font-family="monospace" font-size="14">@i</text>
+<text x="31" y="160" font-family="Sans-serif" font-size="14">@i</text>
 <g transform="matrix(0.7158436500416631,-0.27065803045481446,0.27065803045481446,0.7158436500416631,-49.49454924617858,87.90453206431629) ">
  <ellipse fill="#404040" stroke-width="5" cx="159.67247" cy="30.64171" rx="64" ry="47" filter="url(#shaddow)"/>
  <ellipse fill="url(#innerGradiant)" stroke-width="5" cx="161.67247" cy="28.96646" rx="65.09307" ry="46.49134"/>
