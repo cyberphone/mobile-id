@@ -136,13 +136,6 @@ public class HTML {
             LocalizedStrings.HT_HOME +
             "\" id=\"egovlogo\" class=\"egovlogo\" src=\"images/egovlogo.svg\">");
         if (userData != null) {
-            StringBuilder id = new StringBuilder();
-            for (int q = 0; q < 12; q += 4) {
-                if (q != 0) {
-                    id.append('\u2009');
-                }
-                id.append(userData.citizenId.substring(q, q + 4));
-            }
             s.append(
                 "<div id=\"session\" class=\"sessionview\"></div>" +
                 "<div class=\"loginlogoutgroup\">" +
@@ -150,10 +143,10 @@ public class HTML {
                 LocalizedStrings.HT_SESSION +
                 "\" onclick=\"showSession()\">" +
                 "<div style=\"padding-bottom:4px;white-space:nowrap\">")
-             .append(userData.userName)
+             .append(userData.getUserCommonName())
              .append(
-                "</div><div>ID:\u2009")
-             .append(id)
+                "</div><div>")
+             .append(userData.getUserIdHTMLString())
              .append(
                 "</div></div><div class=\"logout\" title=\"" +
                 LocalizedStrings.HT_LOGOUT +

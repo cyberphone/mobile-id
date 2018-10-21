@@ -19,16 +19,12 @@ package org.webpki.mobileid.egovernment;
 
 import java.io.IOException;
 
-import java.security.cert.X509Certificate;
-
 import javax.servlet.ServletException;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import org.webpki.crypto.CertificateInfo;
 
 import org.webpki.localized.LocalizedStrings;
 
@@ -72,6 +68,7 @@ public class LoginServlet extends HttpServlet {
             demoAuthentication(request, response);
             return;
         }
+/*
         HttpSession session = request.getSession(true);
         X509Certificate certificate = eGovernmentService.demoCertificate;
         CertificateInfo certInfo = new CertificateInfo(certificate);
@@ -81,17 +78,22 @@ public class LoginServlet extends HttpServlet {
                                           certInfo.getSubjectSerialNumber(),
                                           certificate));
         response.sendRedirect(request.getParameter(LOGIN_TARGET));
+*/
+        HTML.resultPage(response, null, new StringBuilder("NOT IMPLEMENTED!"));
     }
 
     void demoAuthentication(HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
         StringBuilder html = new StringBuilder("<table style=\"border-color:red;" +
-  "border-style:solid;border-width:2pt;width:30em;border-collapse:collapse\">" +
+  "border-style:solid;border-width:2pt;border-collapse:collapse\">" +
    "<tr><td style=\"background-color:grey;color:white;text-align:left;padding:3pt 5pt\">taxdepertment.gov</td></tr>" +
    "<tr><td><img style=\"height:14pt;padding:4pt;display:block;margin-right:auto\"" +
      " src=\"images/mobileidlogo.svg\" alt=\"Mobile ID\" title=\"Mobile ID App\"></td></tr>" +
-   "<tr><td style=\"font-size:14pt;padding:15pt 0 15pt 0\">Authenticate to Service</td></tr>" +
+   "<tr><td style=\"font-size:14pt;padding:15pt 0 15pt 0\">Authenticate to Service hjhjhj</td></tr>" +
    "<tr><td>Credential</td></tr>" +
+   "<tr><td>")
+        .append(eGovernmentService.demoCard)
+        .append("</td></tr>" +
   "</table>");
         HTML.resultPage(response, null, html);
     }

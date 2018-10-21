@@ -18,8 +18,10 @@
 package org.webpki.mobileid.egovernment;
 
 import java.io.IOException;
+
 import java.text.SimpleDateFormat;
-import java.util.Date;
+
+import java.util.GregorianCalendar;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -62,8 +64,8 @@ public abstract class ProtectedServlet extends HttpServlet {
         return userData;
     }
 
-    static String getDateString(Date dateTime) {
-        return new SimpleDateFormat("yyyy-MM-dd' 'HH:mm:ss' CET'").format(dateTime);
+    static String getDateString(GregorianCalendar dateTime) {
+        return new SimpleDateFormat("yyyy-MM-dd' 'HH:mm:ss' CET'").format(dateTime.getTime());
     }
     
     static String getString(HttpServletRequest request, String name) throws IOException {

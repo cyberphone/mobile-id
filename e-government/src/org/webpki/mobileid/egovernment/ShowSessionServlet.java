@@ -19,8 +19,6 @@ package org.webpki.mobileid.egovernment;
 
 import java.io.IOException;
 
-import java.util.Date;
-
 import javax.servlet.ServletException;
 
 import javax.servlet.http.HttpServlet;
@@ -70,21 +68,21 @@ public class ShowSessionServlet extends HttpServlet {
              .append("</td></tr><tr><th>" +
                      LocalizedStrings.START_TIME +
                      "</th><td>")
-             .append(ProtectedServlet.getDateString(new Date(userData.creationTime)))
+             .append(ProtectedServlet.getDateString(userData.getCreationTime()))
              .append("</td></tr></table>" +
                      "<div style=\"padding:10pt 0px 3pt 0px\">" +
                      LocalizedStrings.USER_CERTIFICATE +
                      ":</div>" +
                      "<table class=\"tftable\">");
-            CertificateInfo certInfo = new CertificateInfo(userData.certificate);
+            CertificateInfo certInfo = new CertificateInfo(userData.getUserCertificate());
             addEntry(s, LocalizedStrings.SERIAL_NUMBER, certInfo.getSerialNumber() +
                      " (" + certInfo.getSerialNumberInHex() + ")");
             addEntry(s, LocalizedStrings.ISSUER_NAME, certInfo.getIssuer());
             addEntry(s, LocalizedStrings.SUBJECT_NAME, certInfo.getSubject());
             addEntry(s, LocalizedStrings.VALIDITY,
-                     ProtectedServlet.getDateString(userData.certificate.getNotBefore()) + 
+                     ProtectedServlet.getDateString(certInfo.getNotBeforeDate()) + 
                      " - " +
-                     ProtectedServlet.getDateString(userData.certificate.getNotAfter()));
+                     ProtectedServlet.getDateString(certInfo.getNotAfterDate()));
             s.append("</table>");
         }
         HTML.output(response, s.append("</div>").toString());

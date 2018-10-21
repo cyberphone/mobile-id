@@ -92,6 +92,12 @@ public class eGovernmentService extends InitPropertyReader implements ServletCon
         return is;
     }
 
+/*    
+    StringBuilder createCoreCard(String svgHeader) {
+    	StringBuilder 
+    }
+*/
+
     byte[] getResourceBytes(String name) throws IOException {
         return ArrayUtil.getByteArrayFromInputStream(getResource(name));
     }
@@ -145,12 +151,19 @@ public class eGovernmentService extends InitPropertyReader implements ServletCon
             ////////////////////////////////////////////////////////////////////////////////////////////
             if (getPropertyBoolean(UIDEMO)) {
                 demoCertificate = CertificateUtil.getCertificateFromBlob(getResourceBytes("democert.cer"));
+                UserData userData = new UserData(demoCertificate);
+                String card = getResourceString("democard.svg");
+                	// Removing the SVG header excluding the >
+                card = card.substring(card.indexOf('>'))
+                	// Remove the local title object
+                    .replaceFirst("<title>.*<\\/title>\\s+", "")
+                    // Insert user name
+                	.replace("@n", userData.getUserCommonName())
+                	// And the associated identity string
+                    .replace("@i", userData.getUserIdHTMLString());
+
                 StringBuilder svg = new StringBuilder(
-//                      "<svg width=\"310\" height=\"190\" xmlns=\"http://www.w3.org/2000/svg\">\n" +
-
-"<svg width=\"400\" height=\"300\" xmlns=\"http://www.w3.org/2000/svg\">\n" +
-"<svg x=\"50\" y=\"50\">\n" +
-
+                    "<svg style=\"height:90pt;padding:0 10pt 0 8pt;margin-right:auto;margin-left:auto;display:block\" viewBox=\"0 0 310 190\" xmlns=\"http://www.w3.org/2000/svg\">\n" +
                     "<defs>\n" +
                     " <clipPath id=\"cardClip\">\n" +
                     "  <rect rx=\"15\" ry=\"15\" height=\"180\" width=\"300\" y=\"0\" x=\"0\"/>\n" +
@@ -172,25 +185,27 @@ public class eGovernmentService extends InitPropertyReader implements ServletCon
                     " </linearGradient>\n" +
                     "</defs>\n" +
                     "<rect filter=\"url(#dropShaddow)\" rx=\"16\" ry=\"16\" " +
-                      "height=\"182\" width=\"302\" y=\"4\" x=\"4\" fill=\"#b0b0b0\"/>\n" +
+                      "height=\"182\" width=\"302\" y=\"4\" x=\"4\" fill=\"#c0c0c0\"/>\n" +
                     "<svg x=\"1\" y=\"1\" clip-path=\"url(#cardClip)\"");
-                String card = getResourceString("democard.svg").replaceFirst("<title>.*<\\/title>\\s+", "");
-card = card.replace("@n", "Luke Skywalker").replace("@i", "ID:&#x2009;3456 0678 2954");
-                svg.append(card.substring(card.indexOf('>')))
+                svg.append(card)
                    .append(
-                    "\n" +
-                    "<rect x=\"1.75\" y=\"1.75\" " +
-                    "width=\"298.5\" height=\"178.5\" " +
+                    "<rect x=\"2\" y=\"2\" " +
+                    "width=\"298\" height=\"178\" " +
                     "rx=\"14.7\" ry=\"14.7\" " +
                     "fill=\"none\" " +
-                    "stroke=\"url(#innerCardBorder)\" stroke-width=\"1.5\"/>\n" +
+                    "stroke=\"url(#innerCardBorder)\" stroke-width=\"2.7\"/>\n" +
                     "<rect x=\"0.5\" y=\"0.5\" " +
                     "width=\"301\" height=\"181\" " +
                     "rx=\"16\" ry=\"16\" fill=\"none\" stroke=\"url(#outerCardBorder)\"/>\n" +
-
-"</svg>\n" +
-
                     "</svg>\n");
+                demoCard = svg.toString();
+                
+                svg.delete(0, demoCard.indexOf('>'))
+                   .insert(0,
+                	       "<svg width=\"410\" height=\"290\" xmlns=\"http://www.w3.org/2000/svg\">\n" +
+                           "<title>Mobile ID - Virtual Card Credential</title>\n" +
+                           "<svg x=\"50\" y=\"50\"")
+                   .append("</svg>\n");
                 logger.info(svg.toString());
             }
 

@@ -61,7 +61,6 @@ public class DeclarationServlet extends ProtectedServlet {
     void protectedPost(UserData userData, 
                        HttpServletRequest request,
                        HttpServletResponse response) throws IOException, ServletException {
-        String emailSubject = userData.userName.toLowerCase().replace(' ', '.');
         StringBuilder html = new StringBuilder(
             "<div class=\"header\">" +
             LocalizedStrings.DECLARATION_RECEIVED +
@@ -69,7 +68,7 @@ public class DeclarationServlet extends ProtectedServlet {
             "<div><table class=\"tftable\"><tr><th>" +
             LocalizedStrings.TIME_STAMP +
             "</th><td>")
-        .append(getDateString(new GregorianCalendar().getTime()))
+        .append(getDateString(new GregorianCalendar()))
         .append(
             "</td></tr>" +
             "<tr><th>" +
@@ -81,8 +80,8 @@ public class DeclarationServlet extends ProtectedServlet {
             "<div class=\"footer\"><table class=\"msgtable\"><tr><td>" +
             LocalizedStrings.CONFIRMATION + 
             ":</td></tr><tr><td style=\"white-space:nowrap;font-weight:bold\">")
-        .append(emailSubject)
-        .append("@" + LocalizedStrings.DEMO_EMAIL_PROVIDER + "</td></tr></table></div>");
+        .append(userData.getUserEmailAddress())
+        .append("</td></tr></table></div>");
         HTML.resultPage(response, userData, html);
     }
 }
