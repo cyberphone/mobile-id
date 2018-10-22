@@ -12,9 +12,9 @@
   <stop offset="1" stop-color="#bf0000"/>
  </radialGradient>
  <linearGradient id="cardBackground" x1="0" y1="0" x2="1" y2="1">
-  <stop offset="0" stop-color="#ffe496"/>
-  <stop offset="0.5" stop-color="#f7eecd"/>
-  <stop offset="1" stop-color="#fcdc9c"/>
+  <stop stop-color="#fcf299" offset="0"/>
+  <stop stop-color="#fff9d3" offset="0.5"/>
+  <stop stop-color="#fff7b2" offset="1"/>
  </linearGradient>
 </defs>
 <rect x="0" y="0" height="180" width="300" fill="url(#cardBackground)"/>

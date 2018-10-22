@@ -30,6 +30,11 @@ public interface LocalizedStrings {
                                         "powered by the @ system";
     String DEMO_EMAIL_PROVIDER        = "google.com";  // Pure UI demo feature
 
+    // App UI emulator only
+    String UI_DEMO_TOP_URL            = "taxdepartment.gov";
+    String UI_DEMO_AUTH_TO            = "Authenticate to Service";
+    String UI_DEMO_SELECTED_CRED      = "Selected Credential";
+
     // Main
     String SELECT_SERVICE             = "Select Service";
     String INCOME_DECLARATION         = "Income Declaration";

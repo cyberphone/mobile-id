@@ -94,7 +94,7 @@ public class eGovernmentService extends InitPropertyReader implements ServletCon
 
 /*    
     StringBuilder createCoreCard(String svgHeader) {
-    	StringBuilder 
+        StringBuilder 
     }
 */
 
@@ -153,17 +153,17 @@ public class eGovernmentService extends InitPropertyReader implements ServletCon
                 demoCertificate = CertificateUtil.getCertificateFromBlob(getResourceBytes("democert.cer"));
                 UserData userData = new UserData(demoCertificate);
                 String card = getResourceString("democard.svg");
-                	// Removing the SVG header excluding the >
+                    // Removing the SVG header excluding the >
                 card = card.substring(card.indexOf('>'))
-                	// Remove the local title object
+                    // Remove the local title object
                     .replaceFirst("<title>.*<\\/title>\\s+", "")
                     // Insert user name
-                	.replace("@n", userData.getUserCommonName())
-                	// And the associated identity string
+                    .replace("@n", userData.getUserCommonName())
+                    // And the associated identity string
                     .replace("@i", userData.getUserIdHTMLString());
 
                 StringBuilder svg = new StringBuilder(
-                    "<svg style=\"height:90pt;padding:0 10pt 0 8pt;margin-right:auto;margin-left:auto;display:block\" viewBox=\"0 0 310 190\" xmlns=\"http://www.w3.org/2000/svg\">\n" +
+                    "<svg style=\"height:100pt;padding:4pt 10pt 20pt 10pt;margin-right:auto;margin-left:auto;display:block\" viewBox=\"0 0 318 190\" xmlns=\"http://www.w3.org/2000/svg\">\n" +
                     "<defs>\n" +
                     " <clipPath id=\"cardClip\">\n" +
                     "  <rect rx=\"15\" ry=\"15\" height=\"180\" width=\"300\" y=\"0\" x=\"0\"/>\n" +
@@ -185,16 +185,16 @@ public class eGovernmentService extends InitPropertyReader implements ServletCon
                     " </linearGradient>\n" +
                     "</defs>\n" +
                     "<rect filter=\"url(#dropShaddow)\" rx=\"16\" ry=\"16\" " +
-                      "height=\"182\" width=\"302\" y=\"4\" x=\"4\" fill=\"#c0c0c0\"/>\n" +
-                    "<svg x=\"1\" y=\"1\" clip-path=\"url(#cardClip)\"");
+                      "height=\"182\" width=\"302\" y=\"4\" x=\"12\" fill=\"#c0c0c0\"/>\n" +
+                    "<svg x=\"9\" y=\"1\" clip-path=\"url(#cardClip)\"");
                 svg.append(card)
                    .append(
-                    "<rect x=\"2\" y=\"2\" " +
+                    "<rect x=\"10\" y=\"2\" " +
                     "width=\"298\" height=\"178\" " +
                     "rx=\"14.7\" ry=\"14.7\" " +
                     "fill=\"none\" " +
                     "stroke=\"url(#innerCardBorder)\" stroke-width=\"2.7\"/>\n" +
-                    "<rect x=\"0.5\" y=\"0.5\" " +
+                    "<rect x=\"8.5\" y=\"0.5\" " +
                     "width=\"301\" height=\"181\" " +
                     "rx=\"16\" ry=\"16\" fill=\"none\" stroke=\"url(#outerCardBorder)\"/>\n" +
                     "</svg>\n");
@@ -202,7 +202,7 @@ public class eGovernmentService extends InitPropertyReader implements ServletCon
                 
                 svg.delete(0, demoCard.indexOf('>'))
                    .insert(0,
-                	       "<svg width=\"410\" height=\"290\" xmlns=\"http://www.w3.org/2000/svg\">\n" +
+                           "<svg width=\"418\" height=\"290\" xmlns=\"http://www.w3.org/2000/svg\">\n" +
                            "<title>Mobile ID - Virtual Card Credential</title>\n" +
                            "<svg x=\"50\" y=\"50\"")
                    .append("</svg>\n");

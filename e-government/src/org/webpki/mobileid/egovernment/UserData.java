@@ -48,35 +48,35 @@ public class UserData implements Serializable {
     private X509Certificate userCertificate;
     
     public UserData(HttpSession session, X509Certificate userCertificate) throws IOException {
-    	this(userCertificate);
+        this(userCertificate);
         this.creationTime = session.getCreationTime();
         this.sessionId = session.getId();
     }
 
     public String getSessionId() {
-    	return sessionId;
+        return sessionId;
     }
 
     public GregorianCalendar getCreationTime() {
-    	GregorianCalendar dateTime = new GregorianCalendar();
-    	dateTime.setTimeInMillis(creationTime);
-    	return dateTime;
+        GregorianCalendar dateTime = new GregorianCalendar();
+        dateTime.setTimeInMillis(creationTime);
+        return dateTime;
     }
 
     public UserData(X509Certificate userCertificate) throws IOException {
-    	CertificateInfo certInfo = new CertificateInfo(userCertificate);
+        CertificateInfo certInfo = new CertificateInfo(userCertificate);
         this.userCommonName = certInfo.getSubjectCommonName();
         this.userId = certInfo.getSubjectSerialNumber();
         this.userCertificate = userCertificate;
     }
 
     public X509Certificate getUserCertificate() {
-    	return userCertificate;
+        return userCertificate;
     }
 
     // The actual user identity used by the information systems
     public String getUserId() {
-    	return userId;
+        return userId;
     }
 
     // For usage in UIs
@@ -88,18 +88,18 @@ public class UserData implements Serializable {
             }
             idString.append(userId.substring(q, q + 4));
         }
-    	return idString.toString();
+        return idString.toString();
     }
 
     // Human-friendly name of the user
     public String getUserCommonName() {
-    	return userCommonName;
+        return userCommonName;
     }
 
     // This is fake, you usually get such data elsewhere
     public String getUserEmailAddress() {
-    	return userCommonName.toLowerCase().replace(' ', '.') +
-    		"@" + LocalizedStrings.DEMO_EMAIL_PROVIDER;
+        return userCommonName.toLowerCase().replace(' ', '.') +
+            "@" + LocalizedStrings.DEMO_EMAIL_PROVIDER;
     }
 
     static UserData getUserData(HttpServletRequest request) {
