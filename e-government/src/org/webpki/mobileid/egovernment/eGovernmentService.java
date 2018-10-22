@@ -73,10 +73,14 @@ public class eGovernmentService extends InitPropertyReader implements ServletCon
     static JSONX509Verifier trustedIssuers;
     
     static boolean logging;
+    
+    // UI Demo only
 
     static X509Certificate demoCertificate; // UI demo mode flag as well
     
     static String demoCard;
+    
+    static String pinKeyboard;
 
     void addIssuer(KeyStore keyStore, JSONObjectReader issuerObject) throws IOException, GeneralSecurityException {
         String issuerBase = issuerObject.getString(ISSUER_JSON);
@@ -163,7 +167,7 @@ public class eGovernmentService extends InitPropertyReader implements ServletCon
                     .replace("@i", userData.getUserIdHTMLString());
 
                 StringBuilder svg = new StringBuilder(
-                    "<svg style=\"height:100pt;padding:4pt 10pt 20pt 10pt;margin-right:auto;margin-left:auto;display:block\" viewBox=\"0 0 318 190\" xmlns=\"http://www.w3.org/2000/svg\">\n" +
+                    "<svg style=\"height:100pt;padding:4pt 10pt 20pt 10pt\" viewBox=\"0 0 318 190\" xmlns=\"http://www.w3.org/2000/svg\">\n" +
                     "<defs>\n" +
                     " <clipPath id=\"cardClip\">\n" +
                     "  <rect rx=\"15\" ry=\"15\" height=\"180\" width=\"300\" y=\"0\" x=\"0\"/>\n" +
@@ -207,6 +211,10 @@ public class eGovernmentService extends InitPropertyReader implements ServletCon
                            "<svg x=\"50\" y=\"50\"")
                    .append("</svg>\n");
                 logger.info(svg.toString());
+                
+                String kbd = getResourceString("pinkeyboard.svg");
+                pinKeyboard = "<svg style=\"width:200pt;padding:5pt\" " +
+                        kbd.substring(kbd.indexOf("svg "));
             }
 
             ////////////////////////////////////////////////////////////////////////////////////////////

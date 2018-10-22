@@ -102,9 +102,11 @@
       <zipfileset file="${logotype.dir}/mobileidlogo.svg" prefix="images"/>
       <zipfileset file="${resource.dir}/issuers.json" prefix="${class_war_path}"/>
       <zipfileset file="${tls_cert_path}" prefix="${class_war_path}"/>
-<!-- Remove next two line when ready... -->
+<!-- Remove next lines when ready... -->
       <zipfileset file="${democert.dir}/${demo.issuer}-democert.cer" fullpath="${class_war_path}/democert.cer"/>
       <zipfileset file="${resource.dir}/logotypes/${demo.issuer}-card.svg" fullpath="${class_war_path}/democard.svg"/>
+      <zipfileset file="pinkeyboard.svg" prefix="${class_war_path}"/>
+<!-- End of localized resources -->
       <fileset dir="web"/>
     </war>
     <copy file="${dist.dir}/${application}" todir="${env.CATALINA_HOME}/webapps" overwrite="true" preservelastmodified="true"/>

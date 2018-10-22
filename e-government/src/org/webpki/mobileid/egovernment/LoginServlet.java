@@ -32,7 +32,8 @@ public class LoginServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
     
-    static final String LOGIN_TARGET = "target";
+    static final String LOGIN_TARGET  = "target";
+    static final String MOBILE_ID_APP = "Mobile ID App";
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -85,16 +86,22 @@ public class LoginServlet extends HttpServlet {
     void demoAuthentication(HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
         StringBuilder html = new StringBuilder("<table style=\"border-color:red;" +
-  "border-style:solid;border-width:2pt;border-collapse:collapse\">" +
-   "<tr><td style=\"background-color:grey;color:white;text-align:left;padding:3pt 5pt\">" +
+  "border-style:solid;border-width:2pt;border-collapse:collapse;background-color:white\">" +
+   "<tr><td title=\"" +
+     LocalizedStrings.UI_DEMO_HT_REQUEST_DOMAIN +
+     "\" style=\"background-color:black;color:white;text-align:left;padding:3pt 5pt\">" +
      LocalizedStrings.UI_DEMO_TOP_URL + "</td></tr>" +
    "<tr><td><img style=\"height:14pt;padding:4pt;display:block;margin-right:auto\"" +
-     " src=\"images/mobileidlogo.svg\" alt=\"Mobile ID\" title=\"Mobile ID App\"></td></tr>" +
-   "<tr><td style=\"font-size:14pt;padding:15pt 4pt\">" +
+     " src=\"images/mobileidlogo.svg\" alt=\"Mobile ID\" title=\"" +
+     MOBILE_ID_APP + "\"></td></tr>" +
+   "<tr><td class=\"uidheader\">" +
      LocalizedStrings.UI_DEMO_AUTH_TO + "</td></tr>" +
    "<tr><td>" + LocalizedStrings.UI_DEMO_SELECTED_CRED + "</td></tr>" +
    "<tr><td>")
         .append(eGovernmentService.demoCard)
+        .append("</td></tr>" +
+    "<tr><td>")
+        .append(eGovernmentService.pinKeyboard)
         .append("</td></tr>" +
   "</table>");
         HTML.resultPage(response, null, html);

@@ -34,6 +34,7 @@ public interface LocalizedStrings {
     String UI_DEMO_TOP_URL            = "taxdepartment.gov";
     String UI_DEMO_AUTH_TO            = "Authenticate to Service";
     String UI_DEMO_SELECTED_CRED      = "Selected Credential";
+    String UI_DEMO_HT_REQUEST_DOMAIN  = "Requesting domain";
 
     // Main
     String SELECT_SERVICE             = "Select Service";

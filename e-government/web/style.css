@@ -212,6 +212,11 @@ li {
   width:100%;
 }
 
+.uidheader {
+  font-size:12pt;
+  padding:15pt 4pt;
+}
+
 @media (max-width:768px) {
 
   .stdbtn, .multibtn, .login, .logout, .tftable, .loginbtn {
@@ -247,6 +252,11 @@ li {
   .header, .dialog {
     font-size:12pt;
   }
+  
+  .uidheader {
+    font-size:10pt;
+  }
+  
   .header {
     padding-bottom:10pt;
   }

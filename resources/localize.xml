@@ -50,9 +50,7 @@
     </copy>
     <!-- Localize static Web resources like images --> 
     <copy todir="${localized.egov-app.dir}" overwrite="true" preservelastmodified="true">
-      <fileset dir="${localization.dir}">
-         <include name="web/**"/>
-      </fileset>
+      <fileset dir="${localization.dir}/copy"/>
     </copy>
     <delete dir="${temp.dir}"/>
     <mkdir dir="${temp.dir}"/>

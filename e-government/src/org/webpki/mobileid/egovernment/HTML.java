@@ -65,20 +65,27 @@ public class HTML {
             "    message.style.width = (window.innerWidth * 96) / 100 + 'px';\n" +
             "  }\n" +
             "  let content = document.getElementById('content');\n" +
-            "  if (content) {\n" +
-            "    let minTop = document.getElementById('egovlogo').getBoundingClientRect().bottom;\n" +
-            "    let top = (window.innerHeight - content.offsetHeight) / 2;\n" +
-            "    if (top < minTop) top = minTop;\n" +
-            "    content.style.top = top + 'px';\n" +
-            "    let left = (window.innerWidth - content.offsetWidth) / 2;\n" +
-            "    if (left < 0) left = 0;\n" +
-            "    content.style.left = left + 'px';\n" +
-            "    content.style.visibility = 'visible';\n" +
-            "  }\n" +
-            "}\n" +
-            "window.addEventListener('resize', () => { initUi() });\n" +
-            "function initApplication() {\n" +
-            "  initUi();\n");
+            "  if (content) {\n" + 
+            "    let top = (window.innerHeight - content.offsetHeight) / 2;\n");
+            // Let the virtual mobile phone take the whole screen if necessary...
+            if (eGovernmentService.demoCertificate != null && content.contains(LoginServlet.MOBILE_ID_APP)) {
+                s.append("    if (top < 0) top = 0;\n");
+            } else {
+                s.append(
+                    "    let minTop = document.getElementById('egovlogo').getBoundingClientRect().bottom;\n" +
+                    "    if (top < minTop) top = minTop;\n");
+            }
+            s.append(
+                "    content.style.top = top + 'px';\n" +
+                "    let left = (window.innerWidth - content.offsetWidth) / 2;\n" +
+                "    if (left < 0) left = 0;\n" +
+                "    content.style.left = left + 'px';\n" +
+                "    content.style.visibility = 'visible';\n" +
+                "  }\n" +
+                "}\n" +
+                "window.addEventListener('resize', () => { initUi() });\n" +
+                "function initApplication() {\n" +
+                "  initUi();\n");
         if (customOnLoad != null) {
             s.append("  ")
              .append(customOnLoad)
