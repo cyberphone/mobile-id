@@ -32,6 +32,8 @@ import javax.servlet.http.HttpSession;
 
 import org.webpki.keygen2.ServerState;
 
+import org.webpki.localized.LocalizedStrings;
+
 import org.webpki.util.Base64URL;
 
 import org.webpki.webutil.ServletUtil;
@@ -117,7 +119,8 @@ public class KeyProviderInitServlet extends HttpServlet {
                     getHTML(null,
                             null,
                             "<tr><td width=\"100%\" align=\"center\" valign=\"middle\">" +
-                            "This proof-of-concept system only supports Android</td></tr>"));
+                            LocalizedStrings.ANDROID_ONLY +
+                            "</td></tr>"));
             return;
         }
         if (keygen2EnrollmentUrl == null) {
@@ -152,6 +155,8 @@ public class KeyProviderInitServlet extends HttpServlet {
                        "<tr><td align=\"center\">" +
                        "<a href=\"intent://keygen2?" + extra +
                        "#Intent;scheme=webpkiproxy;" +
-                       "package=org.webpki.mobile.android;end\">Start KeyGen2</a></td></tr></table></td></tr>"));
+                       "package=org.webpki.mobile.android;end\">" +
+                       LocalizedStrings.START_ENROLLMENT +
+                       "</a></td></tr></table></td></tr>"));
     }
 }

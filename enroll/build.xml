@@ -1,11 +1,13 @@
 <project name="MobileID (Demo) Key Provider" default="help" basedir=".">
 
   <!-- set properties for this build -->
-  <property file="../resources/common.properties"/>
+  <property name="resource.dir" location="../resources"/>
+  <property file="${resource.dir}/common.properties"/>
   <basename property="tls_cert_file" file="${tls_cert_path}"/>
   <property name="logging" value="false"/>
 
   <property name="src.dir" value="src"/>
+  <property name="localized.dir" value="localized"/>
   <property name="temp.dir" value=".tmp"/>
   <property name="class_war_path" value="WEB-INF/classes/org/webpki/mobileid/keyprovider"/>
   
@@ -22,7 +24,7 @@
   <property name="catalina.home" value="${env.CATALINA_HOME}"/>
 
   <target name="help">
-      <echo message="tomcat"/>
+      <echo message="tomcat [-Dlogging=true]"/>
   </target>
 
   <target name="_init" unless="app_path">
@@ -37,19 +39,22 @@
   </target>
 
   <target name="tomcat" depends="_init">
+    <property name="zip.common.lib.dir" value="${common.lib.dir}"/>
+    <property name="zip.bcprovider.lib.dir" value="${bcprovider.lib.dir}"/>
     <delete dir="${temp.dir}"/>
     <fixcrlf srcdir="${src.dir}"
        tab="remove"
        tablength="4"
        eol="lf"
        eof="remove"
-       includes="**/*.java"/>
+       includes="**/*.java, **/*.css, **/*.xml, **/*.properties"/>
     <copy file="web.xml" todir="${temp.dir}"/>
     <javac debug="${debug}"
            source="${javaversion}"
            target="${javaversion}"
-           srcdir="${src.dir}"
+           srcdir="${src.dir}:${localized.dir}"
            destdir="${temp.dir}"
+    	   encoding="UTF-8"
            includeAntRuntime="false">
         <classpath>
           <fileset dir="${common.lib.dir}">
@@ -78,24 +83,24 @@
       <classes dir="${temp.dir}">
          <exclude name="web.xml"/>
       </classes>
-      <lib dir="${common.lib.dir}">
+      <lib dir="${zip.common.lib.dir}">
          <include name="${webpki-libext.jar}"/>
       </lib>
-      <lib dir="${common.lib.dir}">
+      <lib dir="${zip.common.lib.dir}">
          <include name="${webpki-webutil.jar}"/>
       </lib>
-      <lib dir="${bcprovider.lib.dir}">
+      <lib dir="${zip.bcprovider.lib.dir}">
          <include name="${bcprovider.jar}"/>
       </lib>
-      <zipfileset dir="${key.dir}" prefix="${class_war_path}">
+      <zipfileset dir="${cakey.dir}" prefix="${class_war_path}">
          <include name="*-sub-ca.p12"/>
          <include name="*-kmk.p12"/>
       </zipfileset>
       <zipfileset dir="${logotype.dir}" prefix="${class_war_path}">
-        <include name="card-*"/>
+        <include name="*-card.svg"/>
       </zipfileset>
       <zipfileset file="${logotype.dir}/mobileidlogo.svg" prefix="images"/>
-      <zipfileset file="../resources/issuers.json" prefix="${class_war_path}"/>
+      <zipfileset file="${resource.dir}/issuers.json" prefix="${class_war_path}"/>
       <zipfileset file="${tls_cert_path}" prefix="${class_war_path}"/>
       <fileset dir="web"/>
     </war>

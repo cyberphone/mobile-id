@@ -1,0 +1,16 @@
+<project name="Make a French version of the source" default="help" basedir=".">
+
+  <!-- set french specialtes  -->
+
+  <target name="help">
+      <echo message="help localize"/>
+  </target>
+        
+  <target name="localize">
+    <replace file="${app.dir}/build.xml" failOnNoReplacements="true">
+      <replacetoken expandProperties="false"><![CDATA[${application.path}]]></replacetoken>
+      <replacevalue><![CDATA[mobileid.fr#]]></replacevalue>
+    </replace>
+  </target>
+   
+</project>

@@ -85,7 +85,7 @@ public class KeyProviderService extends InitPropertyReader implements ServletCon
                                                         getPropertyString(KEYSTORE_PASSWORD));
             subCA = new KeyStoreEnumerator(getResource(issuerBase + "-sub-ca.p12"),
                                            getPropertyString(KEYSTORE_PASSWORD));
-            cardImage = getResourceString("card-" + issuerBase + ".svg");
+            cardImage = getResourceString(issuerBase + "-card.svg");
             issuerObject.checkForUnread();
         }
     }

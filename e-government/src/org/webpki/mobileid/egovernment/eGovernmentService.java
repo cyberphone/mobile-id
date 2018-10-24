@@ -167,7 +167,7 @@ public class eGovernmentService extends InitPropertyReader implements ServletCon
                     .replace("@i", userData.getUserIdHTMLString());
 
                 StringBuilder svg = new StringBuilder(
-                    "<svg style=\"height:100pt;padding:4pt 10pt 20pt 10pt\" viewBox=\"0 0 318 190\" xmlns=\"http://www.w3.org/2000/svg\">\n" +
+                    "<svg style=\"height:100pt;display:block;margin-left:auto;margin-right:auto\" viewBox=\"0 0 318 190\" xmlns=\"http://www.w3.org/2000/svg\">\n" +
                     "<defs>\n" +
                     " <clipPath id=\"cardClip\">\n" +
                     "  <rect rx=\"15\" ry=\"15\" height=\"180\" width=\"300\" y=\"0\" x=\"0\"/>\n" +
@@ -206,14 +206,14 @@ public class eGovernmentService extends InitPropertyReader implements ServletCon
                 
                 svg.delete(0, demoCard.indexOf('>'))
                    .insert(0,
-                           "<svg width=\"418\" height=\"290\" xmlns=\"http://www.w3.org/2000/svg\">\n" +
+                           "<svg width=\"418\" height=\"288\" xmlns=\"http://www.w3.org/2000/svg\">\n" +
                            "<title>Mobile ID - Virtual Card Credential</title>\n" +
                            "<svg x=\"50\" y=\"50\"")
                    .append("</svg>\n");
                 logger.info(svg.toString());
                 
                 String kbd = getResourceString("pinkeyboard.svg");
-                pinKeyboard = "<svg style=\"width:200pt;padding:5pt\" " +
+                pinKeyboard = "<svg style=\"display:block;width:200pt;padding:0 5pt 5pt 5pt\" " +
                         kbd.substring(kbd.indexOf("svg "));
             }
 

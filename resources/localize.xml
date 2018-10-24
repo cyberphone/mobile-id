@@ -17,7 +17,7 @@
   </path>
   
   <target name="help">
-    <echo message="localize -Dapp-sub-dir=e-government -Dlocale=fr [-Dlocalized.egov-app.dir=adirectory -Ddemo=true -Dlogging=true]]"/>
+    <echo message="localize -Dapp-sub-dir=e-government -Dlocale=fr [-Dlocalized.egov-app.dir=adirectory -Duidemo=true -Dlogging=true]]"/>
   </target>
   
    <target name="localize">

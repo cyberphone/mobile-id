@@ -100,10 +100,12 @@ public class LoginServlet extends HttpServlet {
    "<tr><td>")
         .append(eGovernmentService.demoCard)
         .append("</td></tr>" +
-    "<tr><td>")
+   "<tr><td><div style=\"display:flex;justify-content:center\"><div>PIN</div><div>Field</div><div>PIN</div>" +
+	 "</div></td></tr>" +
+   "<tr><td>")
         .append(eGovernmentService.pinKeyboard)
         .append("</td></tr>" +
-  "</table>");
+   "</table>");
         HTML.resultPage(response, null, html);
     }
 }
