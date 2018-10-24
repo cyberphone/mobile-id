@@ -146,7 +146,7 @@ public class KeyProviderService extends InitPropertyReader implements ServletCon
             ////////////////////////////////////////////////////////////////////////////////////////////
             // Get TLS server certificate
             ////////////////////////////////////////////////////////////////////////////////////////////
-            tlsCertificate = CertificateUtil.getCertificateFromBlob(getResourceBytes(getPropertyString(TLS_CERTIFICATE)));
+            tlsCertificate = CertificateUtil.getCertificateFromBlob(ArrayUtil.readFile(getPropertyString(TLS_CERTIFICATE)));
 
             ////////////////////////////////////////////////////////////////////////////////////////////
             // Are we logging?

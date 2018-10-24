@@ -109,7 +109,11 @@
 <!-- End of localized resources -->
       <fileset dir="web"/>
     </war>
-    <copy file="${dist.dir}/${application}" todir="${env.CATALINA_HOME}/webapps" overwrite="true" preservelastmodified="true"/>
+    <antcall target="_updatetomcat"/>
   </target>
 
+  <target name="_updatetomcat" unless="standalone">
+    <copy file="${dist.dir}/${application}" todir="${env.CATALINA_HOME}/webapps" overwrite="true" preservelastmodified="true"/>
+  </target>
+	
 </project>
