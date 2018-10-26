@@ -90,6 +90,9 @@ public class KeyProviderInitServlet extends HttpServlet {
             }
             this.cardImage = issuer.cardImage.replace("@n", userName)
                                              .replace("@i", idString);
+            if (userName.length() > 26) {
+                cardImage = cardImage.replace("font-size=\"20\"", "font-size=\"14\"");
+            }
         }
     }
     
@@ -182,16 +185,19 @@ public class KeyProviderInitServlet extends HttpServlet {
         }
         StringBuilder html = new StringBuilder(
             "<form name=\"shoot\" method=\"POST\" action=\"home\">" +
-            "<div style=\"text-align:left\">This proof-of-concept system provisions secure payment " +
-             "credentials to be used in the Android version of Mobile ID</div>" +
+            "<div style=\"text-align:left\">" + LocalizedStrings.DESCRIPTION + "</div>" +
             "<div style=\"padding:20pt 0 10pt 0;display:flex;justify-content:center;align-items:center\">" +
-             "<div class=\"header\">Your name:&nbsp;</div>" +
-             "<div><input type=\"text\" placeholder=\"default: " +
+             "<div class=\"header\">" + LocalizedStrings.YOUR_NAME + ":&nbsp;</div>" +
+             "<div><input type=\"text\" placeholder=\"" +
+             LocalizedStrings.DEFAULT +
+             ": " +
              DEFAULT_NAME +
-             "\" style=\"background-color:#ffffe0\" class=\"header\" name=\"" +
+             "\" maxlength=\"50\" style=\"background-color:#ffffe0\" class=\"header\" name=\"" +
              RA_NAME_PARAM + "\"></div></div>" + 
             "<div class=\"header\" style=\"display:flex;justify-content:center;align-items:center;padding-bottom:20pt;text-align:left\">" +
-             "<div>Selected Issuer:</div>" +
+             "<div>" +
+             LocalizedStrings.SELECTED_ISSUER +
+             ":</div>" +
                 "<div style=\"display:flex;flex-direction:column\">");
             boolean first = true;
             for (String issuer : KeyProviderService.issuers.keySet()) {

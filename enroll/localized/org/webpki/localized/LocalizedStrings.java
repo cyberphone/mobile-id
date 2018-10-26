@@ -28,13 +28,24 @@ public interface LocalizedStrings {
     // Description
     String DESCRIPTION                = "This is a proof of concept site " +
                                         "hosting an enrollment application " +
-                                        "for the @ system";
+                                        "for the Mobile ID system.";
     
+    // Your name label
+    String YOUR_NAME                  = "Your Name";
+    
+    // Name hint
+    String DEFAULT                    = "default";
+
+    // Issuer radio button label
+    String SELECTED_ISSUER            = "Selected Issuer";
+
     // Button text
     String START_ENROLLMENT           = "Start Enrollment";
 
     // Limitations
     String ANDROID_ONLY               = "This demo currently only supports Android";
+
+	String RESULT_MESSAGE_HEADER      = "Your new digital identity has arrived!";
 
  }
 

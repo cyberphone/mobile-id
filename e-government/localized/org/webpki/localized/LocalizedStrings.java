@@ -27,7 +27,7 @@ public interface LocalizedStrings {
     // Demo data
     String DEMO_TEXT                  = "This is a proof of concept site " +
                                         "hosting a minute e-government application " +
-                                        "powered by the @ system";
+                                        "powered by the @ system.";
     String DEMO_EMAIL_PROVIDER        = "google.com";  // Pure UI demo feature
 
     // App UI emulator only

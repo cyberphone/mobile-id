@@ -58,6 +58,7 @@ import org.webpki.keygen2.ProvisioningInitializationRequestEncoder;
 import org.webpki.keygen2.CredentialDiscoveryRequestEncoder;
 import org.webpki.keygen2.KeyCreationRequestEncoder;
 import org.webpki.keygen2.ProvisioningFinalizationRequestEncoder;
+import org.webpki.localized.LocalizedStrings;
 import org.webpki.sks.AppUsage;
 import org.webpki.sks.PassphraseFormat;
 import org.webpki.util.MIMETypedObject;
@@ -357,7 +358,10 @@ public class KeyProviderServlet extends HttpServlet {
     
     StringBuilder successPage(HttpSession session) {
         StringBuilder svg = new StringBuilder(
-            "<svg style=\"width:100pt;display:block;margin-left:auto;margin-right:auto\" " +
+            "<div class=\"header\">" +
+            LocalizedStrings.RESULT_MESSAGE_HEADER +
+            "</div>" +
+            "<svg id=\"cardimage\" style=\"width:100pt;padding-top:15pt\" " +
             "viewBox=\"0 0 318 190\" xmlns=\"http://www.w3.org/2000/svg\">\n" +
             "<defs>\n" +
             " <clipPath id=\"cardClip\">\n" +

@@ -61,7 +61,12 @@ public class HTML {
             "\"use strict\";\n" +
             STICK_TO_HOME_URL +
             "function initUi() {\n" +
-            "  let content = document.getElementById('content');\n" +
+            "  let cardimage = document.getElementById('cardimage');\n" +
+            "  if (cardimage) {\n" + 
+            "    let width = window.innerWidth;\n" +
+            "    if (width > window.innerHeight) width = window.innerHeight;\n" +
+            "    cardimage.style.width = (width * 0.8) + 'px';\n" +
+            "  }\n" +
             "  if (content) {\n" + 
             "    let top = (window.innerHeight - content.offsetHeight) / 2;\n" +
             "    if (top < 0) top = 0;\n" +
