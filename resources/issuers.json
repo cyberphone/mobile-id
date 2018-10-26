@@ -1,5 +1,7 @@
 [{
-  "issuer": "laposte"
+  "issuer": "laposte",
+  "commonName": "La Poste"
 },{
-  "issuer": "bankid"
+  "issuer": "bankid",
+  "commonName": "BankID Ltd."
 }]

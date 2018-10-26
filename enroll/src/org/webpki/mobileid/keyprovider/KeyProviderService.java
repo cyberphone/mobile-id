@@ -18,11 +18,9 @@ package org.webpki.mobileid.keyprovider;
 
 import java.io.IOException;
 import java.io.InputStream;
-
 import java.security.cert.X509Certificate;
-
+import java.util.LinkedHashMap;
 import java.util.Vector;
-
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -31,20 +29,16 @@ import javax.servlet.ServletContextListener;
 
 import org.webpki.crypto.CertificateUtil;
 import org.webpki.crypto.CustomCryptoProvider;
-
 import org.webpki.json.JSONArrayReader;
 import org.webpki.json.JSONDecoderCache;
 import org.webpki.json.JSONObjectReader;
 import org.webpki.json.JSONParser;
-
 import org.webpki.keygen2.CredentialDiscoveryResponseDecoder;
 import org.webpki.keygen2.InvocationResponseDecoder;
 import org.webpki.keygen2.KeyCreationResponseDecoder;
 import org.webpki.keygen2.ProvisioningFinalizationResponseDecoder;
 import org.webpki.keygen2.ProvisioningInitializationResponseDecoder;
-
 import org.webpki.util.ArrayUtil;
-
 import org.webpki.webutil.InitPropertyReader;
 
 public class KeyProviderService extends InitPropertyReader implements ServletContextListener {
@@ -69,23 +63,27 @@ public class KeyProviderService extends InitPropertyReader implements ServletCon
 
     static boolean logging;
 
-    static Vector<IssuerHolder> issuers = new Vector<IssuerHolder>();
+    static LinkedHashMap<String,IssuerHolder> issuers = new LinkedHashMap<String,IssuerHolder>();
     
     class IssuerHolder {
         
-        private final static String ISSUER_JSON = "issuer";
+        private final static String ISSUER_JSON      = "issuer";
+        private final static String COMMON_NAME_JSON = "commonName";
         
         KeyStoreEnumerator keyManagementKey;
         KeyStoreEnumerator subCA;
         String cardImage;
+        String issuer;
+        String commonName;
 
         public IssuerHolder(JSONObjectReader issuerObject) throws IOException {
-            String issuerBase = issuerObject.getString(ISSUER_JSON);
-            keyManagementKey = new KeyStoreEnumerator(getResource(issuerBase + "-kmk.p12"),
+            issuer = issuerObject.getString(ISSUER_JSON);
+            commonName = issuerObject.getString(COMMON_NAME_JSON);
+            keyManagementKey = new KeyStoreEnumerator(getResource(issuer + "-kmk.p12"),
                                                         getPropertyString(KEYSTORE_PASSWORD));
-            subCA = new KeyStoreEnumerator(getResource(issuerBase + "-sub-ca.p12"),
+            subCA = new KeyStoreEnumerator(getResource(issuer + "-sub-ca.p12"),
                                            getPropertyString(KEYSTORE_PASSWORD));
-            cardImage = getResourceString(issuerBase + "-card.svg");
+            cardImage = getResourceString(issuer + "-card.svg");
             issuerObject.checkForUnread();
         }
     }
@@ -135,7 +133,8 @@ public class KeyProviderService extends InitPropertyReader implements ServletCon
             ////////////////////////////////////////////////////////////////////////////////////////////
             JSONArrayReader issuerArray = readJSONFile("issuers.json").getJSONArrayReader();
             do {
-                issuers.add(new IssuerHolder(issuerArray.getObject()));
+                IssuerHolder issuer = new IssuerHolder(issuerArray.getObject());
+                issuers.put(issuer.issuer, issuer);
             } while (issuerArray.hasMore());
 
             ////////////////////////////////////////////////////////////////////////////////////////////

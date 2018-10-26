@@ -23,6 +23,7 @@ public interface LocalizedStrings {
 
     String TITLE                      = "Mobile ID Enrollment Demo";
     String URL_TO_DESCRIPTION         = "http://cyberphone.github.io/doc/mobile-id";
+	String HT_TO_MOBILEID_LOGO        = "Mobile ID documentation";
 
     // Description
     String DESCRIPTION                = "This is a proof of concept site " +
@@ -34,5 +35,6 @@ public interface LocalizedStrings {
 
     // Limitations
     String ANDROID_ONLY               = "This demo currently only supports Android";
+
  }
 

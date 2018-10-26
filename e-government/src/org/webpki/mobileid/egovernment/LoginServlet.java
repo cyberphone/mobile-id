@@ -101,7 +101,7 @@ public class LoginServlet extends HttpServlet {
         .append(eGovernmentService.demoCard)
         .append("</td></tr>" +
    "<tr><td><div style=\"display:flex;justify-content:center\"><div>PIN</div><div>Field</div><div>PIN</div>" +
-	 "</div></td></tr>" +
+     "</div></td></tr>" +
    "<tr><td>")
         .append(eGovernmentService.pinKeyboard)
         .append("</td></tr>" +

@@ -1,1 +1,1 @@
-<%@page session="false"%><%response.sendRedirect ("init");%>
+<%@page session="false"%><%response.sendRedirect ("home");%>

@@ -1,0 +1,93 @@
+.mobileidlogo {
+  cursor:pointer;
+  position:absolute;
+  top:12px;
+  left:12px;
+}
+
+.toaster {
+  border-color:red;
+  border-style:solid;
+  border-width:1pt;
+  text-align:left;
+  border-radius:7px;
+  z-index:11;
+  background-color:#f0f0f0;
+  position:absolute;
+  visibility:hidden;
+  padding:5pt 10pt;
+}
+
+body {
+  margin:0pt;
+  font-size:10pt;
+  font-family:Verdana,'Bitstream Vera Sans','DejaVu Sans',Arial,'Liberation Sans';
+}
+
+a {
+  color:#007fff;
+  text-decoration:none;
+}
+
+li {
+  padding-top:5pt
+}
+
+.content {
+  position:absolute;
+  text-align:center;
+  padding:5pt;
+  visibility:hidden;
+}
+
+.stdbtn, .multibtn {
+  cursor:pointer;
+  background:linear-gradient(to bottom, #eaeaea 14%,#fcfcfc 52%,#e5e5e5 89%);
+  border-width:1px;
+  border-style:solid;
+  border-color:#a9a9a9;
+  border-radius:5pt;
+  padding:3pt 10pt;
+}
+
+.header, .stdbtn {
+  font-size:11pt;
+  font-family:Arial,'Liberation Sans',Verdana,'Bitstream Vera Sans','DejaVu Sans';
+}
+
+.stdbtn, .multibtn {
+  box-shadow:3pt 3pt 3pt #d0d0d0;
+}
+
+.stdbtn {
+  display:inline-block;
+}
+
+.multibtn {
+  margin-top:12pt;
+}
+
+.uidheader {
+  font-size:12pt;
+  padding:15pt 4pt;
+}
+
+@media (max-width:768px) {
+
+  .stdbtn, .multibtn {
+    box-shadow:2pt 2pt 2pt #d0d0d0;
+  }
+
+  body {
+    font-size:8pt;
+  }
+
+  .uidheader {
+    font-size:10pt;
+  }
+  
+  .toaster {
+    font-weight:bolder;
+    padding:3pt 7pt;
+  }
+}

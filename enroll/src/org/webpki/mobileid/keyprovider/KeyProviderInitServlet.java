@@ -18,24 +18,20 @@
 package org.webpki.mobileid.keyprovider;
 
 import java.io.IOException;
-
+import java.io.OutputStream;
 import java.util.logging.Logger;
-
 import java.net.URLEncoder;
 
 import javax.servlet.ServletException;
-
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.webpki.keygen2.ServerState;
-
 import org.webpki.localized.LocalizedStrings;
-
 import org.webpki.util.Base64URL;
-
 import org.webpki.webutil.ServletUtil;
 
 public class KeyProviderInitServlet extends HttpServlet {
@@ -55,52 +51,9 @@ public class KeyProviderInitServlet extends HttpServlet {
     static final String ABORT_TAG = "abort";
     static final String PARAM_TAG = "msg";
     static final String ERROR_TAG = "err";
-
-    static final String HTML_INIT = 
-            "<!DOCTYPE HTML>"+
-            "<html><head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"/>" +
-            "<link rel=\"icon\" href=\"mobileid.png\" sizes=\"192x192\">"+
-            "<title>Mobile ID Enrollment</title>"+
-            "<style type=\"text/css\">html {overflow:auto} html, body {margin:0px;padding:0px;height:100%} "+
-            "body {font-size:8pt;color:#000000;font-family:verdana,arial;background-color:white} "+
-            "h2 {font-weight:bold;font-size:12pt;color:#000000;font-family:arial,verdana,helvetica} "+
-            "h3 {font-weight:bold;font-size:11pt;color:#000000;font-family:arial,verdana,helvetica} "+
-            "a:link {font-weight:bold;font-size:8pt;color:blue;font-family:arial,verdana;text-decoration:none} "+
-            "a:visited {font-weight:bold;font-size:8pt;color:blue;font-family:arial,verdana;text-decoration:none} "+
-            "a:active {font-weight:bold;font-size:8pt;color:blue;font-family:arial,verdana} "+
-            "input {font-weight:normal;font-size:8pt;font-family:verdana,arial} "+
-            "td {font-size:8pt;font-family:verdana,arial} "+
-            ".smalltext {font-size:6pt;font-family:verdana,arial} "+
-            "button {font-weight:normal;font-size:8pt;font-family:verdana,arial;padding-top:2px;padding-bottom:2px} "+
-            ".headline {font-weight:bolder;font-size:10pt;font-family:arial,verdana} "+
-            "</style>";
-
-    static String getHTML(String javascript, String bodyscript, String box) {
-        StringBuilder s = new StringBuilder(HTML_INIT);
-        if (javascript != null) {
-            s.append("<script type=\"text/javascript\">").append(javascript)
-                    .append("</script>");
-        }
-        s.append("</head><body");
-        if (bodyscript != null) {
-            s.append(' ').append(bodyscript);
-        }
-        s.append(
-                "><img style=\"cursor:pointer;position:absolute;top:10pt;left:10pt;z-index:5;visibility:visible\"" +
-                " onclick=\"document.location.href='https://github.com/cyberphone/mobile-id'\" title=\"Home of Mobile ID\" " +
-                "src=\"images/mobileidlogo.svg\">" +
-                "<table cellapdding=\"0\" cellspacing=\"0\" width=\"100%\" height=\"100%\">")
-                .append(box).append("</table></body></html>");
-        return s.toString();
-    }
-  
-    static void output(HttpServletResponse response, String html) throws IOException, ServletException {
-        response.setContentType("text/html; charset=utf-8");
-        response.setHeader("Pragma", "No-Cache");
-        response.setDateHeader("EXPIRES", 0);
-        response.getOutputStream().write(html.getBytes("UTF-8"));
-    }
     
+    static final String DEFAULT_NAME                   ="Luke Skywalker";
+
     static String keygen2EnrollmentUrl;
     
     synchronized void initGlobals(String baseUrl) throws IOException {
@@ -113,22 +66,19 @@ public class KeyProviderInitServlet extends HttpServlet {
     }
     
     @Override
-    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        if (!request.getHeader("User-Agent").contains("Android")) {
-            output(response, 
-                    getHTML(null,
-                            null,
-                            "<tr><td width=\"100%\" align=\"center\" valign=\"middle\">" +
-                            LocalizedStrings.ANDROID_ONLY +
-                            "</td></tr>"));
-            return;
-        }
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         if (keygen2EnrollmentUrl == null) {
             initGlobals(ServletUtil.getContextURL(request));
         }
+        String name = request.getParameter("name").trim(); 
+        if (name.length() == 0) {
+            name = DEFAULT_NAME;
+        }
+        logger.info(name);
         HttpSession session = request.getSession(true);
+        logger.info("Created ID=" + session.getId() + " Int" + session.getMaxInactiveInterval());
         // Temporary issuer selector
-        KeyProviderService.IssuerHolder issuer = KeyProviderService.issuers.firstElement();
+        KeyProviderService.IssuerHolder issuer = KeyProviderService.issuers.get("laposte");
         ServerState serverState = new ServerState(new KeyGen2SoftHSM(issuer.keyManagementKey));
         serverState.setServiceSpecificObject(SERVER_STATE_ISSUER, issuer);
         session.setAttribute(KEYGEN2_SESSION_ATTR, serverState);
@@ -141,22 +91,69 @@ public class KeyProviderInitServlet extends HttpServlet {
         // The "init" element on the bootstrap URL is a local Mobile RA convention.
         // The purpose of the random element is suppressing caching of bootstrap data.
         ////////////////////////////////////////////////////////////////////////////////////////////
+
         String extra = "cookie=JSESSIONID%3D" +
                      session.getId() +
                      "&url=" + URLEncoder.encode(keygen2EnrollmentUrl + "?" +
                      INIT_TAG + "=" + Base64URL.generateURLFriendlyRandom(8) +
                      (KeyProviderService.grantedVersions == null ? "" : "&" + ANDROID_WEBPKI_VERSION_TAG + "=" + ANDROID_WEBPKI_VERSION_MACRO), "UTF-8");
-        output(response, 
+/*
+               output(response, 
                getHTML(null,
-                       null,
+//                       null,
+                       "onload=\"document.location.href='intent://keygen2?" + extra +
+                           "#Intent;scheme=webpkiproxy;" +
+                           "package=org.webpki.mobile.android;end'\"",
                        "<tr><td align=\"center\"><table>" +
-                       "<tr><td>This proof-of-concept system provisions secure payment<br>" +
-                       "credentials to be used in the Android version of the \"Wallet\"<br>&nbsp;</td></tr>" +
-                       "<tr><td align=\"center\">" +
-                       "<a href=\"intent://keygen2?" + extra +
-                       "#Intent;scheme=webpkiproxy;" +
-                       "package=org.webpki.mobile.android;end\">" +
-                       LocalizedStrings.START_ENROLLMENT +
-                       "</a></td></tr></table></td></tr>"));
+                       "<tr><td align=\"center\">Here the App is supposed to start...</td></tr>" +
+                       "</table></td></tr>"));
+*/
+        response.sendRedirect("intent://keygen2?" + extra +
+                              "#Intent;scheme=webpkiproxy;" +
+                              "package=org.webpki.mobile.android;end");
+    }
+
+    @Override
+    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+/*
+        if (!request.getHeader("User-Agent").contains("Android")) {
+            output(response, 
+                    getHTML(null,
+                            null,
+                            "<tr><td width=\"100%\" align=\"center\" valign=\"middle\">" +
+                            LocalizedStrings.ANDROID_ONLY +
+                            "</td></tr>"));
+            return;
+        }
+*/
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            session.invalidate();
+        }
+        HTML.resultPage(response,
+                        "function enroll() {\n" +
+                        "  console.log('Mobile application is supposed to start here');\n" +
+                        "  document.forms.shoot.submit();\n" +
+                        "}\n",
+                        false,
+                        new StringBuilder(
+            "<form name=\"shoot\" method=\"POST\" action=\"home\">" +
+            "<div style=\"text-align:left\">This proof-of-concept system provisions secure payment " +
+                 "credentials to be used in the Android version of Mobile ID</div>" +
+            "<div style=\"padding:20pt 0 10pt 0;display:flex;justify-content:center;align-items:center\">" +
+                 "<div class=\"header\">Your name:&nbsp;</div>" +
+                 "<div><input type=\"text\" placeholder=\"default: " +
+                 DEFAULT_NAME +
+                 "\" style=\"background-color:#ffffe0\" class=\"header\" name=\"name\"></div></div>" + 
+            "<div class=\"header\" style=\"display:flex;justify-content:center;align-items:center;padding-bottom:20pt;text-align:left\">" +
+                 "<div>Selected Issuer:</div>" +
+                    "<div style=\"display:flex;flex-direction:column\">" +
+                      "<div style=\"display:flex;align-items:center\"><div><input type=\"radio\"></div><div>La Poste</div></div>" +
+                      "<div style=\"display:flex;align-items:center\"><div><input type=\"radio\"></div><div>BankID ltd.</div></div>" +
+                    "</div>" +
+            "</div>" +
+            "<div id=\"command\" class=\"stdbtn\" onclick=\"enroll()\">" +
+                        LocalizedStrings.START_ENROLLMENT +
+                  "</div></form>"));
     }
 }

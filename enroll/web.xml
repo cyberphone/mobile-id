@@ -61,7 +61,7 @@
 
     <servlet-mapping>
         <servlet-name>KeyProviderInitServlet</servlet-name>
-        <url-pattern>/init</url-pattern>
+        <url-pattern>/home</url-pattern>
     </servlet-mapping>
 
     <security-constraint>
