@@ -28,7 +28,10 @@ public interface LocalizedStrings {
     // Description
     String DESCRIPTION                = "This is a proof of concept site " +
                                         "hosting an enrollment application " +
-                                        "for the Mobile ID system.";
+                                        "for the Mobile ID system. " +
+                                        "Note that in a real enrollment system " +
+                                        "you would also need to authenticate in a " +
+                                        "way defined by the issuer.";
     
     // Your name label
     String YOUR_NAME                  = "Your Name";
@@ -45,7 +48,8 @@ public interface LocalizedStrings {
     // Limitations
     String ANDROID_ONLY               = "This demo currently only supports Android";
 
-	String RESULT_MESSAGE_HEADER      = "Your new digital identity has arrived!";
+	String RESULT_MESSAGE_HEADER      = "Your new digital identity is now securely " +
+	                                    "stored in your Android device!";
 
  }
 

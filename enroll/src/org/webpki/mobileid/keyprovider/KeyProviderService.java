@@ -18,9 +18,11 @@ package org.webpki.mobileid.keyprovider;
 
 import java.io.IOException;
 import java.io.InputStream;
+
 import java.security.cert.X509Certificate;
+
 import java.util.LinkedHashMap;
-import java.util.Vector;
+
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -29,16 +31,20 @@ import javax.servlet.ServletContextListener;
 
 import org.webpki.crypto.CertificateUtil;
 import org.webpki.crypto.CustomCryptoProvider;
+
 import org.webpki.json.JSONArrayReader;
 import org.webpki.json.JSONDecoderCache;
 import org.webpki.json.JSONObjectReader;
 import org.webpki.json.JSONParser;
+
 import org.webpki.keygen2.CredentialDiscoveryResponseDecoder;
 import org.webpki.keygen2.InvocationResponseDecoder;
 import org.webpki.keygen2.KeyCreationResponseDecoder;
 import org.webpki.keygen2.ProvisioningFinalizationResponseDecoder;
 import org.webpki.keygen2.ProvisioningInitializationResponseDecoder;
+
 import org.webpki.util.ArrayUtil;
+
 import org.webpki.webutil.InitPropertyReader;
 
 public class KeyProviderService extends InitPropertyReader implements ServletContextListener {
@@ -69,9 +75,11 @@ public class KeyProviderService extends InitPropertyReader implements ServletCon
         
         private final static String ISSUER_JSON      = "issuer";
         private final static String COMMON_NAME_JSON = "commonName";
+        private final static String OCSP_JSON        = "ocsp";
         
         KeyStoreEnumerator keyManagementKey;
         KeyStoreEnumerator subCA;
+        String ocspURL;
         String cardImage;
         String issuer;
         String commonName;
@@ -79,6 +87,7 @@ public class KeyProviderService extends InitPropertyReader implements ServletCon
         public IssuerHolder(JSONObjectReader issuerObject) throws IOException {
             issuer = issuerObject.getString(ISSUER_JSON);
             commonName = issuerObject.getString(COMMON_NAME_JSON);
+            ocspURL = issuerObject.getString(OCSP_JSON);
             keyManagementKey = new KeyStoreEnumerator(getResource(issuer + "-kmk.p12"),
                                                         getPropertyString(KEYSTORE_PASSWORD));
             subCA = new KeyStoreEnumerator(getResource(issuer + "-sub-ca.p12"),

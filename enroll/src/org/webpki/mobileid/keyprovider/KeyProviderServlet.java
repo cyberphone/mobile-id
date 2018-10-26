@@ -20,31 +20,43 @@ package org.webpki.mobileid.keyprovider;
 import java.io.IOException;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintWriter;
+
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.GregorianCalendar;
+
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import java.security.GeneralSecurityException;
 import java.security.PublicKey;
+
 import java.security.cert.X509Certificate;
+
 import java.math.BigInteger;
+
 import java.net.URLEncoder;
 
 import javax.servlet.ServletException;
+
 import javax.servlet.http.Cookie;
+
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.webpki.asn1.cert.DistinguishedName;
+
 import org.webpki.ca.CA;
 import org.webpki.ca.CertSpec;
+
 import org.webpki.crypto.AsymKeySignerInterface;
 import org.webpki.crypto.AsymSignatureAlgorithms;
 import org.webpki.crypto.KeyAlgorithms;
+import org.webpki.crypto.KeyUsageBits;
 import org.webpki.crypto.SignatureWrapper;
+
 import org.webpki.keygen2.ServerState;
 import org.webpki.keygen2.KeySpecifier;
 import org.webpki.keygen2.KeyGen2URIs;
@@ -58,11 +70,16 @@ import org.webpki.keygen2.ProvisioningInitializationRequestEncoder;
 import org.webpki.keygen2.CredentialDiscoveryRequestEncoder;
 import org.webpki.keygen2.KeyCreationRequestEncoder;
 import org.webpki.keygen2.ProvisioningFinalizationRequestEncoder;
+
 import org.webpki.localized.LocalizedStrings;
+
 import org.webpki.sks.AppUsage;
 import org.webpki.sks.PassphraseFormat;
+
 import org.webpki.util.MIMETypedObject;
+
 import org.webpki.webutil.ServletUtil;
+
 import org.webpki.json.JSONEncoder;
 import org.webpki.json.JSONDecoder;
 import org.webpki.json.JSONOutputFormats;
@@ -258,6 +275,9 @@ public class KeyProviderServlet extends HttpServlet {
                           (KeyProviderInitServlet.UserData) keygen2State.getServiceSpecificObject(KeyProviderInitServlet.SERVER_STATE_USER);
                   CertSpec certSpec = new CertSpec();
                   certSpec.setSubject("cn=" + userData.userName + ", serialNumber=" + userData.userId);
+                  certSpec.setEndEntityConstraint();
+                  certSpec.setKeyUsageBit(KeyUsageBits.DIGITAL_SIGNATURE);
+                  certSpec.addOCSPResponderURI(issuer.ocspURL);
                   CA ca = new CA();
                   X509Certificate[] caCertPath = issuer.subCA.getCertificatePath();
                   DistinguishedName issuerName = DistinguishedName.subjectDN(caCertPath[0]);
@@ -358,7 +378,7 @@ public class KeyProviderServlet extends HttpServlet {
     
     StringBuilder successPage(HttpSession session) {
         StringBuilder svg = new StringBuilder(
-            "<div class=\"header\">" +
+            "<div class=\"header\" style=\"text-align:left\">" +
             LocalizedStrings.RESULT_MESSAGE_HEADER +
             "</div>" +
             "<svg id=\"cardimage\" style=\"width:100pt;padding-top:15pt\" " +

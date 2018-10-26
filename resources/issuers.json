@@ -1,7 +1,9 @@
 [{
   "issuer": "laposte",
-  "commonName": "La Poste"
+  "commonName": "La Poste",
+  "ocsp": "http://ocsp.laposte.fr/status"
 },{
   "issuer": "bankid",
-  "commonName": "BankID Ltd."
+  "commonName": "BankID Ltd.",
+  "ocsp": "http://ocsp.bankid.co.uk/status"
 }]
