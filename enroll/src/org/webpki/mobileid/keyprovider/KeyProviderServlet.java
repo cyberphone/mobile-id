@@ -253,10 +253,10 @@ public class KeyProviderServlet extends HttpServlet {
                   ServerState.Key key = keygen2State.getKeys()[0];
 
                   // Certification of key starts here
-                  String citizenId = "123412341234";
-                  String citizenName = "Luke Skywalker";
+                  KeyProviderInitServlet.UserData userData = 
+                          (KeyProviderInitServlet.UserData) keygen2State.getServiceSpecificObject(KeyProviderInitServlet.SERVER_STATE_USER);
                   CertSpec certSpec = new CertSpec();
-                  certSpec.setSubject("cn=" + citizenName + ", serialNumber=" + citizenId);
+                  certSpec.setSubject("cn=" + userData.userName + ", serialNumber=" + userData.userId);
                   CA ca = new CA();
                   X509Certificate[] caCertPath = issuer.subCA.getCertificatePath();
                   DistinguishedName issuerName = DistinguishedName.subjectDN(caCertPath[0]);
@@ -276,48 +276,42 @@ public class KeyProviderServlet extends HttpServlet {
                                               AsymSignatureAlgorithms.ECDSA_SHA256,
                                               new AsymKeySignerInterface() {
 
-                        @Override
-                        public PublicKey getPublicKey() throws IOException {
-                            return issuer.subCA.getPublicKey();
-                        }
+                      @Override
+                      public PublicKey getPublicKey() throws IOException {
+                          return issuer.subCA.getPublicKey();
+                      }
     
-                        @Override
-                        public byte[] signData(byte[] data,
+                      @Override
+                      public byte[] signData(byte[] data,
                                                AsymSignatureAlgorithms certAlg)
                                 throws IOException {
-                            try {
-                                return new SignatureWrapper(certAlg, issuer.subCA.getPrivateKey())
+                          try {
+                              return new SignatureWrapper(certAlg, issuer.subCA.getPrivateKey())
                                         .setEcdsaSignatureEncoding(true)
                                         .update(data)
                                         .sign();
-                            } catch (GeneralSecurityException e) {
-                                throw new IOException(e);
-                            }
-                        }
+                          } catch (GeneralSecurityException e) {
+                              throw new IOException(e);
+                          }
+                      }
                   },
                                               key.getPublicKey());
                   // Certification of key ends here
 
                   key.setCertificatePath(certPath);
                   
-                  // Personalize the card image
+                  // Get the personalized card image
                   key.addLogotype(KeyGen2URIs.LOGOTYPES.CARD, new MIMETypedObject() {
 
-                        @Override
-                        public byte[] getData() throws IOException {
-                            return issuer.cardImage.replace("@n", citizenName)
-                                      .replace("@i", 
-                                               citizenId.substring(0, 4) +
-                                                 " " +
-                                                 citizenId.substring(4, 8) +
-                                                 " " +
-                                                 citizenId.substring(8)).getBytes("utf-8");
-                        }
+                      @Override
+                       public byte[] getData() throws IOException {
+                          return userData.cardImage.getBytes("utf-8");
+                      }
     
-                        @Override
-                        public String getMimeType() throws IOException {
-                            return "image/svg+xml";
-                        }
+                      @Override
+                      public String getMimeType() throws IOException {
+                          return "image/svg+xml";
+                      }
                   });
                   keygen2JSONBody(response,
                                   new ProvisioningFinalizationRequestEncoder(keygen2State,
@@ -361,6 +355,50 @@ public class KeyProviderServlet extends HttpServlet {
         return true;
     }
     
+    StringBuilder successPage(HttpSession session) {
+        StringBuilder svg = new StringBuilder(
+            "<svg style=\"width:100pt;display:block;margin-left:auto;margin-right:auto\" " +
+            "viewBox=\"0 0 318 190\" xmlns=\"http://www.w3.org/2000/svg\">\n" +
+            "<defs>\n" +
+            " <clipPath id=\"cardClip\">\n" +
+            "  <rect rx=\"15\" ry=\"15\" height=\"180\" width=\"300\" y=\"0\" x=\"0\"/>\n" +
+            " </clipPath>\n" +
+            " <filter id=\"dropShaddow\">\n" +
+            "  <feGaussianBlur stdDeviation=\"2.4\"/>\n" +
+            " </filter>\n" +
+            " <linearGradient y1=\"0\" x1=\"0\" y2=\"1\" x2=\"1\" id=\"innerCardBorder\">\n" +
+            "  <stop offset=\"0\" stop-opacity=\"0.6\" stop-color=\"white\"/>\n" +
+            "  <stop offset=\"0.48\" stop-opacity=\"0.6\" stop-color=\"white\"/>\n" +
+            "  <stop offset=\"0.52\" stop-opacity=\"0.6\" stop-color=\"#b0b0b0\"/>\n" +
+            "  <stop offset=\"1\" stop-opacity=\"0.6\" stop-color=\"#b0b0b0\"/>\n" +
+            " </linearGradient>\n" +
+            " <linearGradient y1=\"0\" x1=\"0\" y2=\"1\" x2=\"1\" id=\"outerCardBorder\">\n" +
+            "  <stop offset=\"0\" stop-color=\"#b0b0b0\"/>\n" +
+            "  <stop offset=\"0.48\" stop-color=\"#b0b0b0\"/>\n" +
+            "  <stop offset=\"0.52\" stop-color=\"#808080\"/>\n" +
+            "  <stop offset=\"1\" stop-color=\"#808080\"/>\n" +
+            " </linearGradient>\n" +
+            "</defs>\n" +
+            "<rect filter=\"url(#dropShaddow)\" rx=\"16\" ry=\"16\" " +
+              "height=\"182\" width=\"302\" y=\"4\" x=\"12\" fill=\"#c0c0c0\"/>\n" +
+            "<svg x=\"9\" y=\"1\" clip-path=\"url(#cardClip)\"");
+        svg.append(((KeyProviderInitServlet.UserData) ((ServerState)session
+                .getAttribute(KeyProviderInitServlet.KEYGEN2_SESSION_ATTR))
+                .getServiceSpecificObject(KeyProviderInitServlet.SERVER_STATE_USER))
+                    .cardImage)
+           .append(
+            "<rect x=\"10\" y=\"2\" " +
+            "width=\"298\" height=\"178\" " +
+            "rx=\"14.7\" ry=\"14.7\" " +
+            "fill=\"none\" " +
+            "stroke=\"url(#innerCardBorder)\" stroke-width=\"2.7\"/>\n" +
+            "<rect x=\"8.5\" y=\"0.5\" " +
+            "width=\"301\" height=\"181\" " +
+            "rx=\"16\" ry=\"16\" fill=\"none\" stroke=\"url(#outerCardBorder)\"/>\n" +
+            "</svg>\n");
+        return svg;
+    }
+    
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response)
            throws IOException, ServletException {
@@ -371,6 +409,7 @@ public class KeyProviderServlet extends HttpServlet {
                            true);
             return;
         }
+        HttpSession session = request.getSession(false);
         StringBuilder html = new StringBuilder();
         StringBuilder result = new StringBuilder();
         if (foundData(request, result, KeyProviderInitServlet.ERROR_TAG)) {
@@ -383,13 +422,14 @@ public class KeyProviderServlet extends HttpServlet {
             log.info("KeyGen2 run aborted by the user");
             html.append("<b>Aborted by the user!</b>");
         } else {
-            HttpSession session = request.getSession(false);
             if (session == null) {
                 html.append("<b>You need to restart the session</b>");
             } else {
-                session.invalidate();
-                html.append("<b>You did it!</b>");
+                html = successPage(session);
             }
+        }
+        if (session != null) {
+            session.invalidate();
         }
        HTML.resultPage(response, null, false, html);
     }

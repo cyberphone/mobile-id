@@ -18,7 +18,7 @@
 package org.webpki.mobileid.keyprovider;
 
 import java.io.IOException;
-import java.io.OutputStream;
+import java.security.SecureRandom;
 import java.util.logging.Logger;
 import java.net.URLEncoder;
 
@@ -40,19 +40,26 @@ public class KeyProviderInitServlet extends HttpServlet {
 
     static Logger logger = Logger.getLogger(KeyProviderInitServlet.class.getCanonicalName());
 
-    static final String ANDROID_WEBPKI_VERSION_TAG     = "VER";
-    static final String ANDROID_WEBPKI_VERSION_MACRO   = "$VER$";  // KeyGen2 Android PoC
+    static final String ANDROID_WEBPKI_VERSION_TAG      = "VER";
+    static final String ANDROID_WEBPKI_VERSION_MACRO    = "$VER$";  // KeyGen2 Android PoC
     
-    static final String KEYGEN2_SESSION_ATTR           = "keygen2";
+    static final String KEYGEN2_SESSION_ATTR            = "keygen2";
     
-    static final String SERVER_STATE_ISSUER            = "issuer";
+    static final String SERVER_STATE_ISSUER             = "issuer";
+    static final String SERVER_STATE_USER               = "user";
 
-    static final String INIT_TAG = "init";     // Note: This is currently also a part of the KeyGen2 client!
-    static final String ABORT_TAG = "abort";
+    static final String INIT_TAG                        = "init";     // Note: This is currently also a part of the KeyGen2 client!
+    static final String ABORT_TAG                       = "abort";
     static final String PARAM_TAG = "msg";
     static final String ERROR_TAG = "err";
     
-    static final String DEFAULT_NAME                   ="Luke Skywalker";
+    static final String DEFAULT_NAME                    = "Luke Skywalker";
+
+    static final String RA_NAME_PARAM                   = "name";
+    static final String RA_ISSUER_PARAM                 = "issuer";
+    
+    static final int    ID_STRING_LENGTH                = 12;
+    static final String ID_STRING_NAME                  = "ID";
 
     static String keygen2EnrollmentUrl;
     
@@ -65,22 +72,65 @@ public class KeyProviderInitServlet extends HttpServlet {
 
     }
     
+    class UserData {
+
+        String userName;
+        String userId;
+        String cardImage;
+
+        UserData(String userName, String userId, KeyProviderService.IssuerHolder issuer) {
+            this.userName = userName;
+            this.userId = userId;
+            StringBuilder idString = new StringBuilder(ID_STRING_NAME + ":&#x2009;");
+            for (int q = 0; q < ID_STRING_LENGTH; q += 4) {
+                if (q != 0) {
+                    idString.append(' ');
+                }
+                idString.append(userId.substring(q, q + 4));
+            }
+            this.cardImage = issuer.cardImage.replace("@n", userName)
+                                             .replace("@i", idString);
+        }
+    }
+    
+    String getParameter(HttpServletRequest request, String name) throws IOException {
+        String value = request.getParameter(name);
+        if (value == null) {
+            throw new IOException ("Missing parameter: " + name);
+        }
+        return value;
+    }
+    
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         if (keygen2EnrollmentUrl == null) {
             initGlobals(ServletUtil.getContextURL(request));
         }
-        String name = request.getParameter("name").trim(); 
-        if (name.length() == 0) {
-            name = DEFAULT_NAME;
+        request.setCharacterEncoding("utf-8");
+        String userName = getParameter(request, RA_NAME_PARAM).trim(); 
+        if (userName.length() == 0) {  // This is a demo...
+            userName = DEFAULT_NAME;
         }
-        logger.info(name);
+        String issuerName = getParameter(request, RA_ISSUER_PARAM);
+        KeyProviderService.IssuerHolder issuer = KeyProviderService.issuers.get(issuerName);
+        if (issuer == null) {
+            throw new IOException("No such issuer: " + issuerName);
+        }
+        // Since we doesn't have a citizen registry we fake one :-)
+        long randomUserId = new SecureRandom().nextLong() & 0x7fffffffffffffffl;
+        StringBuilder userId = new StringBuilder();
+        for (int q = 0; q < ID_STRING_LENGTH; q++) {
+            userId.append(randomUserId % 10);
+            randomUserId /= 10;
+        }
+        UserData userData = new UserData(userName, userId.toString(), issuer);
+        
+        logger.info("User=" + userName + " ID=" + userId + " Issuer=" + issuerName);
         HttpSession session = request.getSession(true);
         logger.info("Created ID=" + session.getId() + " Int" + session.getMaxInactiveInterval());
-        // Temporary issuer selector
-        KeyProviderService.IssuerHolder issuer = KeyProviderService.issuers.get("laposte");
         ServerState serverState = new ServerState(new KeyGen2SoftHSM(issuer.keyManagementKey));
         serverState.setServiceSpecificObject(SERVER_STATE_ISSUER, issuer);
+        serverState.setServiceSpecificObject(SERVER_STATE_USER, userData);
         session.setAttribute(KEYGEN2_SESSION_ATTR, serverState);
 
         ////////////////////////////////////////////////////////////////////////////////////////////
@@ -130,30 +180,43 @@ public class KeyProviderInitServlet extends HttpServlet {
         if (session != null) {
             session.invalidate();
         }
+        StringBuilder html = new StringBuilder(
+            "<form name=\"shoot\" method=\"POST\" action=\"home\">" +
+            "<div style=\"text-align:left\">This proof-of-concept system provisions secure payment " +
+             "credentials to be used in the Android version of Mobile ID</div>" +
+            "<div style=\"padding:20pt 0 10pt 0;display:flex;justify-content:center;align-items:center\">" +
+             "<div class=\"header\">Your name:&nbsp;</div>" +
+             "<div><input type=\"text\" placeholder=\"default: " +
+             DEFAULT_NAME +
+             "\" style=\"background-color:#ffffe0\" class=\"header\" name=\"" +
+             RA_NAME_PARAM + "\"></div></div>" + 
+            "<div class=\"header\" style=\"display:flex;justify-content:center;align-items:center;padding-bottom:20pt;text-align:left\">" +
+             "<div>Selected Issuer:</div>" +
+                "<div style=\"display:flex;flex-direction:column\">");
+            boolean first = true;
+            for (String issuer : KeyProviderService.issuers.keySet()) {
+                html.append("<div style=\"display:flex;align-items:center\"><div>" +
+                            "<input name=\"" + RA_ISSUER_PARAM + "\" type=\"radio\" value=\"")
+                    .append(issuer)
+                    .append("\"")
+                    .append(first ? " checked" : "")
+                    .append("></div><div>")
+                    .append(KeyProviderService.issuers.get(issuer).commonName)
+                    .append("</div></div>");
+                first = false;
+            }
+        html.append(
+                "</div>" +
+            "</div>" +
+            "<div id=\"command\" class=\"stdbtn\" onclick=\"enroll()\">" +
+            LocalizedStrings.START_ENROLLMENT +
+            "</div></form>");
         HTML.resultPage(response,
                         "function enroll() {\n" +
                         "  console.log('Mobile application is supposed to start here');\n" +
                         "  document.forms.shoot.submit();\n" +
                         "}\n",
                         false,
-                        new StringBuilder(
-            "<form name=\"shoot\" method=\"POST\" action=\"home\">" +
-            "<div style=\"text-align:left\">This proof-of-concept system provisions secure payment " +
-                 "credentials to be used in the Android version of Mobile ID</div>" +
-            "<div style=\"padding:20pt 0 10pt 0;display:flex;justify-content:center;align-items:center\">" +
-                 "<div class=\"header\">Your name:&nbsp;</div>" +
-                 "<div><input type=\"text\" placeholder=\"default: " +
-                 DEFAULT_NAME +
-                 "\" style=\"background-color:#ffffe0\" class=\"header\" name=\"name\"></div></div>" + 
-            "<div class=\"header\" style=\"display:flex;justify-content:center;align-items:center;padding-bottom:20pt;text-align:left\">" +
-                 "<div>Selected Issuer:</div>" +
-                    "<div style=\"display:flex;flex-direction:column\">" +
-                      "<div style=\"display:flex;align-items:center\"><div><input type=\"radio\"></div><div>La Poste</div></div>" +
-                      "<div style=\"display:flex;align-items:center\"><div><input type=\"radio\"></div><div>BankID ltd.</div></div>" +
-                    "</div>" +
-            "</div>" +
-            "<div id=\"command\" class=\"stdbtn\" onclick=\"enroll()\">" +
-                        LocalizedStrings.START_ENROLLMENT +
-                  "</div></form>"));
+                        html);
     }
 }
