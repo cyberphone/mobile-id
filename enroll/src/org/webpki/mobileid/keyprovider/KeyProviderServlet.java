@@ -272,7 +272,7 @@ public class KeyProviderServlet extends HttpServlet {
                           (KeyProviderInitServlet.UserData) keygen2State.getServiceSpecificObject(KeyProviderInitServlet.SERVER_STATE_USER);
                   CertSpec certSpec = new CertSpec();
                   certSpec.setSubject("cn=" + cleanedUpName(userData.userName) +
-                		              ", serialNumber=" + userData.userId);
+                                      ", serialNumber=" + userData.userId);
                   certSpec.setEndEntityConstraint();
                   certSpec.setKeyUsageBit(KeyUsageBits.DIGITAL_SIGNATURE);
                   certSpec.addOCSPResponderURI(issuer.ocspURL);
@@ -363,11 +363,11 @@ public class KeyProviderServlet extends HttpServlet {
     }
 
     private String cleanedUpName(String userName) {
-    	// Sorry, this is building on old and bad code. OTOH who needs a " in a name?
-		return "\"" + userName.replace("\"", "") + "\"";
-	}
+        // Sorry, this is building on old and bad code. OTOH who needs a " in a name?
+        return "\"" + userName.replace("\"", "") + "\"";
+    }
 
-	boolean foundData(HttpServletRequest request, StringBuilder result, String tag) {
+    boolean foundData(HttpServletRequest request, StringBuilder result, String tag) {
         String value = request.getParameter(tag);
         if (value == null) {
             return false;
@@ -437,9 +437,9 @@ public class KeyProviderServlet extends HttpServlet {
         StringBuilder html = new StringBuilder("<div class=\"header\">");
         StringBuilder result = new StringBuilder();
         if (foundData(request, result, KeyProviderInitServlet.ERROR_TAG)) {
-        	String errorInfo = result.toString().replace("\n", "<br>")
-        			                            .replace("\t","&nbsp;&nbsp;&nbsp;&nbsp;")
-        			                            .replace("\r", "");
+            String errorInfo = result.toString().replace("\n", "<br>")
+                                                .replace("\t","&nbsp;&nbsp;&nbsp;&nbsp;")
+                                                .replace("\r", "");
             html.append("<b>Operation Failed</b></div>" +
                         "<div style=\"text-align:left;color:red;padding-top:10pt\">")
                 .append(errorInfo)
