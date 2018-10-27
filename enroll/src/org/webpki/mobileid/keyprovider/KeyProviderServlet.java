@@ -406,10 +406,11 @@ public class KeyProviderServlet extends HttpServlet {
             "<rect filter=\"url(#dropShaddow)\" rx=\"16\" ry=\"16\" " +
               "height=\"182\" width=\"302\" y=\"4\" x=\"12\" fill=\"#c0c0c0\"/>\n" +
             "<svg x=\"9\" y=\"1\" clip-path=\"url(#cardClip)\"");
-        svg.append(((KeyProviderInitServlet.UserData) ((ServerState)session
-                .getAttribute(KeyProviderInitServlet.KEYGEN2_SESSION_ATTR))
+        String rawCardImage = ((KeyProviderInitServlet.UserData)((ServerState)session
+            .getAttribute(KeyProviderInitServlet.KEYGEN2_SESSION_ATTR))
                 .getServiceSpecificObject(KeyProviderInitServlet.SERVER_STATE_USER))
-                    .cardImage)
+                    .cardImage;
+        svg.append(rawCardImage.substring(rawCardImage.indexOf('>')))
            .append(
             "<rect x=\"10\" y=\"2\" " +
             "width=\"298\" height=\"178\" " +
