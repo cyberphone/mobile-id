@@ -43,6 +43,8 @@ import org.webpki.keygen2.KeyCreationResponseDecoder;
 import org.webpki.keygen2.ProvisioningFinalizationResponseDecoder;
 import org.webpki.keygen2.ProvisioningInitializationResponseDecoder;
 
+import org.webpki.localized.LocalizedStrings;
+
 import org.webpki.util.ArrayUtil;
 
 import org.webpki.webutil.InitPropertyReader;
@@ -161,7 +163,7 @@ public class KeyProviderService extends InitPropertyReader implements ServletCon
             ////////////////////////////////////////////////////////////////////////////////////////////
             logging = getPropertyBoolean(LOGGING);
 
-            logger.info("Mobile ID KeyProvider Server initiated: " + tlsCertificate.getSubjectX500Principal().getName());
+            logger.info("Mobile ID KeyProvider [" + LocalizedStrings.LANGUAGE_CODE + "] Server initiated: " + tlsCertificate.getSubjectX500Principal().getName());
         } catch (Exception e) {
             logger.log(Level.SEVERE, "********\n" + e.getMessage() + "\n********", e);
         }

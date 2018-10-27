@@ -98,8 +98,8 @@
         <param name="issuer-key"      value="bankid"/>
         <param name="issuer-key-alg"  value="RSA"/>
         <param name="issuer-root-dn"  value="CN=BankID Root CA1, C=UK"/>
-        <param name="issuer-sub-dn"   value="CN=BankID Sub CA3, C=UK"/>
-        <param name="issuer-kmk-dn"   value="CN=BankID KMK"/>
+        <param name="issuer-sub-dn"   value="CN=MyBank Client CA3, C=UK"/>
+        <param name="issuer-kmk-dn"   value="CN=MyBank KMK"/>
     </antcall>
     <antcall target="createdemocerts"/>
   </target>

@@ -18,8 +18,6 @@
 package org.webpki.mobileid.keyprovider;
 
 import java.io.IOException;
-import java.io.ByteArrayOutputStream;
-import java.io.PrintWriter;
 
 import java.util.Date;
 import java.util.Enumeration;
@@ -40,7 +38,6 @@ import java.net.URLEncoder;
 import javax.servlet.ServletException;
 
 import javax.servlet.http.Cookie;
-
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletRequest;
@@ -93,7 +90,7 @@ public class KeyProviderServlet extends HttpServlet {
     static Logger log = Logger.getLogger(KeyProviderServlet.class.getCanonicalName());
     
     static final String JSON_CONTENT_TYPE = "application/json";
-
+    
     static String success_image_and_message;
     
     void returnKeyGen2Error(HttpServletResponse response, String errorMessage) throws IOException, ServletException {
@@ -274,7 +271,8 @@ public class KeyProviderServlet extends HttpServlet {
                   KeyProviderInitServlet.UserData userData = 
                           (KeyProviderInitServlet.UserData) keygen2State.getServiceSpecificObject(KeyProviderInitServlet.SERVER_STATE_USER);
                   CertSpec certSpec = new CertSpec();
-                  certSpec.setSubject("cn=" + userData.userName + ", serialNumber=" + userData.userId);
+                  certSpec.setSubject("cn=" + cleanedUpName(userData.userName) +
+                		              ", serialNumber=" + userData.userId);
                   certSpec.setEndEntityConstraint();
                   certSpec.setKeyUsageBit(KeyUsageBits.DIGITAL_SIGNATURE);
                   certSpec.addOCSPResponderURI(issuer.ocspURL);
@@ -359,15 +357,17 @@ public class KeyProviderServlet extends HttpServlet {
                 session.invalidate();
             }
             log.log(Level.SEVERE, "KeyGen2 failure", e);
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            PrintWriter printerWriter = new PrintWriter(baos);
-            e.printStackTrace(printerWriter);
-            printerWriter.flush();
-            returnKeyGen2Error(response, baos.toString("UTF-8"));
+            StringBuilder err = new StringBuilder("Server error:\n").append(e.getMessage());
+            returnKeyGen2Error(response, err.toString());
         }
     }
 
-    boolean foundData(HttpServletRequest request, StringBuilder result, String tag) {
+    private String cleanedUpName(String userName) {
+    	// Sorry, this is building on old and bad code. OTOH who needs a " in a name?
+		return "\"" + userName.replace("\"", "") + "\"";
+	}
+
+	boolean foundData(HttpServletRequest request, StringBuilder result, String tag) {
         String value = request.getParameter(tag);
         if (value == null) {
             return false;
@@ -434,20 +434,24 @@ public class KeyProviderServlet extends HttpServlet {
             return;
         }
         HttpSession session = request.getSession(false);
-        StringBuilder html = new StringBuilder();
+        StringBuilder html = new StringBuilder("<div class=\"header\">");
         StringBuilder result = new StringBuilder();
         if (foundData(request, result, KeyProviderInitServlet.ERROR_TAG)) {
-            html.append("<b>Failure Report:</b><pre><font color=\"red\">")
-                .append(result)
-                .append("</font></pre>");
+        	String errorInfo = result.toString().replace("\n", "<br>")
+        			                            .replace("\t","&nbsp;&nbsp;&nbsp;&nbsp;")
+        			                            .replace("\r", "");
+            html.append("<b>Operation Failed</b></div>" +
+                        "<div style=\"text-align:left;color:red;padding-top:10pt\">")
+                .append(errorInfo)
+                .append("</div>");
         } else if (foundData(request, result, KeyProviderInitServlet.PARAM_TAG)) {
             html.append(result);
         } else if (foundData(request, result, KeyProviderInitServlet.ABORT_TAG)) {
             log.info("KeyGen2 run aborted by the user");
-            html.append("<b>Aborted by the user!</b>");
+            html.append("<b>Aborted by the user!</b></div>");
         } else {
             if (session == null) {
-                html.append("<b>You need to restart the session</b>");
+                html.append("<b>You need to restart the session</b></div>");
             } else {
                 html = successPage(session);
             }
@@ -455,6 +459,6 @@ public class KeyProviderServlet extends HttpServlet {
         if (session != null) {
             session.invalidate();
         }
-       HTML.resultPage(response, null, false, html);
+        HTML.resultPage(response, null, false, html);
     }
 }
