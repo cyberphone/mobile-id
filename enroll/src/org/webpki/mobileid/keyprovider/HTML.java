@@ -100,10 +100,9 @@ public class HTML {
         }
         s.append(
             "</script></head><body onload=\"initUi()\">" +
-            "<img alt=\"home\" onclick=\"document.location.href='" +
-            LocalizedStrings.URL_TO_DESCRIPTION +
-            "'\"  title=\"" +
-            LocalizedStrings.HT_TO_MOBILEID_LOGO +
+            "<img alt=\"home\" onclick=\"document.location.href='home'\"  " +
+            "title=\"" +
+            LocalizedStrings.HT_HOME +
             "\" class=\"mobileidlogo\" src=\"images/mobileidlogo.svg\">");
         if (toasterSupport) {
             s.append("<div id=\"toaster\" class=\"toaster\"></div>");

@@ -27,6 +27,7 @@ import java.net.URLEncoder;
 
 import javax.servlet.ServletException;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletRequest;
@@ -66,6 +67,14 @@ public class KeyProviderInitServlet extends HttpServlet {
     
     static final int    ID_STRING_LENGTH                = 12;
     static final String ID_STRING_NAME                  = "ID";
+
+    static final String DISMISSED_FOOTER                = "dismiss";
+    static final int    DISMISS_TIME                    = 60 * 60 * 8; // 8 hours
+
+    private static final String WEB_LINK =
+            "<a href=\"" +
+            LocalizedStrings.URL_TO_DESCRIPTION + 
+            "\" target=\"_blank\">Mobile&nbsp;ID</a>";
 
     static String keygen2EnrollmentUrl;
     
@@ -174,6 +183,13 @@ public class KeyProviderInitServlet extends HttpServlet {
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        boolean footerDismissed = false;
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) for (Cookie cookie : cookies) {
+            if (cookie.getName().equals(DISMISSED_FOOTER)) {
+                footerDismissed = true;
+            }
+        }
 /*
         if (!request.getHeader("User-Agent").contains("Android")) {
             output(response, 
@@ -191,20 +207,18 @@ public class KeyProviderInitServlet extends HttpServlet {
         }
         StringBuilder html = new StringBuilder(
             "<form name=\"shoot\" method=\"POST\" action=\"home\">" +
-            "<div style=\"text-align:left\">" + LocalizedStrings.DESCRIPTION + "</div>" +
+            "<div class=\"header\" style=\"font-weight:bolder\">" + LocalizedStrings.ENROLLMENT_HEADER + "</div>" +
             "<div style=\"padding:20pt 0 10pt 0;display:flex;justify-content:center;align-items:center\">" +
-             "<div class=\"header\">" + LocalizedStrings.YOUR_NAME + ":&nbsp;</div>" +
-             "<div><input type=\"text\" placeholder=\"" +
-             LocalizedStrings.DEFAULT +
-             ": " +
-             DEFAULT_NAME +
-             "\" maxlength=\"50\" style=\"background-color:#ffffe0\" class=\"header\" name=\"" +
-             RA_NAME_PARAM + "\"></div></div>" + 
+            	"<div class=\"header\">" + LocalizedStrings.YOUR_NAME + ":&nbsp;</div>" +
+            	"<div><input type=\"text\" placeholder=\"" +
+            	LocalizedStrings.DEFAULT + ": " +
+            	DEFAULT_NAME + "\" maxlength=\"50\" " +
+            	"style=\"background-color:#def7fc\" class=\"header\" name=\"" +
+            	RA_NAME_PARAM + "\"></div>" +
+            "</div>" + 
             "<div class=\"header\" style=\"display:flex;justify-content:center;align-items:center;padding-bottom:20pt;text-align:left\">" +
-             "<div>" +
-             LocalizedStrings.SELECTED_ISSUER +
-             ":</div>" +
-                "<div style=\"display:flex;flex-direction:column\">");
+            "<div>" + LocalizedStrings.SELECTED_ISSUER + ":</div>" +
+            "<div style=\"display:flex;flex-direction:column\">");
             boolean first = true;
             for (String issuer : KeyProviderService.issuers.keySet()) {
                 html.append("<div style=\"display:flex;align-items:center\"><div>" +
@@ -223,7 +237,29 @@ public class KeyProviderInitServlet extends HttpServlet {
             "<div id=\"command\" class=\"stdbtn\" onclick=\"enroll()\">" +
             LocalizedStrings.START_ENROLLMENT +
             "</div></form>");
+        String javaScript;
+        if (footerDismissed) {
+            javaScript = "";
+        } else {
+            html.append("</div>" +
+                        "<div id=\"sitefooter\" class=\"sitefooter\">" +
+                        "<img src=\"images/x.svg\" class=\"xicon\" alt=\"x\" title=\"" +
+                        LocalizedStrings.CLOSE_VIEW +
+                        "\" onclick=\"closeDescription()\">" +
+                        "<div style=\"padding:0.3em 1em 0.3em 0\">")
+                .append(LocalizedStrings.DEMO_TEXT
+                   .replace("@", WEB_LINK))
+                .append("</div>");
+            javaScript = "function closeDescription() {\n" +
+                         "  let sitefooter = document.getElementById('sitefooter');\n" +
+                         "  sitefooter.style.visibility = 'hidden';\n" +
+                         "  document.cookie = '" + DISMISSED_FOOTER + 
+                         " = true;Max-Age=" + DISMISS_TIME + "';\n" +
+                         "}\n";
+        }
+
         HTML.resultPage(response,
+                        javaScript +
                         "function enroll() {\n" +
                         "  console.log('Mobile application is supposed to start here');\n" +
                         "  document.forms.shoot.submit();\n" +

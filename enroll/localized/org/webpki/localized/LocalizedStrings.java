@@ -23,15 +23,17 @@ public interface LocalizedStrings {
 
     String TITLE                      = "Mobile ID Enrollment Demo";
     String URL_TO_DESCRIPTION         = "http://cyberphone.github.io/doc/mobile-id";
-	String HT_TO_MOBILEID_LOGO        = "Mobile ID documentation";
+    String HT_HOME                    = "Home sweet home...";
 
     // Description
-    String DESCRIPTION                = "This is a proof of concept site " +
+    String DEMO_TEXT                  = "This is a proof of concept site " +
                                         "hosting an enrollment application " +
-                                        "for the Mobile ID system. " +
-                                        "Note that in a real enrollment system " +
-                                        "you would also need to authenticate in a " +
-                                        "way defined by the issuer.";
+                                        "for @. " +
+                                        "Note: in a real enrollment scenario " +
+                                        "users would also need to authenticate!";
+
+    // First header
+    String ENROLLMENT_HEADER          = "Enrolling a Mobile Identity";
     
     // Your name label
     String YOUR_NAME                  = "Your Name";
@@ -50,6 +52,9 @@ public interface LocalizedStrings {
 
 	String RESULT_MESSAGE_HEADER      = "Your new digital identity is now securely " +
 	                                    "stored in your Android device!";
+
+	// The note on the initial page can be closed
+	String CLOSE_VIEW                 = "Click to close";
 
  }
 

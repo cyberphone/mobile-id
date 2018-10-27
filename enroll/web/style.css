@@ -72,6 +72,25 @@ li {
   padding:15pt 4pt;
 }
 
+.xicon {
+  height:20pt;
+  padding:5pt;
+  cursor:pointer;
+}
+
+.sitefooter {
+  display:flex;
+  align-items:center;
+  border-width:1px 0 0 0;
+  border-style:solid;
+  border-color:#a9a9a9;
+  position:absolute;z-index:5;
+  left:0px;
+  bottom:0px;
+  background-color:#ffffe0;
+  width:100%;
+}
+
 @media (max-width:768px) {
 
   .stdbtn, .multibtn {
@@ -80,6 +99,11 @@ li {
 
   body {
     font-size:8pt;
+  }
+
+  .xicon {
+    height:16pt;
+    padding:5pt;
   }
 
   .uidheader {
