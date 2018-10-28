@@ -20,7 +20,6 @@ package org.webpki.mobileid.keyprovider;
 import java.io.IOException;
 
 import java.util.Date;
-import java.util.Enumeration;
 import java.util.GregorianCalendar;
 
 import java.util.logging.Level;
@@ -37,7 +36,6 @@ import java.net.URLEncoder;
 
 import javax.servlet.ServletException;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletRequest;
@@ -81,17 +79,15 @@ import org.webpki.json.JSONEncoder;
 import org.webpki.json.JSONDecoder;
 import org.webpki.json.JSONOutputFormats;
 
-// A KeyGen2 protocol runner that creates MobileID keys.
+// KeyGen2 protocol runner that creates MobileID keys.
 
 public class KeyProviderServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
     
-    static Logger log = Logger.getLogger(KeyProviderServlet.class.getCanonicalName());
+    static Logger logger = Logger.getLogger(KeyProviderServlet.class.getCanonicalName());
     
     static final String JSON_CONTENT_TYPE = "application/json";
-    
-    static String success_image_and_message;
     
     void returnKeyGen2Error(HttpServletResponse response, String errorMessage) throws IOException, ServletException {
         ////////////////////////////////////////////////////////////////////////////////////////////
@@ -107,7 +103,7 @@ public class KeyProviderServlet extends HttpServlet {
     void keygen2JSONBody(HttpServletResponse response, JSONEncoder object) throws IOException {
         byte[] jsonData = object.serializeJSONDocument(JSONOutputFormats.PRETTY_PRINT);
         if (KeyProviderService.logging) {
-            log.info("Sent message\n" + new String(jsonData, "UTF-8"));
+            logger.info("Sent message\n" + new String(jsonData, "UTF-8"));
         }
         response.setContentType(JSON_CONTENT_TYPE);
         response.setHeader("Pragma", "No-Cache");
@@ -147,23 +143,6 @@ public class KeyProviderServlet extends HttpServlet {
                         String versionMacro,
                         boolean init)
          throws IOException, ServletException {
-        Enumeration<String> headerNames = request.getHeaderNames();
-        while (headerNames.hasMoreElements()) {
-            String headerName = headerNames.nextElement();
-            Enumeration<String> headers = request.getHeaders(headerName);
-            while (headers.hasMoreElements()) {
-                log.info("Header=" + headerName + " value=" + headers.nextElement());
-            }
-        }
-        Cookie[] cookies = request.getCookies();
-        if (cookies != null) for (Cookie cookie : cookies) {
-            log.info("Cookie: Name=" + cookie.getName() +
-                    " Value=" + cookie.getValue() +
-                    " Path=" + cookie.getPath() +
-                    " isecure= " + cookie.getSecure() +
-                    " http=" + cookie.isHttpOnly() +
-                    " maxage=" + cookie.getMaxAge());
-        }
         String keygen2EnrollmentUrl = KeyProviderInitServlet.keygen2EnrollmentUrl;
         HttpSession session = request.getSession(false);
         try {
@@ -217,7 +196,7 @@ public class KeyProviderServlet extends HttpServlet {
                 throw new IOException("Wrong \"Content-Type\": " + request.getContentType());
             }
             if (KeyProviderService.logging) {
-                log.info("Received message:\n" + new String(jsonData, "UTF-8"));
+                logger.info("Received message:\n" + new String(jsonData, "UTF-8"));
             }
             JSONDecoder jsonObject = KeyProviderService.keygen2JSONCache.parse(jsonData);
             switch (keygen2State.getProtocolPhase()) {
@@ -239,7 +218,7 @@ public class KeyProviderServlet extends HttpServlet {
                   ProvisioningInitializationResponseDecoder provisioningInitResponse = (ProvisioningInitializationResponseDecoder) jsonObject;
                   keygen2State.update(provisioningInitResponse, KeyProviderService.tlsCertificate);
 
-                  log.info("Device Certificate=" + certificateData(keygen2State.getDeviceCertificate()));
+                  logger.info("Device Certificate=" + certificateData(keygen2State.getDeviceCertificate()));
                   CredentialDiscoveryRequestEncoder credentialDiscoveryRequest =
                       new CredentialDiscoveryRequestEncoder(keygen2State, keygen2EnrollmentUrl);
                   credentialDiscoveryRequest.addLookupDescriptor(issuer.keyManagementKey.getPublicKey());
@@ -256,7 +235,7 @@ public class KeyProviderServlet extends HttpServlet {
                                                         matchingCredential.getServerSessionId(),
                                                         endEntityCertificate,
                                                         issuer.keyManagementKey.getPublicKey());
-                          log.info("Deleting key=" + certificateData(endEntityCertificate));
+                          logger.info("Deleting key=" + certificateData(endEntityCertificate));
                       }
                   }
                   requestKeyGen2KeyCreation(response, keygen2State);
@@ -267,7 +246,7 @@ public class KeyProviderServlet extends HttpServlet {
                   keygen2State.update(keyCreationResponse);
                   ServerState.Key key = keygen2State.getKeys()[0];
 
-                  // Certification of key starts here
+                  // Certification of the key starts here
                   KeyProviderInitServlet.UserData userData = 
                           (KeyProviderInitServlet.UserData) keygen2State.getServiceSpecificObject(KeyProviderInitServlet.SERVER_STATE_USER);
                   CertSpec certSpec = new CertSpec();
@@ -341,7 +320,7 @@ public class KeyProviderServlet extends HttpServlet {
                   ProvisioningFinalizationResponseDecoder provisioningFinalResponse =
                       (ProvisioningFinalizationResponseDecoder) jsonObject;
                   keygen2State.update(provisioningFinalResponse);
-                  log.info("Successful KeyGen2 run");
+                  logger.info("Successful KeyGen2 run");
 
                   ////////////////////////////////////////////////////////////////////////////////////////////
                   // We are done, return an HTTP redirect taking the client out of its KeyGen2 mode
@@ -356,13 +335,13 @@ public class KeyProviderServlet extends HttpServlet {
             if (session != null) {
                 session.invalidate();
             }
-            log.log(Level.SEVERE, "KeyGen2 failure", e);
+            logger.log(Level.SEVERE, "KeyGen2 failure", e);
             StringBuilder err = new StringBuilder("Server error:\n").append(e.getMessage());
             returnKeyGen2Error(response, err.toString());
         }
     }
 
-    private String cleanedUpName(String userName) {
+    String cleanedUpName(String userName) {
         // Sorry, this is building on old and bad code. OTOH who needs a " in a name?
         return "\"" + userName.replace("\"", "") + "\"";
     }
@@ -375,10 +354,11 @@ public class KeyProviderServlet extends HttpServlet {
         result.append(value);
         return true;
     }
-    
+
+    // Showing off?
     StringBuilder successPage(HttpSession session) {
-        StringBuilder svg = new StringBuilder(
-            "<div class=\"header\" style=\"text-align:left\">" +
+        StringBuilder html = new StringBuilder(
+            "<div class=\"label\" style=\"text-align:left\">" +
             LocalizedStrings.RESULT_MESSAGE_HEADER +
             "</div>" +
             "<svg id=\"cardimage\" style=\"width:100pt;padding-top:15pt\" " +
@@ -410,8 +390,8 @@ public class KeyProviderServlet extends HttpServlet {
             .getAttribute(KeyProviderInitServlet.KEYGEN2_SESSION_ATTR))
                 .getServiceSpecificObject(KeyProviderInitServlet.SERVER_STATE_USER))
                     .cardImage;
-        svg.append(rawCardImage.substring(rawCardImage.indexOf('>')))
-           .append(
+        html.append(rawCardImage.substring(rawCardImage.indexOf('>')))
+            .append(
             "<rect x=\"10\" y=\"2\" " +
             "width=\"298\" height=\"178\" " +
             "rx=\"14.7\" ry=\"14.7\" " +
@@ -421,7 +401,7 @@ public class KeyProviderServlet extends HttpServlet {
             "width=\"301\" height=\"181\" " +
             "rx=\"16\" ry=\"16\" fill=\"none\" stroke=\"url(#outerCardBorder)\"/>\n" +
             "</svg>\n");
-        return svg;
+        return html;
     }
     
     @Override
@@ -441,18 +421,18 @@ public class KeyProviderServlet extends HttpServlet {
             String errorInfo = result.toString().replace("\n", "<br>")
                                                 .replace("\t","&nbsp;&nbsp;&nbsp;&nbsp;")
                                                 .replace("\r", "");
-            html.append("<b>Operation Failed</b></div>" +
+            html.append(LocalizedStrings.OPERATION_FAILED_HEADER + " &#x2639;</div>" +
                         "<div style=\"text-align:left;color:red;padding-top:10pt\">")
                 .append(errorInfo)
                 .append("</div>");
         } else if (foundData(request, result, KeyProviderInitServlet.PARAM_TAG)) {
             html.append(result);
         } else if (foundData(request, result, KeyProviderInitServlet.ABORT_TAG)) {
-            log.info("KeyGen2 run aborted by the user");
-            html.append("<b>Aborted by the user!</b></div>");
+            logger.info("KeyGen2 run aborted by the user");
+            html.append(LocalizedStrings.ABORTED_BY_USER_HEADER + "</div>");
         } else {
             if (session == null) {
-                html.append("<b>You need to restart the session</b></div>");
+                html.append(LocalizedStrings.SESSION_TIMED_OUT_HEADER + "</div>");
             } else {
                 html = successPage(session);
             }

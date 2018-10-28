@@ -50,9 +50,14 @@ li {
   padding:3pt 10pt;
 }
 
-.header, .stdbtn {
-  font-size:11pt;
+.label, .stdbtn {
   font-family:Arial,'Liberation Sans',Verdana,'Bitstream Vera Sans','DejaVu Sans';
+  font-size:11pt;
+}
+
+.header {
+  font-size:14pt;
+  color:#036F17;
 }
 
 .stdbtn, .multibtn {
@@ -73,7 +78,7 @@ li {
 }
 
 .xicon {
-  height:20pt;
+  height:16pt;
   padding:5pt;
   cursor:pointer;
 }
@@ -102,8 +107,7 @@ li {
   }
 
   .xicon {
-    height:16pt;
-    padding:5pt;
+    height:12pt;
   }
 
   .uidheader {

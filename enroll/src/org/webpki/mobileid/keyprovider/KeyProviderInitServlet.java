@@ -41,6 +41,8 @@ import org.webpki.util.Base64URL;
 
 import org.webpki.webutil.ServletUtil;
 
+// This is the Home/Initialization servlet
+
 public class KeyProviderInitServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
@@ -62,11 +64,11 @@ public class KeyProviderInitServlet extends HttpServlet {
     
     static final String DEFAULT_NAME                    = "Luke Skywalker";
 
-    static final String RA_NAME_PARAM                   = "name";
+    static final String RA_NAME_PARAM                   = "name.mid";  // No general auto complete please
     static final String RA_ISSUER_PARAM                 = "issuer";
     
-    static final int    ID_STRING_LENGTH                = 12;
-    static final String ID_STRING_NAME                  = "ID";
+    static final int    ID_STRING_LENGTH                = 12;    // Fictitious identity universe
+    static final String ID_STRING_NAME                  = "ID";  // Card label of ID is "ID"
 
     static final String DISMISSED_FOOTER                = "dismiss";
     static final int    DISMISS_TIME                    = 60 * 60 * 8; // 8 hours
@@ -78,12 +80,12 @@ public class KeyProviderInitServlet extends HttpServlet {
 
     static String keygen2EnrollmentUrl;
     
-    synchronized void initGlobals(String baseUrl) throws IOException {
+    synchronized void initGlobals(HttpServletRequest request) throws IOException {
 
         ////////////////////////////////////////////////////////////////////////////////////////////
         // Get KeyGen2 protocol entry
         ////////////////////////////////////////////////////////////////////////////////////////////
-        keygen2EnrollmentUrl = baseUrl + "/getkeys";
+        keygen2EnrollmentUrl = ServletUtil.getContextURL(request) + "/getkeys";
 
     }
     
@@ -92,6 +94,7 @@ public class KeyProviderInitServlet extends HttpServlet {
         String userName;
         String userId;
         String cardImage;
+        String issuerName;
 
         UserData(String userName, String userId, KeyProviderService.IssuerHolder issuer) {
             this.userName = userName;
@@ -103,14 +106,20 @@ public class KeyProviderInitServlet extends HttpServlet {
                 }
                 idString.append(userId.substring(q, q + 4));
             }
+            this.issuerName = issuer.commonName;
             this.cardImage = issuer.cardImage.replace("@n", userName)
                                              .replace("@i", idString);
             if (userName.length() > 26) {
                 cardImage = cardImage.replace("font-size=\"20\"", "font-size=\"14\"");
             }
         }
+        
+        @Override
+        public String toString() {
+        	return "Name=" + userName + " ID=" + userId + " Issuer=" + issuerName;
+        }
     }
-    
+
     String getParameter(HttpServletRequest request, String name) throws IOException {
         String value = request.getParameter(name);
         if (value == null) {
@@ -118,11 +127,13 @@ public class KeyProviderInitServlet extends HttpServlet {
         }
         return value;
     }
-    
+
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        if (keygen2EnrollmentUrl == null) {
-            initGlobals(ServletUtil.getContextURL(request));
+    	// This is where a user's credentials should be verified
+    	// Note: in the demo we don't verify credentials
+    	if (keygen2EnrollmentUrl == null) {
+            initGlobals(request);
         }
         request.setCharacterEncoding("utf-8");
         String userName = getParameter(request, RA_NAME_PARAM).trim(); 
@@ -141,11 +152,14 @@ public class KeyProviderInitServlet extends HttpServlet {
             userId.append(randomUserId % 10);
             randomUserId /= 10;
         }
+        // We have a user
         UserData userData = new UserData(userName, userId.toString(), issuer);
-        
-        logger.info("User=" + userName + " ID=" + userId + " Issuer=" + issuerName);
+        // We have a session to connect the user to
         HttpSession session = request.getSession(true);
-        logger.info("Created ID=" + session.getId() + " Int" + session.getMaxInactiveInterval());
+        if (KeyProviderService.logging) {
+        	logger.info(userData.toString() + " Session ID=" + session.getId());
+        }
+        // Setup KeyGen2 using a session cookie for keeping state
         ServerState serverState = new ServerState(new KeyGen2SoftHSM(issuer.keyManagementKey));
         serverState.setServiceSpecificObject(SERVER_STATE_ISSUER, issuer);
         serverState.setServiceSpecificObject(SERVER_STATE_USER, userData);
@@ -165,17 +179,6 @@ public class KeyProviderInitServlet extends HttpServlet {
                      "&url=" + URLEncoder.encode(keygen2EnrollmentUrl + "?" +
                      INIT_TAG + "=" + Base64URL.generateURLFriendlyRandom(8) +
                      (KeyProviderService.grantedVersions == null ? "" : "&" + ANDROID_WEBPKI_VERSION_TAG + "=" + ANDROID_WEBPKI_VERSION_MACRO), "UTF-8");
-/*
-               output(response, 
-               getHTML(null,
-//                       null,
-                       "onload=\"document.location.href='intent://keygen2?" + extra +
-                           "#Intent;scheme=webpkiproxy;" +
-                           "package=org.webpki.mobile.android;end'\"",
-                       "<tr><td align=\"center\"><table>" +
-                       "<tr><td align=\"center\">Here the App is supposed to start...</td></tr>" +
-                       "</table></td></tr>"));
-*/
         response.sendRedirect("intent://keygen2?" + extra +
                               "#Intent;scheme=webpkiproxy;" +
                               "package=org.webpki.mobile.android;end");
@@ -190,33 +193,23 @@ public class KeyProviderInitServlet extends HttpServlet {
                 footerDismissed = true;
             }
         }
-/*
-        if (!request.getHeader("User-Agent").contains("Android")) {
-            output(response, 
-                    getHTML(null,
-                            null,
-                            "<tr><td width=\"100%\" align=\"center\" valign=\"middle\">" +
-                            LocalizedStrings.ANDROID_ONLY +
-                            "</td></tr>"));
-            return;
-        }
-*/
+        // We always start from zero
         HttpSession session = request.getSession(false);
         if (session != null) {
             session.invalidate();
         }
         StringBuilder html = new StringBuilder(
             "<form name=\"shoot\" method=\"POST\" action=\"home\">" +
-            "<div class=\"header\" style=\"font-weight:bolder\">" + LocalizedStrings.ENROLLMENT_HEADER + "</div>" +
+            "<div class=\"header\">" + LocalizedStrings.ENROLLMENT_HEADER + "</div>" +
             "<div style=\"padding:20pt 0 10pt 0;display:flex;justify-content:center;align-items:center\">" +
-            	"<div class=\"header\">" + LocalizedStrings.YOUR_NAME + ":&nbsp;</div>" +
-            	"<div><input type=\"text\" placeholder=\"" +
-            	LocalizedStrings.DEFAULT + ": " +
-            	DEFAULT_NAME + "\" maxlength=\"50\" " +
-            	"style=\"background-color:#def7fc\" class=\"header\" name=\"" +
-            	RA_NAME_PARAM + "\"></div>" +
+                "<div class=\"label\">" + LocalizedStrings.YOUR_NAME + ":&nbsp;</div>" +
+                "<div><input type=\"text\" placeholder=\"" +
+                LocalizedStrings.DEFAULT + ": " +
+                DEFAULT_NAME + "\" maxlength=\"50\" " +
+                "style=\"background-color:#def7fc\" class=\"label\" name=\"" +
+                RA_NAME_PARAM + "\"></div>" +
             "</div>" + 
-            "<div class=\"header\" style=\"display:flex;justify-content:center;align-items:center;padding-bottom:20pt;text-align:left\">" +
+            "<div class=\"label\" style=\"display:flex;justify-content:center;align-items:center;padding-bottom:20pt;text-align:left\">" +
             "<div>" + LocalizedStrings.SELECTED_ISSUER + ":</div>" +
             "<div style=\"display:flex;flex-direction:column\">");
             boolean first = true;
@@ -257,7 +250,6 @@ public class KeyProviderInitServlet extends HttpServlet {
                          " = true;Max-Age=" + DISMISS_TIME + "';\n" +
                          "}\n";
         }
-
         HTML.resultPage(response,
                         javaScript +
                         "function enroll() {\n" +

@@ -125,7 +125,7 @@ li {
 }
 
 .xicon {
-  height:20pt;
+  height:16pt;
   padding:5pt;
   cursor:pointer;
 }
@@ -232,9 +232,8 @@ li {
   }
 
   .xicon {
-    height:16pt;
-    padding:5pt;
-  }
+    height:12pt;
+ }
 
  .logouticon {
    height:32px;

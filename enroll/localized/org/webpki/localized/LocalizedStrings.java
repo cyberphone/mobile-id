@@ -27,8 +27,7 @@ public interface LocalizedStrings {
 
     // Description
     String DEMO_TEXT                  = "This is a proof of concept site " +
-                                        "hosting an enrollment application " +
-                                        "for @. " +
+                                        "illustrating enrollment using @. " +
                                         "Note: in a real enrollment scenario " +
                                         "users would also need to authenticate!";
 
@@ -56,5 +55,10 @@ public interface LocalizedStrings {
 	// The note on the initial page can be closed
 	String CLOSE_VIEW                 = "Click to close";
 
+	String OPERATION_FAILED_HEADER    = "Operation Failed";
+
+	String ABORTED_BY_USER_HEADER     = "Aborted by the User";
+
+	String SESSION_TIMED_OUT_HEADER   = "Session Timed Out";
  }
 
