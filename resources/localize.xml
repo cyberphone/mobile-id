@@ -17,10 +17,11 @@
   </path>
   
   <target name="help">
-    <echo message="localize -Dapp-sub-dir=e-government -Dlocale=fr [-Dlocalized.egov-app.dir=adirectory -Duidemo=true -Dlogging=true]]"/>
+    <echo message="build/tomcat -Dapp-sub-dir=e-government -Dlocale=fr [-Dlocalized.egov-app.dir=adirectory -Duidemo=true -Dlogging=true]]"/>
   </target>
   
-   <target name="localize">
+   <target name="build">
+    <property name="ant-target" value="build"/>
     <fail message="&quot;app-sub-dir&quot; not defined!" unless="app-sub-dir"/>
     <fail message="&quot;locale&quot; not defined!" unless="locale"/>
     <property name="app.dir" location="../${app-sub-dir}"/>
@@ -80,10 +81,15 @@
        <property name="app.dir" value="${localized.egov-app.dir}"/>
     </ant>
     <!-- Finally, build localized application -->
-    <ant antfile="${localized.egov-app.dir}/build.xml" target="tomcat" useNativeBasedir="true" inheritAll="false">
+    <ant antfile="${localized.egov-app.dir}/build.xml" target="${ant-target}" useNativeBasedir="true" inheritAll="false">
        <property name="saturn.dir" location="${saturn.home}"/>
        <property name="resource.dir" location="."/>
     </ant>
+   </target>
+    
+   <target name="tomcat">
+    <property name="ant-target" value="tomcat"/>
+    <antcall target="build"/>
    </target>
   
 </project>

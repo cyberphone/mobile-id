@@ -116,7 +116,7 @@ public class KeyProviderInitServlet extends HttpServlet {
         
         @Override
         public String toString() {
-        	return "Name=" + userName + " ID=" + userId + " Issuer=" + issuerName;
+            return "Name=" + userName + " ID=" + userId + " Issuer=" + issuerName;
         }
     }
 
@@ -130,9 +130,9 @@ public class KeyProviderInitServlet extends HttpServlet {
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-    	// This is where a user's credentials should be verified
-    	// Note: in the demo we don't verify credentials
-    	if (keygen2EnrollmentUrl == null) {
+        // This is where a user's credentials should be verified
+        // Note: in the demo we don't verify credentials
+        if (keygen2EnrollmentUrl == null) {
             initGlobals(request);
         }
         request.setCharacterEncoding("utf-8");
@@ -157,7 +157,7 @@ public class KeyProviderInitServlet extends HttpServlet {
         // We have a session to connect the user to
         HttpSession session = request.getSession(true);
         if (KeyProviderService.logging) {
-        	logger.info(userData.toString() + " Session ID=" + session.getId());
+            logger.info(userData.toString() + " Session ID=" + session.getId());
         }
         // Setup KeyGen2 using a session cookie for keeping state
         ServerState serverState = new ServerState(new KeyGen2SoftHSM(issuer.keyManagementKey));

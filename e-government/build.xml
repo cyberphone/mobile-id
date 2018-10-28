@@ -22,24 +22,12 @@
 
   <property environment="env"/>
 
-  <property name="catalina.home" value="${env.CATALINA_HOME}"/>
-
   <target name="help">
-      <echo message="tomcat [-Ddemo=true -Dlogging=true]"/>
+      <echo message="tomcat/build [-Ddemo=true -Dlogging=true]"/>
   </target>
 
-  <target name="_init" unless="app_path">
-    <!-- Set up where application should reside --> 
-    <condition property="tomcat_app_root_set">
-      <isset property="env.CATALINA_HOME"/>
-    </condition>
-    <fail message="CATALINA_HOME must be set to environment!" unless="tomcat_app_root_set"/>
-
-    <!-- Set path to application.  -->
+  <target name="build">
     <property name="dist.dir" value="dist"/>
-  </target>
-
-  <target name="tomcat" depends="_init">
     <property name="zip.common.lib.dir" value="${common.lib.dir}"/>
     <property name="zip.bcprovider.lib.dir" value="${bcprovider.lib.dir}"/>
     <delete dir="${temp.dir}"/>
@@ -109,10 +97,10 @@
 <!-- End of localized resources -->
       <fileset dir="web"/>
     </war>
-    <antcall target="_updatetomcat"/>
-  </target>
+   </target>
 
-  <target name="_updatetomcat" unless="standalone">
+  <target name="tomcat" depends="build">
+    <fail message="CATALINA_HOME must be set to environment!" unless="env.CATALINA_HOME"/>
     <copy file="${dist.dir}/${application}" todir="${env.CATALINA_HOME}/webapps" overwrite="true" preservelastmodified="true"/>
   </target>
     
