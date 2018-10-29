@@ -52,21 +52,21 @@ public class KeyProviderInitServlet extends HttpServlet {
     static final String ANDROID_WEBPKI_VERSION_TAG      = "VER";
     static final String ANDROID_WEBPKI_VERSION_MACRO    = "$VER$";  // KeyGen2 Android PoC
     
-    static final String KEYGEN2_SESSION_ATTR            = "keygen2";
+    static final String KG2_SESSION_ATTR                = "keygen2";
     
     static final String SERVER_STATE_ISSUER             = "issuer";
     static final String SERVER_STATE_USER               = "user";
 
-    static final String INIT_TAG                        = "init";     // Note: This is currently also a part of the KeyGen2 client!
-    static final String ABORT_TAG                       = "abort";
-    static final String PARAM_TAG = "msg";
-    static final String ERROR_TAG = "err";
+    static final String KG2_INIT_TAG                    = "init";     // Note: This is currently also a part of the KeyGen2 client!
+    static final String KG2_ABORT_TAG                   = "abort";
+    static final String KG2_PARAM_TAG                   = "msg";
+    static final String KG2_ERROR_TAG                   = "err";
     
-    static final String DEFAULT_NAME                    = "Luke Skywalker";
+    static final String DEFAULT_USER_NAME               = "Luke Skywalker";
 
-    static final String RA_NAME_PARAM                   = "name.mid";  // No general auto complete please
-    static final String RA_ISSUER_PARAM                 = "issuer";
-    static final String DESKTOP_MODE                    = "desktop";
+    static final String USER_NAME_PARAM                 = "name.mid";  // No general auto complete please
+    static final String ISSUER_NAME_PARAM               = "issuer";
+    static final String DESKTOP_MODE_PARAM              = "desktop";
 
     
     static final int    ID_STRING_LENGTH                = 12;    // Fictitious identity universe
@@ -85,12 +85,8 @@ public class KeyProviderInitServlet extends HttpServlet {
     static String keygen2EnrollmentUrl;
     
     synchronized void initGlobals(HttpServletRequest request) throws IOException {
-
-        ////////////////////////////////////////////////////////////////////////////////////////////
         // Get KeyGen2 protocol entry
-        ////////////////////////////////////////////////////////////////////////////////////////////
         keygen2EnrollmentUrl = ServletUtil.getContextURL(request) + "/getkeys";
-
     }
     
     class UserData {
@@ -140,11 +136,11 @@ public class KeyProviderInitServlet extends HttpServlet {
             initGlobals(request);
         }
         request.setCharacterEncoding("utf-8");
-        String userName = getParameter(request, RA_NAME_PARAM).trim(); 
+        String userName = getParameter(request, USER_NAME_PARAM).trim(); 
         if (userName.length() == 0) {  // This is a demo...
-            userName = DEFAULT_NAME;
+            userName = DEFAULT_USER_NAME;
         }
-        String issuerName = getParameter(request, RA_ISSUER_PARAM);
+        String issuerName = getParameter(request, ISSUER_NAME_PARAM);
         KeyProviderService.IssuerHolder issuer = KeyProviderService.issuers.get(issuerName);
         if (issuer == null) {
             throw new IOException("No such issuer: " + issuerName);
@@ -167,10 +163,10 @@ public class KeyProviderInitServlet extends HttpServlet {
         ServerState serverState = new ServerState(new KeyGen2SoftHSM(issuer.keyManagementKey));
         serverState.setServiceSpecificObject(SERVER_STATE_ISSUER, issuer);
         serverState.setServiceSpecificObject(SERVER_STATE_USER, userData);
-        session.setAttribute(KEYGEN2_SESSION_ATTR, serverState);
+        session.setAttribute(KG2_SESSION_ATTR, serverState);
 
         // Now to big question, are we on a [suitable] mobile phone or on a desktop?
-        if (new Boolean(getParameter(request, DESKTOP_MODE))) {
+        if (new Boolean(getParameter(request, DESKTOP_MODE_PARAM))) {
             response.sendRedirect("qrinit");
             return;
         }
@@ -187,7 +183,7 @@ public class KeyProviderInitServlet extends HttpServlet {
         String extra = "cookie=JSESSIONID%3D" +
                      session.getId() +
                      "&url=" + URLEncoder.encode(keygen2EnrollmentUrl + "?" +
-                     INIT_TAG + "=" + Base64URL.generateURLFriendlyRandom(8) +
+                     KG2_INIT_TAG + "=" + Base64URL.generateURLFriendlyRandom(8) +
                      (KeyProviderService.grantedVersions == null ? "" : "&" + ANDROID_WEBPKI_VERSION_TAG + "=" + ANDROID_WEBPKI_VERSION_MACRO), "UTF-8");
         response.sendRedirect("intent://keygen2?" + extra +
                               "#Intent;scheme=webpkiproxy;" +
@@ -259,7 +255,7 @@ public class KeyProviderInitServlet extends HttpServlet {
         // Create the actual HTML
         StringBuilder html = new StringBuilder(
             "<form name=\"shoot\" method=\"POST\" action=\"home\">" +
-            "<input type=\"hidden\" name=\"" + DESKTOP_MODE + "\" value=\"")
+            "<input type=\"hidden\" name=\"" + DESKTOP_MODE_PARAM + "\" value=\"")
         .append(desktopMode)
         .append(
             "\">" +
@@ -268,9 +264,9 @@ public class KeyProviderInitServlet extends HttpServlet {
                 "<div class=\"label\">" + LocalizedStrings.YOUR_NAME + ":&nbsp;</div>" +
                 "<div><input type=\"text\" placeholder=\"" +
                 LocalizedStrings.DEFAULT + ": " +
-                DEFAULT_NAME + "\" maxlength=\"50\" " +
+                DEFAULT_USER_NAME + "\" maxlength=\"50\" " +
                 "style=\"background-color:#def7fc\" class=\"label\" name=\"" +
-                RA_NAME_PARAM + "\"></div>" +
+                USER_NAME_PARAM + "\"></div>" +
             "</div>" + 
             "<div class=\"label\" style=\"display:flex;justify-content:center;align-items:center;padding-bottom:20pt;text-align:left\">" +
             "<div>" + LocalizedStrings.SELECTED_ISSUER + ":</div>" +
@@ -278,7 +274,7 @@ public class KeyProviderInitServlet extends HttpServlet {
             boolean first = true;
             for (String issuer : KeyProviderService.issuers.keySet()) {
                 html.append("<div style=\"display:flex;align-items:center\"><div>" +
-                            "<input name=\"" + RA_ISSUER_PARAM + "\" type=\"radio\" value=\"")
+                            "<input name=\"" + ISSUER_NAME_PARAM + "\" type=\"radio\" value=\"")
                     .append(issuer)
                     .append("\"")
                     .append(first ? " checked" : "")

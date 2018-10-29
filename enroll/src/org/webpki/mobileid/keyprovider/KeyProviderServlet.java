@@ -95,7 +95,7 @@ public class KeyProviderServlet extends HttpServlet {
         ////////////////////////////////////////////////////////////////////////////////////////////
         response.sendRedirect(KeyProviderInitServlet.keygen2EnrollmentUrl + 
                               "?" +
-                              KeyProviderInitServlet.ERROR_TAG +
+                              KeyProviderInitServlet.KG2_ERROR_TAG +
                               "=" +
                               URLEncoder.encode(errorMessage, "UTF-8"));
     }
@@ -154,7 +154,7 @@ public class KeyProviderServlet extends HttpServlet {
                 return;
              }
             ServerState keygen2State =
-                (ServerState) session.getAttribute(KeyProviderInitServlet.KEYGEN2_SESSION_ATTR);
+                (ServerState) session.getAttribute(KeyProviderInitServlet.KG2_SESSION_ATTR);
             if (keygen2State == null) {
                 throw new IOException("Server state missing");
             }
@@ -181,7 +181,7 @@ public class KeyProviderServlet extends HttpServlet {
                                                  null);
                 invocationRequest.setAbortUrl(keygen2EnrollmentUrl +
                                                   "?" +
-                                                  KeyProviderInitServlet.ABORT_TAG +
+                                                  KeyProviderInitServlet.KG2_ABORT_TAG +
                                                   "=true");
                 keygen2State.addImageAttributesQuery(KeyGen2URIs.LOGOTYPES.LIST);
                 keygen2JSONBody(response, invocationRequest);
@@ -394,7 +394,7 @@ public class KeyProviderServlet extends HttpServlet {
               "height=\"182\" width=\"302\" y=\"4\" x=\"12\" fill=\"#c0c0c0\"/>\n" +
             "<svg x=\"9\" y=\"1\" clip-path=\"url(#cardClip)\"");
         String rawCardImage = ((KeyProviderInitServlet.UserData)((ServerState)session
-            .getAttribute(KeyProviderInitServlet.KEYGEN2_SESSION_ATTR))
+            .getAttribute(KeyProviderInitServlet.KG2_SESSION_ATTR))
                 .getServiceSpecificObject(KeyProviderInitServlet.SERVER_STATE_USER))
                     .cardImage;
         html.append(rawCardImage.substring(rawCardImage.indexOf('>')))
@@ -421,7 +421,7 @@ public class KeyProviderServlet extends HttpServlet {
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response)
            throws IOException, ServletException {
-        if (request.getParameter(KeyProviderInitServlet.INIT_TAG) != null) {
+        if (request.getParameter(KeyProviderInitServlet.KG2_INIT_TAG) != null) {
             executeRequest(request,
                            response,
                            request.getParameter(KeyProviderInitServlet.ANDROID_WEBPKI_VERSION_TAG),
@@ -431,7 +431,7 @@ public class KeyProviderServlet extends HttpServlet {
         HttpSession session = request.getSession(false);
         StringBuilder html = new StringBuilder("<div class=\"header\">");
         StringBuilder result = new StringBuilder();
-        if (foundData(request, result, KeyProviderInitServlet.ERROR_TAG)) {
+        if (foundData(request, result, KeyProviderInitServlet.KG2_ERROR_TAG)) {
             String errorInfo = result.toString().replace("\n", "<br>")
                                                 .replace("\t","&nbsp;&nbsp;&nbsp;&nbsp;")
                                                 .replace("\r", "");
@@ -439,9 +439,9 @@ public class KeyProviderServlet extends HttpServlet {
                         "<div style=\"text-align:left;color:red;padding-top:10pt\">")
                 .append(errorInfo)
                 .append("</div>");
-        } else if (foundData(request, result, KeyProviderInitServlet.PARAM_TAG)) {
+        } else if (foundData(request, result, KeyProviderInitServlet.KG2_PARAM_TAG)) {
             html.append(result);
-        } else if (foundData(request, result, KeyProviderInitServlet.ABORT_TAG)) {
+        } else if (foundData(request, result, KeyProviderInitServlet.KG2_ABORT_TAG)) {
             logger.info("KeyGen2 run aborted by the user");
             html.append(LocalizedStrings.ABORTED_BY_USER_HEADER + "</div>");
         } else {

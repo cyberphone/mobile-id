@@ -45,8 +45,39 @@ public class QRInitServlet extends HttpServlet {
     static Logger logger = Logger.getLogger(QRInitServlet.class.getCanonicalName());
 
     @Override
+    public void doPost (HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        String id = new String(ServletUtil.getData(request), "UTF-8");
+        if (KeyProviderService.logging) {
+            logger.info("QR DISP=" + id);
+        }
+        QRSessions.Synchronizer synchronizer = QRSessions.getSynchronizer(id);
+        if (synchronizer == null) {
+            sendResult(response, QRSessions.QR_RETURN);
+        } else if (synchronizer.perform(QRSessions.COMET_WAIT)) {
+            QRSessions.removeSession(id);
+            sendResult(response, QRSessions.QR_SUCCESS);
+        } else {
+            if (KeyProviderService.logging) {
+                logger.info("QR Continue");
+            }
+            sendResult(response, synchronizer.isInProgress() ? QRSessions.QR_PROGRESS : QRSessions.QR_CONTINUE);
+        }
+    }
+
+    void sendResult(HttpServletResponse response, String result) throws IOException {
+        response.setContentType("text/plain");
+        response.setHeader("Pragma", "No-Cache");
+        response.setDateHeader("EXPIRES", 0);
+        response.getOutputStream().write(result.getBytes("UTF-8"));
+    }
+    
+    @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        StringBuilder html = new StringBuilder("Not yet...");
+        StringBuilder html = new StringBuilder(
+                "<div class=\"header\">QR Activation Mode</div>" +
+                "<div class=\"label\" style=\"padding-top:15pt\">" +
+                "Since enrollment was not initiated from Android, you " +
+                "need a QR code to &quot;boostrap&quot; the enrollment process.</div>");
         HTML.resultPage(response,
                         null,
                         false,html);
