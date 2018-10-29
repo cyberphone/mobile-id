@@ -7,13 +7,12 @@
   </target>
         
   <target name="localize">
-    <condition property="application.path" value="middemo.fr#" else="mobileid.fr#">
+    <condition property="french.app.path" value="middemo.fr#" else="mobileid.fr#">
       <isset property="uidemo"/>
     </condition>
-    <echo message="${application.path}"/>
     <replace file="${app.dir}/build.xml" failOnNoReplacements="true">
       <replacetoken expandProperties="false"><![CDATA[${application.path}egov.war]]></replacetoken>
-      <replacevalue expandProperties="true"><![CDATA[${application.path}egouv.war]]></replacevalue>
+      <replacevalue expandProperties="true"><![CDATA[${french.app.path}egouv.war]]></replacevalue>
     </replace>
   </target>
    

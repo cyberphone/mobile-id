@@ -63,6 +63,8 @@ public class KeyProviderService extends InitPropertyReader implements ServletCon
 
     static final String LOGGING               = "logging";
 
+    static final String TEST_URL              = "test_url";
+
     static JSONDecoderCache keygen2JSONCache;
     
     static X509Certificate tlsCertificate;
@@ -70,6 +72,8 @@ public class KeyProviderService extends InitPropertyReader implements ServletCon
     static String[] grantedVersions;
 
     static boolean logging;
+    
+    static String testUrl;
 
     static LinkedHashMap<String,IssuerHolder> issuers = new LinkedHashMap<String,IssuerHolder>();
     
@@ -157,6 +161,11 @@ public class KeyProviderService extends InitPropertyReader implements ServletCon
             // Get TLS server certificate
             ////////////////////////////////////////////////////////////////////////////////////////////
             tlsCertificate = CertificateUtil.getCertificateFromBlob(ArrayUtil.readFile(getPropertyString(TLS_CERTIFICATE)));
+
+            ////////////////////////////////////////////////////////////////////////////////////////////
+            // Last page shows where you can use/test your Mobile ID
+            ////////////////////////////////////////////////////////////////////////////////////////////
+            testUrl = getPropertyString(TEST_URL);
 
             ////////////////////////////////////////////////////////////////////////////////////////////
             // Are we logging?

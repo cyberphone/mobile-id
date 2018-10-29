@@ -40,6 +40,12 @@
         <param-value>@logging@</param-value>
     </context-param>
 
+    <context-param>
+        <description>Test URL</description>
+        <param-name>test_url</param-name>
+        <param-value>@test-url@</param-value>
+    </context-param>
+
     <listener>
         <listener-class>org.webpki.mobileid.keyprovider.KeyProviderService</listener-class>
     </listener>

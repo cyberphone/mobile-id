@@ -60,5 +60,7 @@ public interface LocalizedStrings {
 	String ABORTED_BY_USER_HEADER     = "Aborted by the User";
 
 	String SESSION_TIMED_OUT_HEADER   = "Session Timed Out";
+
+	String TEST_URL_HERE              = "You may now try it out at";
  }
 

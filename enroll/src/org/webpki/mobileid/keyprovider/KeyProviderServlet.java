@@ -357,11 +357,18 @@ public class KeyProviderServlet extends HttpServlet {
 
     // Showing off?
     StringBuilder successPage(HttpSession session) {
+        String testUrl = KeyProviderService.testUrl.contains("/") ?  KeyProviderService.testUrl
+        	: KeyProviderInitServlet
+                 .keygen2EnrollmentUrl
+                     .substring(0,
+            	                KeyProviderInitServlet
+            		                .keygen2EnrollmentUrl
+            		                    .lastIndexOf('/')) + "/" + KeyProviderService.testUrl; 
         StringBuilder html = new StringBuilder(
             "<div class=\"label\" style=\"text-align:left\">" +
             LocalizedStrings.RESULT_MESSAGE_HEADER +
             "</div>" +
-            "<svg id=\"cardimage\" style=\"width:100pt;padding-top:15pt\" " +
+            "<svg id=\"cardimage\" style=\"width:100pt;padding:15pt 0\" " +
             "viewBox=\"0 0 318 190\" xmlns=\"http://www.w3.org/2000/svg\">\n" +
             "<defs>\n" +
             " <clipPath id=\"cardClip\">\n" +
@@ -392,15 +399,22 @@ public class KeyProviderServlet extends HttpServlet {
                     .cardImage;
         html.append(rawCardImage.substring(rawCardImage.indexOf('>')))
             .append(
-            "<rect x=\"10\" y=\"2\" " +
-            "width=\"298\" height=\"178\" " +
-            "rx=\"14.7\" ry=\"14.7\" " +
-            "fill=\"none\" " +
-            "stroke=\"url(#innerCardBorder)\" stroke-width=\"2.7\"/>\n" +
-            "<rect x=\"8.5\" y=\"0.5\" " +
-            "width=\"301\" height=\"181\" " +
-            "rx=\"16\" ry=\"16\" fill=\"none\" stroke=\"url(#outerCardBorder)\"/>\n" +
-            "</svg>\n");
+		        "<rect x=\"10\" y=\"2\" " +
+		        "width=\"298\" height=\"178\" " +
+		        "rx=\"14.7\" ry=\"14.7\" " +
+		        "fill=\"none\" " +
+		        "stroke=\"url(#innerCardBorder)\" stroke-width=\"2.7\"/>\n" +
+		        "<rect x=\"8.5\" y=\"0.5\" " +
+		        "width=\"301\" height=\"181\" " +
+		        "rx=\"16\" ry=\"16\" fill=\"none\" stroke=\"url(#outerCardBorder)\"/>\n" +
+		        "</svg>\n" +
+		        "<div class=\"label\">" +
+		        LocalizedStrings.TEST_URL_HERE +
+		        ": <a href=\"")
+            .append(testUrl)
+            .append("\">")
+            .append(testUrl)
+            .append("</a></div>");
         return html;
     }
     

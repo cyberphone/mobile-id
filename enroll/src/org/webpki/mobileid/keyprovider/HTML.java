@@ -30,8 +30,6 @@ import org.webpki.localized.LocalizedStrings;
 
 public class HTML {
 
-    private static final long serialVersionUID = 1L;
-
     static Logger logger = Logger.getLogger(HTML.class.getCanonicalName());
 
     static final String STICK_TO_HOME_URL            =
