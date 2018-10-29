@@ -51,6 +51,11 @@
     </listener>
 
     <servlet>
+        <servlet-name>QRInitServlet</servlet-name>
+        <servlet-class>org.webpki.mobileid.keyprovider.QRInitServlet</servlet-class>
+    </servlet>
+
+    <servlet>
         <servlet-name>KeyProviderServlet</servlet-name>
         <servlet-class>org.webpki.mobileid.keyprovider.KeyProviderServlet</servlet-class>
     </servlet>
@@ -59,6 +64,11 @@
         <servlet-name>KeyProviderInitServlet</servlet-name>
         <servlet-class>org.webpki.mobileid.keyprovider.KeyProviderInitServlet</servlet-class>
     </servlet>
+
+    <servlet-mapping>
+        <servlet-name>QRInitServlet</servlet-name>
+        <url-pattern>/qrinit</url-pattern>
+    </servlet-mapping>
 
     <servlet-mapping>
         <servlet-name>KeyProviderServlet</servlet-name>

@@ -66,12 +66,16 @@ public class KeyProviderInitServlet extends HttpServlet {
 
     static final String RA_NAME_PARAM                   = "name.mid";  // No general auto complete please
     static final String RA_ISSUER_PARAM                 = "issuer";
+    static final String DESKTOP_MODE                    = "desktop";
+
     
     static final int    ID_STRING_LENGTH                = 12;    // Fictitious identity universe
     static final String ID_STRING_NAME                  = "ID";  // Card label of ID is "ID"
 
     static final String DISMISSED_FOOTER                = "dismiss";
     static final int    DISMISS_TIME                    = 60 * 60 * 8; // 8 hours
+    
+    static final int    MINIMUM_CHROME_VERSION          = 67;
 
     private static final String WEB_LINK =
             "<a href=\"" +
@@ -165,6 +169,12 @@ public class KeyProviderInitServlet extends HttpServlet {
         serverState.setServiceSpecificObject(SERVER_STATE_USER, userData);
         session.setAttribute(KEYGEN2_SESSION_ATTR, serverState);
 
+        // Now to big question, are we on a [suitable] mobile phone or on a desktop?
+        if (new Boolean(getParameter(request, DESKTOP_MODE))) {
+            response.sendRedirect("qrinit");
+            return;
+        }
+        
         ////////////////////////////////////////////////////////////////////////////////////////////
         // The following is the actual contract between an issuing server and a KeyGen2 client.
         // The "cookie" element is optional while the HTTP GET "url" argument is mandatory.
@@ -183,9 +193,61 @@ public class KeyProviderInitServlet extends HttpServlet {
                               "#Intent;scheme=webpkiproxy;" +
                               "package=org.webpki.mobile.android;end");
     }
+    
+    void incompatibleBrowser(HttpServletResponse response, String reason) throws IOException, ServletException {
+        StringBuilder html = new StringBuilder(
+                "<div class=\"header\">" +
+                "Incompatible Browser" +
+                "</div>" +
+                "<div class=\"label\" style=\"padding-top:20pt\">")
+            .append(reason)
+            .append("</div>");
+        HTML.resultPage(response, null, false, html);
+    }
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+
+        // We always start from zero
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            session.invalidate();
+        }
+        
+        // Investigate which browser/platform we are using
+        boolean desktopMode = true;
+        String userAgent = request.getHeader("User-Agent");
+        if (userAgent.contains("Android ")) {
+            int i = userAgent.indexOf(" Chrome/");
+            if (i > 0) {
+                String chromeVersion = userAgent.substring(i + 8, userAgent.indexOf('.', i));
+                logger.info(chromeVersion);
+                if (Integer.parseInt(chromeVersion) < MINIMUM_CHROME_VERSION) {
+                    incompatibleBrowser(response,
+                                        "Found Chrome version=" +  chromeVersion +
+                                        ", min version=" + MINIMUM_CHROME_VERSION);
+                    return;
+                }
+            } else {
+                HTML.output(response,
+                    "<!DOCTYPE html><html><head>" +
+                    "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">" +
+                    "<title>Unsupported Browser</title>" +
+                    "</head><body>" +
+                    "&quot;Chrome&quot; is currently the only supported browser on Android" +
+                    "</body></html>");
+                return;
+            }
+            desktopMode = false;
+        } else if (userAgent.contains(" Mobile/") &&
+                   userAgent.contains(" Safari/") &&
+                   userAgent.contains(" iPhone")) {
+            incompatibleBrowser(response,
+                    "iPhone is currently not supported");
+            return;
+        }
+
+        // Check if we need showing the footer
         boolean footerDismissed = false;
         Cookie[] cookies = request.getCookies();
         if (cookies != null) for (Cookie cookie : cookies) {
@@ -193,13 +255,14 @@ public class KeyProviderInitServlet extends HttpServlet {
                 footerDismissed = true;
             }
         }
-        // We always start from zero
-        HttpSession session = request.getSession(false);
-        if (session != null) {
-            session.invalidate();
-        }
+
+        // Create the actual HTML
         StringBuilder html = new StringBuilder(
             "<form name=\"shoot\" method=\"POST\" action=\"home\">" +
+            "<input type=\"hidden\" name=\"" + DESKTOP_MODE + "\" value=\"")
+        .append(desktopMode)
+        .append(
+            "\">" +
             "<div class=\"header\">" + LocalizedStrings.ENROLLMENT_HEADER + "</div>" +
             "<div style=\"padding:20pt 0 10pt 0;display:flex;justify-content:center;align-items:center\">" +
                 "<div class=\"label\">" + LocalizedStrings.YOUR_NAME + ":&nbsp;</div>" +
