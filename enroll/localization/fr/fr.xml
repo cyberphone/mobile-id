@@ -2,7 +2,7 @@
 
   <!-- set french specialtes  -->
   <property name="french.app.path" value="mobileid.fr#"/>
-	
+    
   <target name="help">
       <echo message="help localize"/>
   </target>

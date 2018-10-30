@@ -32,7 +32,7 @@
     <fail message="localized data not found in &quot;${localization.dir}&quot;!" unless="foundlocalizeddata"/>
     <property name="localized.egov-app.dir" location="../${app-sub-dir}.${locale}"/>
     <delete dir="${localized.egov-app.dir}"/>
-    <fixcrlf srcdir="."
+    <fixcrlf srcdir="${app.dir}"
        tab="remove"
        tablength="4"
        eol="lf"

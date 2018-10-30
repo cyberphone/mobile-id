@@ -18,12 +18,10 @@
 package org.webpki.mobileid.keyprovider;
 
 import java.io.IOException;
-
 import java.util.logging.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
-
 import javax.servlet.http.HttpServletResponse;
 
 import org.webpki.localized.LocalizedStrings;
@@ -135,4 +133,21 @@ public class HTML {
                                  toasterSupport,
                                  stringBuilder.toString()));
     }
+
+    static String javaScript(String string) {
+        StringBuilder s = new StringBuilder();
+        for (char c : string.toCharArray()) {
+            if (c == '\n') {
+                s.append("\\n");
+            } else if (c == '\'') {
+                s.append("\\'");
+            } else if (c == '\\') {
+                s.append("\\\\");
+            } else {
+                s.append(c);
+            }
+        }
+        return s.toString();
+    }
+
 }

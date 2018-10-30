@@ -67,57 +67,23 @@ public class KeyProviderInitServlet extends HttpServlet {
     static final String USER_NAME_PARAM                 = "name.mid";  // No general auto complete please
     static final String ISSUER_NAME_PARAM               = "issuer";
     static final String DESKTOP_MODE_PARAM              = "desktop";
-
+    static final String TARGET_PLATFORM_PARAM           = "target";
     
-    static final int    ID_STRING_LENGTH                = 12;    // Fictitious identity universe
-    static final String ID_STRING_NAME                  = "ID";  // Card label of ID is "ID"
-
     static final String DISMISSED_FOOTER                = "dismiss";
     static final int    DISMISS_TIME                    = 60 * 60 * 8; // 8 hours
     
     static final int    MINIMUM_CHROME_VERSION          = 67;
 
-    private static final String WEB_LINK =
+    static final String WEB_LINK =
             "<a href=\"" +
             LocalizedStrings.URL_TO_DESCRIPTION + 
             "\" target=\"_blank\">Mobile&nbsp;ID</a>";
-
+    
     static String keygen2EnrollmentUrl;
     
     synchronized void initGlobals(HttpServletRequest request) throws IOException {
         // Get KeyGen2 protocol entry
         keygen2EnrollmentUrl = ServletUtil.getContextURL(request) + "/getkeys";
-    }
-    
-    class UserData {
-
-        String userName;
-        String userId;
-        String cardImage;
-        String issuerName;
-
-        UserData(String userName, String userId, KeyProviderService.IssuerHolder issuer) {
-            this.userName = userName;
-            this.userId = userId;
-            StringBuilder idString = new StringBuilder(ID_STRING_NAME + ":&#x2009;");
-            for (int q = 0; q < ID_STRING_LENGTH; q += 4) {
-                if (q != 0) {
-                    idString.append(' ');
-                }
-                idString.append(userId.substring(q, q + 4));
-            }
-            this.issuerName = issuer.commonName;
-            this.cardImage = issuer.cardImage.replace("@n", userName)
-                                             .replace("@i", idString);
-            if (userName.length() > 26) {
-                cardImage = cardImage.replace("font-size=\"20\"", "font-size=\"14\"");
-            }
-        }
-        
-        @Override
-        public String toString() {
-            return "Name=" + userName + " ID=" + userId + " Issuer=" + issuerName;
-        }
     }
 
     String getParameter(HttpServletRequest request, String name) throws IOException {
@@ -130,6 +96,15 @@ public class KeyProviderInitServlet extends HttpServlet {
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        // Check that we can make it at all
+        TargetPlatforms targetPlatform = TargetPlatforms.valueOf(getParameter(request, TARGET_PLATFORM_PARAM));
+        if (!targetPlatform.supported) {
+            incompatibleBrowser(response,
+                                LocalizedStrings.UNSUPPORTED_PLATFORM
+                                    .replace("@", targetPlatform.name));
+            return;
+        }
+
         // This is where a user's credentials should be verified
         // Note: in the demo we don't verify credentials
         if (keygen2EnrollmentUrl == null) {
@@ -148,12 +123,15 @@ public class KeyProviderInitServlet extends HttpServlet {
         // Since we doesn't have a citizen registry we fake one :-)
         long randomUserId = new SecureRandom().nextLong() & 0x7fffffffffffffffl;
         StringBuilder userId = new StringBuilder();
-        for (int q = 0; q < ID_STRING_LENGTH; q++) {
+        for (int q = 0; q < UserData.ID_STRING_LENGTH; q++) {
             userId.append(randomUserId % 10);
             randomUserId /= 10;
         }
         // We have a user
-        UserData userData = new UserData(userName, userId.toString(), issuer);
+        UserData userData = new UserData(userName, 
+                                         userId.toString(),
+                                         issuer,
+                                         targetPlatform);
         // We have a session to connect the user to
         HttpSession session = request.getSession(true);
         if (KeyProviderService.logging) {
@@ -211,13 +189,13 @@ public class KeyProviderInitServlet extends HttpServlet {
         }
         
         // Investigate which browser/platform we are using
+        TargetPlatforms targetPlatform = TargetPlatforms.ANDROID;
         boolean desktopMode = true;
         String userAgent = request.getHeader("User-Agent");
         if (userAgent.contains("Android ")) {
             int i = userAgent.indexOf(" Chrome/");
             if (i > 0) {
                 String chromeVersion = userAgent.substring(i + 8, userAgent.indexOf('.', i));
-                logger.info(chromeVersion);
                 if (Integer.parseInt(chromeVersion) < MINIMUM_CHROME_VERSION) {
                     incompatibleBrowser(response,
                                         "Found Chrome version=" +  chromeVersion +
@@ -238,8 +216,7 @@ public class KeyProviderInitServlet extends HttpServlet {
         } else if (userAgent.contains(" Mobile/") &&
                    userAgent.contains(" Safari/") &&
                    userAgent.contains(" iPhone")) {
-            incompatibleBrowser(response,
-                    "iPhone is currently not supported");
+            targetPlatform = TargetPlatforms.IPHONE;
             return;
         }
 
@@ -257,6 +234,10 @@ public class KeyProviderInitServlet extends HttpServlet {
             "<form name=\"shoot\" method=\"POST\" action=\"home\">" +
             "<input type=\"hidden\" name=\"" + DESKTOP_MODE_PARAM + "\" value=\"")
         .append(desktopMode)
+        .append(
+            "\">" +
+            "<input type=\"hidden\" name=\"" + TARGET_PLATFORM_PARAM + "\" value=\"")
+        .append(targetPlatform.toString())
         .append(
             "\">" +
             "<div class=\"header\">" + LocalizedStrings.ENROLLMENT_HEADER + "</div>" +

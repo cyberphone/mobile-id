@@ -29,11 +29,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.webpki.keygen2.ServerState;
-
 import org.webpki.localized.LocalizedStrings;
-
 import org.webpki.util.Base64URL;
-
 import org.webpki.webutil.ServletUtil;
 
 // This is the "Desktop" initialization servlet using QR code
@@ -73,13 +70,38 @@ public class QRInitServlet extends HttpServlet {
     
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        HttpSession session = request.getSession();
+        StringBuilder supportedTargets = new StringBuilder();
+        boolean next = false;
+        for (TargetPlatforms targetPlatform : TargetPlatforms.values()) {
+            if (targetPlatform.supported) {
+                if (next) {
+                    supportedTargets.append('/');
+                }
+                next = true;
+                supportedTargets.append(targetPlatform.name);
+            }
+        }
         StringBuilder html = new StringBuilder(
-                "<div class=\"header\">QR Activation Mode</div>" +
-                "<div class=\"label\" style=\"padding-top:15pt\">" +
-                "Since enrollment was not initiated from Android, you " +
-                "need a QR code to &quot;boostrap&quot; the enrollment process.</div>");
+                "<div class=\"header\">" +
+                LocalizedStrings.QR_ACTIVATION_HEADER +
+                "</div>" +
+                "<div class=\"label\" style=\"padding:15pt 0;text-align:left\">")
+            .append(LocalizedStrings.QR_BOOTSTRAP.replace("@", supportedTargets.toString()))
+            .append(
+                "</div>" +
+                "<div class=\"label\" style=\"padding:0\">" +
+                LocalizedStrings.QR_START_APPLICATION
+                    .replace("@",
+                             "<img src=\"images/qr_launcher.png\" onclick=\"toast('" +
+                               HTML.javaScript(LocalizedStrings.QR_APP_LOCATING
+                                                   .replace("@",
+                                                            "&quot;WebPKI&nbsp;Suite&quot;")) +
+                              "', this)\" " +
+                              "style=\"border-width:1px;border-style:solid;border-color:blue;cursor:pointer\">") +
+                "</div>");
         HTML.resultPage(response,
                         null,
-                        false,html);
+                        true,html);
     }
 }

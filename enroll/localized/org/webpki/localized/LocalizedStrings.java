@@ -49,18 +49,31 @@ public interface LocalizedStrings {
     // Limitations
     String ANDROID_ONLY               = "This demo currently only supports Android";
 
-	String RESULT_MESSAGE_HEADER      = "Your new digital identity is now securely " +
-	                                    "stored in your Android device!";
+    String RESULT_MESSAGE_HEADER      = "Your new digital identity is now securely " +
+                                        "stored in your Android device!";
 
-	// The note on the initial page can be closed
-	String CLOSE_VIEW                 = "Click to close";
+    // The note on the initial page can be closed
+    String CLOSE_VIEW                 = "Click to close";
 
-	String OPERATION_FAILED_HEADER    = "Operation Failed";
+    String OPERATION_FAILED_HEADER    = "Operation Failed";
 
-	String ABORTED_BY_USER_HEADER     = "Aborted by the User";
+    String ABORTED_BY_USER_HEADER     = "Aborted by the User";
 
-	String SESSION_TIMED_OUT_HEADER   = "Session Timed Out";
+    String SESSION_TIMED_OUT_HEADER   = "Session Timed Out";
 
-	String TEST_URL_HERE              = "You may now try it out at";
+    String TEST_URL_HERE              = "You may now try it out at";
+
+    String QR_ACTIVATION_HEADER       = "QR Activation Mode";
+
+    String QR_BOOTSTRAP               = "Since enrollment was not initiated from an @ " +
+                                        "device you need a QR code to &quot;boostrap&quot; " +
+                                        "the enrollment process.";
+
+    String QR_START_APPLICATION       = "Use the @ application to start!";
+    
+    String QR_APP_LOCATING            = "You get it automatically when you " +
+                                        "install the @, just look for the icon!";
+
+    String UNSUPPORTED_PLATFORM       = "@ is currently not supported";
  }
 

@@ -247,8 +247,8 @@ public class KeyProviderServlet extends HttpServlet {
                   ServerState.Key key = keygen2State.getKeys()[0];
 
                   // Certification of the key starts here
-                  KeyProviderInitServlet.UserData userData = 
-                          (KeyProviderInitServlet.UserData) keygen2State.getServiceSpecificObject(KeyProviderInitServlet.SERVER_STATE_USER);
+                  UserData userData = 
+                          (UserData) keygen2State.getServiceSpecificObject(KeyProviderInitServlet.SERVER_STATE_USER);
                   CertSpec certSpec = new CertSpec();
                   certSpec.setSubject("cn=" + cleanedUpName(userData.userName) +
                                       ", serialNumber=" + userData.userId);
@@ -393,7 +393,7 @@ public class KeyProviderServlet extends HttpServlet {
             "<rect filter=\"url(#dropShaddow)\" rx=\"16\" ry=\"16\" " +
               "height=\"182\" width=\"302\" y=\"4\" x=\"12\" fill=\"#c0c0c0\"/>\n" +
             "<svg x=\"9\" y=\"1\" clip-path=\"url(#cardClip)\"");
-        String rawCardImage = ((KeyProviderInitServlet.UserData)((ServerState)session
+        String rawCardImage = ((UserData)((ServerState)session
             .getAttribute(KeyProviderInitServlet.KG2_SESSION_ATTR))
                 .getServiceSpecificObject(KeyProviderInitServlet.SERVER_STATE_USER))
                     .cardImage;

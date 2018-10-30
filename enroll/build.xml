@@ -42,7 +42,7 @@
            target="${javaversion}"
            srcdir="${src.dir}:${localized.dir}"
            destdir="${temp.dir}"
-    	   encoding="UTF-8"
+           encoding="UTF-8"
            includeAntRuntime="false">
         <classpath>
           <fileset dir="${common.lib.dir}">
