@@ -29,6 +29,7 @@
     <property name="dist.dir" value="dist"/>
     <property name="zip.common.lib.dir" value="${common.lib.dir}"/>
     <property name="zip.bcprovider.lib.dir" value="${bcprovider.lib.dir}"/>
+    <property name="zip.qr.lib.dir" value="${qr.lib.dir}"/>
     <delete dir="${temp.dir}"/>
     <fixcrlf srcdir="${src.dir}"
        tab="remove"
@@ -57,6 +58,9 @@
           <fileset dir="${reference.lib.dir}">
              <include name="*.jar"/>
           </fileset>
+          <fileset dir="${qr.lib.dir}">
+             <include name="*.jar"/>
+          </fileset>
         </classpath>
     </javac>
     <replace file="${temp.dir}/web.xml">
@@ -80,6 +84,9 @@
       </lib>
       <lib dir="${zip.bcprovider.lib.dir}">
          <include name="${bcprovider.jar}"/>
+      </lib>
+      <lib dir="${zip.qr.lib.dir}">
+         <include name="*.jar"/>
       </lib>
       <zipfileset dir="${cakey.dir}" prefix="${class_war_path}">
          <include name="*-sub-ca.p12"/>

@@ -8,5 +8,8 @@
 	<classpathentry kind="lib" path="C:/github.repositories/saturn/resources/common.lib/proxy-support.jar"/>
 	<classpathentry kind="lib" path="C:/github.repositories/saturn/resources/common.lib/webpki.org-libext-1.00.jar"/>
 	<classpathentry kind="lib" path="C:/github.repositories/saturn/resources/common.lib/webpki.org-webutil-1.00.jar"/>
+	<classpathentry kind="lib" path="C:/github.repositories/saturn/merchant/lib/qrgen-1.0.jar"/>
+	<classpathentry kind="lib" path="C:/github.repositories/saturn/merchant/lib/zxing-core-1.7.jar"/>
+	<classpathentry kind="lib" path="C:/github.repositories/saturn/merchant/lib/zxing-j2se-1.7.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

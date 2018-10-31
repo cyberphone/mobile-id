@@ -78,11 +78,13 @@ public class KeyProviderInitServlet extends HttpServlet {
             LocalizedStrings.URL_TO_DESCRIPTION + 
             "\" target=\"_blank\">Mobile&nbsp;ID</a>";
     
+    static String keygen2EnrollmentBase;
     static String keygen2EnrollmentUrl;
     
     synchronized void initGlobals(HttpServletRequest request) throws IOException {
         // Get KeyGen2 protocol entry
-        keygen2EnrollmentUrl = ServletUtil.getContextURL(request) + "/getkeys";
+        keygen2EnrollmentBase = ServletUtil.getContextURL(request);
+        keygen2EnrollmentUrl = keygen2EnrollmentBase + "/getkeys";
     }
 
     String getParameter(HttpServletRequest request, String name) throws IOException {

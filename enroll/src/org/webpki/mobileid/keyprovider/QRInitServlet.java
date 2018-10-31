@@ -19,6 +19,8 @@ package org.webpki.mobileid.keyprovider;
 
 import java.io.IOException;
 
+import java.net.URLEncoder;
+
 import java.util.logging.Logger;
 
 import javax.servlet.ServletException;
@@ -28,16 +30,22 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.webpki.keygen2.ServerState;
 import org.webpki.localized.LocalizedStrings;
-import org.webpki.util.Base64URL;
+
+import org.webpki.util.Base64;
+
 import org.webpki.webutil.ServletUtil;
+
+import net.glxn.qrgen.QRCode;
+import net.glxn.qrgen.image.ImageType;
 
 // This is the "Desktop" initialization servlet using QR code
 
 public class QRInitServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
+
+    static final String QR_SESSION_ID_ATTR     = "qrsess";
 
     static Logger logger = Logger.getLogger(QRInitServlet.class.getCanonicalName());
 
@@ -71,6 +79,18 @@ public class QRInitServlet extends HttpServlet {
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         HttpSession session = request.getSession();
+        if (session == null) {
+            throw new IOException("Missing session");
+        }
+        String id = QRSessions.createSession(session);
+        session.setAttribute(QR_SESSION_ID_ATTR, id);
+        response.setHeader("Cache-Control", "no-cache, max-age=0, must-revalidate, no-store");
+        String url = "webpki.org=" + URLEncoder.encode(KeyProviderInitServlet.keygen2EnrollmentBase +
+                                                       "/androidplugin?" + QRSessions.QR_SESSION_ID  + "=" + id,
+                                                       "UTF-8");
+        logger.info("URL=" + url + " SID=" + session.getId());
+        String qrImage = new Base64(false).getBase64StringFromBinary(QRCode.from(url)
+                .to(ImageType.PNG).withSize(200, 200).stream().toByteArray());
         StringBuilder supportedTargets = new StringBuilder();
         boolean next = false;
         for (TargetPlatforms targetPlatform : TargetPlatforms.getSupportedMobilePlatforms()) {
@@ -95,9 +115,11 @@ public class QRInitServlet extends HttpServlet {
                                HTML.javaScript(LocalizedStrings.QR_APP_LOCATING) +
                               "', this)\" " +
                               "style=\"border-width:1px;border-style:solid;border-color:blue;cursor:pointer\">") +
-                "</div>");
-        HTML.resultPage(response,
-                        null,
-                        true,html);
+                "</div>" +
+                "<img src=\"data:image/png;base64,")
+            .append(qrImage)
+            .append(
+                "\" style=\"cursor:none\" alt=\"image\">");
+        HTML.resultPage(response, null, true, html);
     }
 }

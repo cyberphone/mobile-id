@@ -358,12 +358,7 @@ public class KeyProviderServlet extends HttpServlet {
     // Showing off?
     StringBuilder successPage(HttpSession session) {
         String testUrl = KeyProviderService.testUrl.contains("/") ?  KeyProviderService.testUrl
-            : KeyProviderInitServlet
-                 .keygen2EnrollmentUrl
-                     .substring(0,
-                                KeyProviderInitServlet
-                                    .keygen2EnrollmentUrl
-                                        .lastIndexOf('/')) + "/" + KeyProviderService.testUrl; 
+            : KeyProviderInitServlet.keygen2EnrollmentBase + "/" + KeyProviderService.testUrl; 
         StringBuilder html = new StringBuilder(
             "<div class=\"label\" style=\"text-align:left\">" +
             LocalizedStrings.RESULT_MESSAGE_HEADER +

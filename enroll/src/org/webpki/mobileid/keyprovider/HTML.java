@@ -63,6 +63,7 @@ public class HTML {
             "    if (width > window.innerHeight) width = window.innerHeight;\n" +
             "    cardimage.style.width = (width * 0.8) + 'px';\n" +
             "  }\n" +
+            "  let content = document.getElementById('content');\n" +
             "  if (content) {\n" + 
             "    let top = (window.innerHeight - content.offsetHeight) / 2;\n" +
             "    if (top < 0) top = 0;\n" +
@@ -73,7 +74,10 @@ public class HTML {
             "    content.style.visibility = 'visible';\n" +
             "  }\n" +
             "}\n" +
-            "window.addEventListener('resize', () => { initUi() });\n");
+            "window.addEventListener('resize', () => { initUi() });\n" +
+            "function initApplication() {\n" +
+            "  initUi();\n" +
+            "}\n");
         if (customJavaScript != null) {
             s.append(customJavaScript);
         }
@@ -95,7 +99,7 @@ public class HTML {
                 "}\n");
         }
         s.append(
-            "</script></head><body onload=\"initUi()\">" +
+            "</script></head><body onload=\"initApplication()\">" +
             "<img alt=\"home\" onclick=\"document.location.href='home'\"  " +
             "title=\"" +
             LocalizedStrings.HT_HOME +

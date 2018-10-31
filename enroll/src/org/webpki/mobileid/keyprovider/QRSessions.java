@@ -18,6 +18,8 @@ package org.webpki.mobileid.keyprovider;
 
 import java.io.IOException;
 
+import java.security.SecureRandom;
+
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 
@@ -76,8 +78,6 @@ public class QRSessions {
 
     private static Looper looper;
 
-    private static int sessionId;
-
     static final String QR_RETURN         = "r";
     static final String QR_SUCCESS        = "s";
     static final String QR_CONTINUE       = "c";
@@ -128,7 +128,7 @@ public class QRSessions {
     static synchronized String createSession(HttpSession session) throws IOException {
         SessionInProgress sessionInProgress = new SessionInProgress();
         sessionInProgress.httpSessionId = session.getId();
-        sessionInProgress.id = String.valueOf(++sessionId);
+        sessionInProgress.id = String.valueOf(new SecureRandom().nextInt());
         sessionInProgress.expiryTime = System.currentTimeMillis() + MAX_SESSION;
         sessionInProgress.synchronizer = new Synchronizer();
         currentSessions.put(sessionInProgress.id, sessionInProgress);
