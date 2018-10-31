@@ -73,14 +73,12 @@ public class QRInitServlet extends HttpServlet {
         HttpSession session = request.getSession();
         StringBuilder supportedTargets = new StringBuilder();
         boolean next = false;
-        for (TargetPlatforms targetPlatform : TargetPlatforms.values()) {
-            if (targetPlatform.supported) {
-                if (next) {
-                    supportedTargets.append('/');
-                }
-                next = true;
-                supportedTargets.append(targetPlatform.name);
+        for (TargetPlatforms targetPlatform : TargetPlatforms.getSupportedMobilePlatforms()) {
+            if (next) {
+                supportedTargets.append('/');
             }
+            next = true;
+            supportedTargets.append(targetPlatform.name);
         }
         StringBuilder html = new StringBuilder(
                 "<div class=\"header\">" +
@@ -94,9 +92,7 @@ public class QRInitServlet extends HttpServlet {
                 LocalizedStrings.QR_START_APPLICATION
                     .replace("@",
                              "<img src=\"images/qr_launcher.png\" onclick=\"toast('" +
-                               HTML.javaScript(LocalizedStrings.QR_APP_LOCATING
-                                                   .replace("@",
-                                                            "&quot;WebPKI&nbsp;Suite&quot;")) +
+                               HTML.javaScript(LocalizedStrings.QR_APP_LOCATING) +
                               "', this)\" " +
                               "style=\"border-width:1px;border-style:solid;border-color:blue;cursor:pointer\">") +
                 "</div>");

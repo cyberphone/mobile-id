@@ -61,6 +61,9 @@ public interface LocalizedStrings {
 
     String SESSION_TIMED_OUT_HEADER   = "Session Timed Out";
 
+    String DO_YOU_HAVE_MOBILE_ID      = "If you have not already installed " +
+                                        "Mobile ID, this is the time to do it!";
+
     String TEST_URL_HERE              = "You may now try it out at";
 
     String QR_ACTIVATION_HEADER       = "QR Activation Mode";
@@ -72,8 +75,15 @@ public interface LocalizedStrings {
     String QR_START_APPLICATION       = "Use the @ application to start!";
     
     String QR_APP_LOCATING            = "You get it automatically when you " +
-                                        "install the @, just look for the icon!";
+                                        "install Mobile ID, just look for the icon!";
+
+    String FOUND_CHROME_VERSION       = "Found &quot;Chrome&quot; version";
 
     String UNSUPPORTED_PLATFORM       = "@ is currently not supported";
- }
+
+    String INCOMPATIBILITY_ISSUES     = "Incompatibility Issues";
+
+    String UNSUPPORTED_ANDROID_BROWSER = "&quot;Chrome&quot; is currently the " +
+                                        "only supported browser on Android";
+}
 

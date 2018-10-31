@@ -17,18 +17,39 @@
 
 package org.webpki.mobileid.keyprovider;
 
+import java.util.Vector;
+
 // Known Mobile ID platforms
 
 public enum TargetPlatforms {
 
-    ANDROID ("Android", true),
-    IPHONE  ("iPhone",  false);
+    DESKTOP_MODE (null, true, null, null),
+
+    ANDROID ("Android", true, "google-play-badge.png", 
+             "https://play.google.com/store/apps/details?id=org.webpki.mobile.android"),
+
+    IPAD    ("iPad",    false, null, null),
+    IPHONE  ("iPhone",  false, "iphone-not-ready.png", "https://apple.com");
     
     String name;
     boolean supported;
+    String logotype;
+    String url;
     
-    TargetPlatforms(String name, boolean supported) {
+    TargetPlatforms(String name, boolean supported, String logotype, String url) {
         this.name = name;
         this.supported = supported;
+        this.logotype = logotype;
+        this.url = url;
+    }
+
+    static TargetPlatforms[] getSupportedMobilePlatforms() {
+        Vector<TargetPlatforms> supportedPlatforms = new Vector<TargetPlatforms>();
+        for (TargetPlatforms platform : TargetPlatforms.values()) {
+            if (platform.supported && platform != TargetPlatforms.DESKTOP_MODE) {
+                supportedPlatforms.add(platform);
+            }
+        }
+        return supportedPlatforms.toArray(new TargetPlatforms[0]);
     }
 }

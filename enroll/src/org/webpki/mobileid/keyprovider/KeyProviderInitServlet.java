@@ -66,7 +66,6 @@ public class KeyProviderInitServlet extends HttpServlet {
 
     static final String USER_NAME_PARAM                 = "name.mid";  // No general auto complete please
     static final String ISSUER_NAME_PARAM               = "issuer";
-    static final String DESKTOP_MODE_PARAM              = "desktop";
     static final String TARGET_PLATFORM_PARAM           = "target";
     
     static final String DISMISSED_FOOTER                = "dismiss";
@@ -99,9 +98,9 @@ public class KeyProviderInitServlet extends HttpServlet {
         // Check that we can make it at all
         TargetPlatforms targetPlatform = TargetPlatforms.valueOf(getParameter(request, TARGET_PLATFORM_PARAM));
         if (!targetPlatform.supported) {
-            incompatibleBrowser(response,
-                                LocalizedStrings.UNSUPPORTED_PLATFORM
-                                    .replace("@", targetPlatform.name));
+            incompatibiltyIssues(response,
+                                 LocalizedStrings.UNSUPPORTED_PLATFORM
+                                     .replace("@", targetPlatform.name));
             return;
         }
 
@@ -144,7 +143,7 @@ public class KeyProviderInitServlet extends HttpServlet {
         session.setAttribute(KG2_SESSION_ATTR, serverState);
 
         // Now to big question, are we on a [suitable] mobile phone or on a desktop?
-        if (new Boolean(getParameter(request, DESKTOP_MODE_PARAM))) {
+        if (targetPlatform == TargetPlatforms.DESKTOP_MODE) {
             response.sendRedirect("qrinit");
             return;
         }
@@ -168,11 +167,9 @@ public class KeyProviderInitServlet extends HttpServlet {
                               "package=org.webpki.mobile.android;end");
     }
     
-    void incompatibleBrowser(HttpServletResponse response, String reason) throws IOException, ServletException {
+    void incompatibiltyIssues(HttpServletResponse response, String reason) throws IOException, ServletException {
         StringBuilder html = new StringBuilder(
-                "<div class=\"header\">" +
-                "Incompatible Browser" +
-                "</div>" +
+                "<div class=\"header\">" + LocalizedStrings.INCOMPATIBILITY_ISSUES + "</div>" +
                 "<div class=\"label\" style=\"padding-top:20pt\">")
             .append(reason)
             .append("</div>");
@@ -189,34 +186,33 @@ public class KeyProviderInitServlet extends HttpServlet {
         }
         
         // Investigate which browser/platform we are using
-        TargetPlatforms targetPlatform = TargetPlatforms.ANDROID;
-        boolean desktopMode = true;
+        TargetPlatforms targetPlatform = TargetPlatforms.DESKTOP_MODE;
         String userAgent = request.getHeader("User-Agent");
         if (userAgent.contains("Android ")) {
             int i = userAgent.indexOf(" Chrome/");
             if (i > 0) {
                 String chromeVersion = userAgent.substring(i + 8, userAgent.indexOf('.', i));
                 if (Integer.parseInt(chromeVersion) < MINIMUM_CHROME_VERSION) {
-                    incompatibleBrowser(response,
-                                        "Found Chrome version=" +  chromeVersion +
-                                        ", min version=" + MINIMUM_CHROME_VERSION);
+                    incompatibiltyIssues(response,
+                                         LocalizedStrings.FOUND_CHROME_VERSION +
+                                         ": " +  chromeVersion +
+                                         ", min version: " + MINIMUM_CHROME_VERSION);
                     return;
                 }
             } else {
                 HTML.output(response,
                     "<!DOCTYPE html><html><head>" +
                     "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">" +
-                    "<title>Unsupported Browser</title>" +
+                    "<title>" + LocalizedStrings.INCOMPATIBILITY_ISSUES + "</title>" +
                     "</head><body>" +
-                    "&quot;Chrome&quot; is currently the only supported browser on Android" +
+                    LocalizedStrings.UNSUPPORTED_ANDROID_BROWSER +
                     "</body></html>");
                 return;
             }
-            desktopMode = false;
-        } else if (userAgent.contains(" Mobile/") &&
-                   userAgent.contains(" Safari/") &&
-                   userAgent.contains(" iPhone")) {
-            targetPlatform = TargetPlatforms.IPHONE;
+            targetPlatform = TargetPlatforms.ANDROID;
+        } else if (userAgent.contains(" Mobile/") && userAgent.contains(" Safari/")) {
+            targetPlatform = userAgent.contains(" iPhone") ?
+                                    TargetPlatforms.IPHONE : TargetPlatforms.IPAD;
             return;
         }
 
@@ -232,10 +228,6 @@ public class KeyProviderInitServlet extends HttpServlet {
         // Create the actual HTML
         StringBuilder html = new StringBuilder(
             "<form name=\"shoot\" method=\"POST\" action=\"home\">" +
-            "<input type=\"hidden\" name=\"" + DESKTOP_MODE_PARAM + "\" value=\"")
-        .append(desktopMode)
-        .append(
-            "\">" +
             "<input type=\"hidden\" name=\"" + TARGET_PLATFORM_PARAM + "\" value=\"")
         .append(targetPlatform.toString())
         .append(
@@ -266,20 +258,41 @@ public class KeyProviderInitServlet extends HttpServlet {
             }
         html.append(
                 "</div>" +
-            "</div>" +
-            "<div id=\"command\" class=\"stdbtn\" onclick=\"enroll()\">" +
-            LocalizedStrings.START_ENROLLMENT +
-            "</div></form>");
+                "</div>" +
+                "<div id=\"command\" class=\"stdbtn\" onclick=\"enroll()\">" +
+                LocalizedStrings.START_ENROLLMENT +
+                "</div></form>");
+        if (targetPlatform == TargetPlatforms.DESKTOP_MODE) {
+            html.append(
+                    "<div class=\"label\" style=\"padding-top:40pt;padding-bottom:10pt\">" +
+                    LocalizedStrings.DO_YOU_HAVE_MOBILE_ID +
+                    "</div>" +
+                    "<div style=\"cursor:pointer;display:flex;justify-content:center;align-items:center\">");
+            for (TargetPlatforms platform : TargetPlatforms.getSupportedMobilePlatforms()) {
+                html.append(
+                        "<img src=\"images/")
+                    .append(platform.logotype)
+                    .append(
+                        "\" style=\"height:25pt;padding:0 15pt\" alt=\"image\" title=\"")
+                    .append(platform.name)
+                    .append("\" onclick=\"document.location.href = '")
+                    .append(platform.url)
+                    .append(
+                        "'\">");
+            }
+            html.append("</div>");
+        }
         String javaScript;
         if (footerDismissed) {
             javaScript = "";
         } else {
-            html.append("</div>" +
-                        "<div id=\"sitefooter\" class=\"sitefooter\">" +
-                        "<img src=\"images/x.svg\" class=\"xicon\" alt=\"x\" title=\"" +
-                        LocalizedStrings.CLOSE_VIEW +
-                        "\" onclick=\"closeDescription()\">" +
-                        "<div style=\"padding:0.3em 1em 0.3em 0\">")
+            html.append(
+                    "</div>" +
+                    "<div id=\"sitefooter\" class=\"sitefooter\">" +
+                    "<img src=\"images/x.svg\" class=\"xicon\" alt=\"x\" title=\"" +
+                    LocalizedStrings.CLOSE_VIEW +
+                    "\" onclick=\"closeDescription()\">" +
+                    "<div style=\"padding:0.3em 1em 0.3em 0\">")
                 .append(LocalizedStrings.DEMO_TEXT
                    .replace("@", WEB_LINK))
                 .append("</div>");
