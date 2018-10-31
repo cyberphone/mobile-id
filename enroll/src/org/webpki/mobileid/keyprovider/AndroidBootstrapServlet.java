@@ -42,6 +42,8 @@ public class AndroidBootstrapServlet extends HttpServlet {
     static final String ANDROID_WEBPKI_VERSION_TAG      = "VER";
     static final String ANDROID_WEBPKI_VERSION_MACRO    = "$VER$";  // KeyGen2 Android PoC
     
+    static final String TOMCAT_SESSION_COOKIE           = "JSESSIONID";
+    
     static String createIntent(HttpSession session) throws IOException {
         ////////////////////////////////////////////////////////////////////////////////////////////
         // The following is the actual contract between an issuing server and a KeyGen2 client.
@@ -51,7 +53,8 @@ public class AndroidBootstrapServlet extends HttpServlet {
         // The "init" element on the bootstrap URL is a local Mobile ID RA convention.
         // The purpose of the random element is suppressing caching of bootstrap data.
         ////////////////////////////////////////////////////////////////////////////////////////////
-        return new StringBuilder("intent://keygen2?cookie=JSESSIONID%3D")
+        return new StringBuilder(
+                "intent://keygen2?cookie=" + TOMCAT_SESSION_COOKIE + "%3D")
             .append(session.getId())
             .append("&url=")
             .append(
@@ -73,7 +76,7 @@ public class AndroidBootstrapServlet extends HttpServlet {
         if (session == null) {
             throw new IOException("QR Session timeout");
         }
-        response.addCookie(new Cookie("JSESSIONID", session.getId()));
+        response.addCookie(new Cookie(TOMCAT_SESSION_COOKIE, session.getId()));
         HTML.output(response,
                 "<!DOCTYPE html><html><head>" +
                 "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">" +
