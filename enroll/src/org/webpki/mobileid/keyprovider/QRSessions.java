@@ -32,7 +32,7 @@ public class QRSessions {
     static class SessionInProgress {
         long expiryTime;
         String id;
-        String httpSessionId;
+        HttpSession session;
         Synchronizer synchronizer;
     }
     
@@ -127,7 +127,7 @@ public class QRSessions {
 
     static synchronized String createSession(HttpSession session) throws IOException {
         SessionInProgress sessionInProgress = new SessionInProgress();
-        sessionInProgress.httpSessionId = session.getId();
+        sessionInProgress.session = session;
         sessionInProgress.id = String.valueOf(new SecureRandom().nextInt());
         sessionInProgress.expiryTime = System.currentTimeMillis() + MAX_SESSION;
         sessionInProgress.synchronizer = new Synchronizer();
@@ -154,12 +154,12 @@ public class QRSessions {
         return session.synchronizer;
     }
 
-    static String getHttpSessionId(String id) {
+    static HttpSession getHttpSession(String id) {
         SessionInProgress session = currentSessions.get(id);
         if (session == null) {
             return null;
         }
-        return session.httpSessionId;
+        return session.session;
     }
 
     static void optionalSessionSetReady(String id) {

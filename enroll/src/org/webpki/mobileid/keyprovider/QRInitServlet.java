@@ -84,9 +84,8 @@ public class QRInitServlet extends HttpServlet {
         }
         String id = QRSessions.createSession(session);
         session.setAttribute(QR_SESSION_ID_ATTR, id);
-        response.setHeader("Cache-Control", "no-cache, max-age=0, must-revalidate, no-store");
         String url = "webpki.org=" + URLEncoder.encode(KeyProviderInitServlet.keygen2EnrollmentBase +
-                                                       "/androidplugin?" + QRSessions.QR_SESSION_ID  + "=" + id,
+                                                       "/androidbootstrap?" + QRSessions.QR_SESSION_ID  + "=" + id,
                                                        "UTF-8");
         logger.info("URL=" + url + " SID=" + session.getId());
         String qrImage = new Base64(false).getBase64StringFromBinary(QRCode.from(url)

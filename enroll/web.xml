@@ -51,6 +51,11 @@
     </listener>
 
     <servlet>
+        <servlet-name>AndroidBootstrapServlet</servlet-name>
+        <servlet-class>org.webpki.mobileid.keyprovider.AndroidBootstrapServlet</servlet-class>
+    </servlet>
+
+    <servlet>
         <servlet-name>QRInitServlet</servlet-name>
         <servlet-class>org.webpki.mobileid.keyprovider.QRInitServlet</servlet-class>
     </servlet>
@@ -66,10 +71,14 @@
     </servlet>
 
     <servlet-mapping>
+        <servlet-name>AndroidBootstrapServlet</servlet-name>
+        <url-pattern>/androidbootstrap</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
         <servlet-name>QRInitServlet</servlet-name>
         <url-pattern>/qrinit</url-pattern>
     </servlet-mapping>
-
     <servlet-mapping>
         <servlet-name>KeyProviderServlet</servlet-name>
         <url-pattern>/getkeys</url-pattern>

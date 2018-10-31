@@ -85,5 +85,8 @@ public interface LocalizedStrings {
 
     String UNSUPPORTED_ANDROID_BROWSER = "&quot;Chrome&quot; is currently the " +
                                         "only supported browser on Android";
+
+    String WRONG_APP_VERSION           = "Incorrect version of the Mobile ID app, " +
+                                         "you need to update";
 }
 

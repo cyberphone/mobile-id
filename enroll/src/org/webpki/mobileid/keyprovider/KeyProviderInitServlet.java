@@ -23,8 +23,6 @@ import java.security.SecureRandom;
 
 import java.util.logging.Logger;
 
-import java.net.URLEncoder;
-
 import javax.servlet.ServletException;
 
 import javax.servlet.http.Cookie;
@@ -37,8 +35,6 @@ import org.webpki.keygen2.ServerState;
 
 import org.webpki.localized.LocalizedStrings;
 
-import org.webpki.util.Base64URL;
-
 import org.webpki.webutil.ServletUtil;
 
 // This is the Home/Initialization servlet
@@ -49,9 +45,6 @@ public class KeyProviderInitServlet extends HttpServlet {
 
     static Logger logger = Logger.getLogger(KeyProviderInitServlet.class.getCanonicalName());
 
-    static final String ANDROID_WEBPKI_VERSION_TAG      = "VER";
-    static final String ANDROID_WEBPKI_VERSION_MACRO    = "$VER$";  // KeyGen2 Android PoC
-    
     static final String KG2_SESSION_ATTR                = "keygen2";
     
     static final String SERVER_STATE_ISSUER             = "issuer";
@@ -87,7 +80,7 @@ public class KeyProviderInitServlet extends HttpServlet {
         keygen2EnrollmentUrl = keygen2EnrollmentBase + "/getkeys";
     }
 
-    String getParameter(HttpServletRequest request, String name) throws IOException {
+    static String getParameter(HttpServletRequest request, String name) throws IOException {
         String value = request.getParameter(name);
         if (value == null) {
             throw new IOException ("Missing parameter: " + name);
@@ -150,25 +143,11 @@ public class KeyProviderInitServlet extends HttpServlet {
             return;
         }
         
-        ////////////////////////////////////////////////////////////////////////////////////////////
-        // The following is the actual contract between an issuing server and a KeyGen2 client.
-        // The "cookie" element is optional while the HTTP GET "url" argument is mandatory.
-        // The "url" argument bootstraps the protocol.
-        //
-        // The "init" element on the bootstrap URL is a local Mobile RA convention.
-        // The purpose of the random element is suppressing caching of bootstrap data.
-        ////////////////////////////////////////////////////////////////////////////////////////////
-
-        String extra = "cookie=JSESSIONID%3D" +
-                     session.getId() +
-                     "&url=" + URLEncoder.encode(keygen2EnrollmentUrl + "?" +
-                     KG2_INIT_TAG + "=" + Base64URL.generateURLFriendlyRandom(8) +
-                     (KeyProviderService.grantedVersions == null ? "" : "&" + ANDROID_WEBPKI_VERSION_TAG + "=" + ANDROID_WEBPKI_VERSION_MACRO), "UTF-8");
-        response.sendRedirect("intent://keygen2?" + extra +
-                              "#Intent;scheme=webpkiproxy;" +
-                              "package=org.webpki.mobile.android;end");
+        // iOS code is not yet in place...
+        response.sendRedirect(AndroidBootstrapServlet.createIntent(session));
     }
     
+   
     void incompatibiltyIssues(HttpServletResponse response, String reason) throws IOException, ServletException {
         StringBuilder html = new StringBuilder(
                 "<div class=\"header\">" + LocalizedStrings.INCOMPATIBILITY_ISSUES + "</div>" +

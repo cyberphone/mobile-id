@@ -172,7 +172,7 @@ public class KeyProviderServlet extends HttpServlet {
                       }
                 }
                 if (!found) {
-                    returnKeyGen2Error(response, "Wrong version of the WebPKI app, you need to update");
+                    returnKeyGen2Error(response, LocalizedStrings.WRONG_APP_VERSION);
                     return;
                 }
                 InvocationRequestEncoder invocationRequest =
@@ -419,7 +419,7 @@ public class KeyProviderServlet extends HttpServlet {
         if (request.getParameter(KeyProviderInitServlet.KG2_INIT_TAG) != null) {
             executeRequest(request,
                            response,
-                           request.getParameter(KeyProviderInitServlet.ANDROID_WEBPKI_VERSION_TAG),
+                           request.getParameter(AndroidBootstrapServlet.ANDROID_WEBPKI_VERSION_TAG),
                            true);
             return;
         }
