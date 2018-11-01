@@ -81,6 +81,8 @@ public interface LocalizedStrings {
 
     String QR_SUCCESS_HEADER          = "Mobile ID Enrollment Succeeded";
 
+    String QR_SESSION_STATUS          = "Session Status";
+
     String FOUND_CHROME_VERSION       = "Found &quot;Chrome&quot; version";
 
     String UNSUPPORTED_PLATFORM       = "@ is currently not supported";
@@ -90,7 +92,7 @@ public interface LocalizedStrings {
     String UNSUPPORTED_ANDROID_BROWSER = "&quot;Chrome&quot; is currently the " +
                                         "only supported browser on Android";
 
-    String WRONG_APP_VERSION           = "Incorrect version of the Mobile ID app, " +
-                                         "you need to update";
+    String WRONG_APP_VERSION          = "Incorrect version of the Mobile ID app, " +
+                                        "you need to update";
 }
 

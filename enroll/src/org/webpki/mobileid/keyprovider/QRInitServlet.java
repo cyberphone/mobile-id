@@ -102,13 +102,13 @@ public class QRInitServlet extends HttpServlet {
             supportedTargets.append(targetPlatform.name);
         }
         StringBuilder html = new StringBuilder(
-                "<div class=\"header\">" +
+                "<div class=\"header\" style=\"padding-bottom:15pt\">" +
                 LocalizedStrings.QR_ACTIVATION_HEADER +
-                "</div>" +
-                "<div class=\"label\" style=\"padding:15pt 0;text-align:left\">")
+                "</div><div id=\"qr\">" +
+                "<div class=\"label\" style=\"padding-bottom:15pt;text-align:left\">")
             .append(LocalizedStrings.QR_BOOTSTRAP.replace("@", supportedTargets.toString()))
             .append(
-                "</div><div id=\"qr\">" +
+                "</div>" +
                 "<div class=\"label\">" +
                 LocalizedStrings.QR_START_APPLICATION
                     .replace("@",
@@ -123,7 +123,8 @@ public class QRInitServlet extends HttpServlet {
             .append(
                 "\" style=\"cursor:none\" alt=\"image\"></div>" +
                 "<div style=\"display:flex;justify-content:center;align-items:center\">" +
-                  "<div class=\"label\">Session Status:&nbsp;</div>" +
+                  "<div class=\"label\">" +
+                  LocalizedStrings.QR_SESSION_STATUS + ":&nbsp;</div>" +
                   "<div style=\"width:100px;background-color:#f2646b;" +
                               "border-width:1px;border-style:solid;" +
                               "border-color:grey\">" +
