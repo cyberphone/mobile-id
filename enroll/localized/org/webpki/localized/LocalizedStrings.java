@@ -77,6 +77,10 @@ public interface LocalizedStrings {
     String QR_APP_LOCATING            = "You get it automatically when you " +
                                         "install Mobile ID, just look for the icon!";
 
+    String QR_WAITING_FOR_MOB_DEVICE  = "Now waiting on your interactions with the mobile device...";
+
+    String QR_SUCCESS_HEADER          = "Mobile ID Enrollment Succeeded";
+
     String FOUND_CHROME_VERSION       = "Found &quot;Chrome&quot; version";
 
     String UNSUPPORTED_PLATFORM       = "@ is currently not supported";

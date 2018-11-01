@@ -124,10 +124,10 @@ public class QRInitServlet extends HttpServlet {
                 "\" style=\"cursor:none\" alt=\"image\"></div>" +
                 "<div style=\"display:flex;justify-content:center;align-items:center\">" +
                   "<div class=\"label\">Session Status:&nbsp;</div>" +
-                  "<div style=\"width:100px;background-color:crimson;" +
+                  "<div style=\"width:100px;background-color:#f2646b;" +
                               "border-width:1px;border-style:solid;" +
                               "border-color:grey\">" +
-                    "<div id=\"life\" style=\"width:100%;height:15pt;background-color:lightgreen\"></div>" +
+                    "<div id=\"life\" style=\"width:100%;height:15pt;background-color:#adf0a6\"></div>" +
                  "</div>" +
                 "</div>");
         HTML.resultPage(response, 
@@ -147,13 +147,19 @@ public class QRInitServlet extends HttpServlet {
             "        document.location.href = 'home';\n" +
             "        break;\n" +
             "      case '" + QRSessions.QR_PROGRESS + "':\n" +
-            "        document.getElementById('qr').outerHTML = '<div class=\"label\" style=\"padding-bottom:15pt\">Working...</div>';\n" +
+            "        document.getElementById('qr').outerHTML = " +
+            "'<div class=\"label\" style=\"padding-bottom:15pt\">" +
+            HTML.javaScript(LocalizedStrings.QR_WAITING_FOR_MOB_DEVICE) + 
+            "</div>';\n" +
             "        initUi();\n" +
             "      case '" + QRSessions.QR_CONTINUE + "':\n" +
             "        startComet();\n" +
             "        break;\n" +
             "      default:\n" +
-            "        document.getElementById('content').innerHTML = 'done';\n" +
+            "        document.getElementById('content').innerHTML = '" +
+            "<div class=\"header\" style=\"padding-bottom:15pt\">" +
+            HTML.javaScript(LocalizedStrings.QR_SUCCESS_HEADER + "</div>" +
+                            KeyProviderServlet.showTestUrl()) + "';\n" +
             "        initUi();\n" +
             "    }\n" +
             "  }).catch (function(error) {\n" +

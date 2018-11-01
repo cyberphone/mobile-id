@@ -357,10 +357,21 @@ public class KeyProviderServlet extends HttpServlet {
         return true;
     }
 
+    static String showTestUrl() {
+        String testUrl = KeyProviderService.testUrl.contains("/") ?  KeyProviderService.testUrl
+                : KeyProviderInitServlet.keygen2EnrollmentBase + "/" + KeyProviderService.testUrl; 
+        return new StringBuffer(
+                "<div class=\"label\">" +
+                LocalizedStrings.TEST_URL_HERE +
+                ": <a href=\"")
+           .append(testUrl)
+           .append("\">")
+           .append(testUrl)
+           .append("</a></div>").toString();    
+    }
+
     // Showing off?
     StringBuilder successPage(HttpSession session) {
-        String testUrl = KeyProviderService.testUrl.contains("/") ?  KeyProviderService.testUrl
-            : KeyProviderInitServlet.keygen2EnrollmentBase + "/" + KeyProviderService.testUrl; 
         StringBuilder html = new StringBuilder(
             "<div class=\"label\" style=\"text-align:left\">" +
             LocalizedStrings.RESULT_MESSAGE_HEADER +
@@ -404,14 +415,8 @@ public class KeyProviderServlet extends HttpServlet {
                 "<rect x=\"8.5\" y=\"0.5\" " +
                 "width=\"301\" height=\"181\" " +
                 "rx=\"16\" ry=\"16\" fill=\"none\" stroke=\"url(#outerCardBorder)\"/>\n" +
-                "</svg>\n" +
-                "<div class=\"label\">" +
-                LocalizedStrings.TEST_URL_HERE +
-                ": <a href=\"")
-            .append(testUrl)
-            .append("\">")
-            .append(testUrl)
-            .append("</a></div>");
+                "</svg>\n")
+            .append(showTestUrl());
         return html;
     }
     
