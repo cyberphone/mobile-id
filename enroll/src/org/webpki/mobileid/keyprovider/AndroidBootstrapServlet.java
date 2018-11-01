@@ -18,20 +18,22 @@
 package org.webpki.mobileid.keyprovider;
 
 import java.io.IOException;
+
 import java.util.logging.Logger;
+
 import java.net.URLEncoder;
 
 import javax.servlet.ServletException;
+
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.webpki.localized.LocalizedStrings;
 import org.webpki.util.Base64URL;
 
-// This is a servlet which through QR + mobile browser invokes the
+// This is a servlet which through QR + mobile browser invokes the KeyGen2 protocol
 
 public class AndroidBootstrapServlet extends HttpServlet {
 
@@ -43,7 +45,7 @@ public class AndroidBootstrapServlet extends HttpServlet {
     static final String ANDROID_WEBPKI_VERSION_MACRO    = "$VER$";  // KeyGen2 Android PoC
     
     static final String TOMCAT_SESSION_COOKIE           = "JSESSIONID";
-    
+       
     static String createIntent(HttpSession session) throws IOException {
         ////////////////////////////////////////////////////////////////////////////////////////////
         // The following is the actual contract between an issuing server and a KeyGen2 client.
@@ -53,20 +55,17 @@ public class AndroidBootstrapServlet extends HttpServlet {
         // The "init" element on the bootstrap URL is a local Mobile ID RA convention.
         // The purpose of the random element is suppressing caching of bootstrap data.
         ////////////////////////////////////////////////////////////////////////////////////////////
-        return new StringBuilder(
-                "intent://keygen2?cookie=" + TOMCAT_SESSION_COOKIE + "%3D")
+        return new StringBuilder("intent://keygen2?cookie=" + TOMCAT_SESSION_COOKIE + "%3D")
             .append(session.getId())
             .append("&url=")
-            .append(
-                URLEncoder.encode(
-                    new StringBuilder(KeyProviderInitServlet.keygen2EnrollmentUrl)
-                        .append("?" + KeyProviderInitServlet.KG2_INIT_TAG + "=" )
-                        .append(Base64URL.generateURLFriendlyRandom(8))
-                        .append("&" + ANDROID_WEBPKI_VERSION_TAG + "=" +
-                                ANDROID_WEBPKI_VERSION_MACRO).toString(), "UTF-8"))
-            .append(
-                "#Intent;scheme=webpkiproxy;" +
-                "package=org.webpki.mobile.android;end").toString();
+            .append(URLEncoder.encode(
+                        new StringBuilder(KeyProviderInitServlet.keygen2EnrollmentUrl)
+                            .append("?" + KeyProviderInitServlet.KG2_INIT_TAG + "=" )
+                            .append(Base64URL.generateURLFriendlyRandom(8))
+                            .append("&" + ANDROID_WEBPKI_VERSION_TAG + "=" +
+                                    ANDROID_WEBPKI_VERSION_MACRO).toString(), "UTF-8"))
+            .append("#Intent;scheme=webpkiproxy;" +
+                    "package=org.webpki.mobile.android;end").toString();
     }
 
     @Override
@@ -77,13 +76,11 @@ public class AndroidBootstrapServlet extends HttpServlet {
             throw new IOException("QR Session timeout");
         }
         response.addCookie(new Cookie(TOMCAT_SESSION_COOKIE, session.getId()));
-        HTML.output(response,
-                "<!DOCTYPE html><html><head>" +
-                "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">" +
-                "<title>Android Bootstrap</title>" +
-                "</head><body onload=\"document.location.href = '" +
-                createIntent(session) +
-                "'\">Android Bootstrap" +
-                "</body></html>");
+        HTML.resultPage(response,
+                        null,
+                        false,
+                        "  document.location.href = '" + createIntent(session) + "';\n", 
+                        new StringBuilder(
+                            "<div class=\"header\">Android QR &quot;Bootstrap&quot;</div>"));
     }
 }
