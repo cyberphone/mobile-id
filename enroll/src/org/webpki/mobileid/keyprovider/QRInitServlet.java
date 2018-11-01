@@ -108,19 +108,28 @@ public class QRInitServlet extends HttpServlet {
                 "<div class=\"label\" style=\"padding:15pt 0;text-align:left\">")
             .append(LocalizedStrings.QR_BOOTSTRAP.replace("@", supportedTargets.toString()))
             .append(
-                "</div>" +
-                "<div class=\"label\" style=\"padding:0\">" +
+                "</div><div id=\"qr\">" +
+                "<div class=\"label\">" +
                 LocalizedStrings.QR_START_APPLICATION
                     .replace("@",
                              "<img src=\"images/qr_launcher.png\" onclick=\"toast('" +
                                HTML.javaScript(LocalizedStrings.QR_APP_LOCATING) +
                               "', this)\" " +
-                              "style=\"border-width:1px;border-style:solid;border-color:blue;cursor:pointer\">") +
+                              "style=\"border-width:1px;border-style:solid;" +
+                              "border-color:blue;cursor:pointer\" alt=\"image\">") +
                 "</div>" +
                 "<img src=\"data:image/png;base64,")
             .append(qrImage)
             .append(
-                "\" style=\"cursor:none\" alt=\"image\">");
+                "\" style=\"cursor:none\" alt=\"image\"></div>" +
+                "<div style=\"display:flex;justify-content:center;align-items:center\">" +
+                  "<div class=\"label\">Session Status:&nbsp;</div>" +
+                  "<div style=\"width:100px;background-color:crimson;" +
+                              "border-width:1px;border-style:solid;" +
+                              "border-color:grey\">" +
+                    "<div id=\"life\" style=\"width:100%;height:15pt;background-color:lightgreen\"></div>" +
+                 "</div>" +
+                "</div>");
         HTML.resultPage(response, 
             "function startComet() {\n" +
             "  fetch('" + QR_INIT_SERVLET_NAME + "', {\n" +
@@ -138,12 +147,8 @@ public class QRInitServlet extends HttpServlet {
             "        document.location.href = 'home';\n" +
             "        break;\n" +
             "      case '" + QRSessions.QR_PROGRESS + "':\n" +
-            "        document.getElementById('content').innerHTML = 'working...';\n" +
+            "        document.getElementById('qr').outerHTML = '<div class=\"label\" style=\"padding-bottom:15pt\">Working...</div>';\n" +
             "        initUi();\n" +
- //           .append(progressAction)
- //           .append("      document.getElementById('authhelp').style.display = 'table-row';\n")
- //           .append(
- //           "        setQRDisplay(false);\n" +
             "      case '" + QRSessions.QR_CONTINUE + "':\n" +
             "        startComet();\n" +
             "        break;\n" +
@@ -154,9 +159,12 @@ public class QRInitServlet extends HttpServlet {
             "  }).catch (function(error) {\n" +
             "    console.log('Request failed', error);\n" +
             "  });\n" +                           
-            "}\n",
+            "}\n" +
+            "var life = 100;\n",
             true,
-            "  startComet();\n",
+            "  startComet();\n" +
+            "  setInterval(function(){ document.getElementById('life').style.width = life + '%'; life -= " +
+            (100.0 / (QRSessions.MAX_SESSION / 1000)) + ";}, 1000);\n",
             html);
     }
 }
