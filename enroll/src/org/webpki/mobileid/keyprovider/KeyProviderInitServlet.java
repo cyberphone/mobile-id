@@ -139,7 +139,7 @@ public class KeyProviderInitServlet extends HttpServlet {
 
         // Now to big question, are we on a [suitable] mobile phone or on a desktop?
         if (targetPlatform == TargetPlatforms.DESKTOP_MODE) {
-            response.sendRedirect("qrinit");
+            response.sendRedirect(QRInitServlet.QR_INIT_SERVLET_NAME);
             return;
         }
         

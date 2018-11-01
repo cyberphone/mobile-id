@@ -46,7 +46,9 @@ public class QRInitServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     static final String QR_SESSION_ID_ATTR     = "qrsess";
-
+    
+    static final String QR_INIT_SERVLET_NAME   = "qrinit";
+    
     static Logger logger = Logger.getLogger(QRInitServlet.class.getCanonicalName());
 
     @Override
@@ -57,7 +59,7 @@ public class QRInitServlet extends HttpServlet {
         }
         QRSessions.Synchronizer synchronizer = QRSessions.getSynchronizer(id);
         if (synchronizer == null) {
-            sendResult(response, QRSessions.QR_RETURN);
+            sendResult(response, QRSessions.QR_DIED);
         } else if (synchronizer.perform(QRSessions.COMET_WAIT)) {
             QRSessions.removeSession(id);
             sendResult(response, QRSessions.QR_SUCCESS);
@@ -119,6 +121,42 @@ public class QRInitServlet extends HttpServlet {
             .append(qrImage)
             .append(
                 "\" style=\"cursor:none\" alt=\"image\">");
-        HTML.resultPage(response, null, true, html);
+        HTML.resultPage(response, 
+            "function startComet() {\n" +
+            "  fetch('" + QR_INIT_SERVLET_NAME + "', {\n" +
+            "     headers: {\n" +
+            "       'Content-Type': 'text/plain'\n" +
+            "     },\n" +
+            "     method: 'POST',\n" +
+            "     body: '" + id + "'\n" +
+            "  }).then(function (response) {\n" +
+            "    return response.text();\n" +
+            "  }).then(function (resultData) {\n" +
+            "    console.log('Response', resultData);\n" +
+            "    switch (resultData) {\n" +
+            "      case '" + QRSessions.QR_DIED + "':\n" +
+            "        document.location.href = 'home';\n" +
+            "        break;\n" +
+            "      case '" + QRSessions.QR_PROGRESS + "':\n" +
+            "        document.getElementById('content').innerHTML = 'working...';\n" +
+            "        initUi();\n" +
+ //           .append(progressAction)
+ //           .append("      document.getElementById('authhelp').style.display = 'table-row';\n")
+ //           .append(
+ //           "        setQRDisplay(false);\n" +
+            "      case '" + QRSessions.QR_CONTINUE + "':\n" +
+            "        startComet();\n" +
+            "        break;\n" +
+            "      default:\n" +
+            "        document.getElementById('content').innerHTML = 'done';\n" +
+            "        initUi();\n" +
+            "    }\n" +
+            "  }).catch (function(error) {\n" +
+            "    console.log('Request failed', error);\n" +
+            "  });\n" +                           
+            "}\n",
+            true,
+            "  startComet();\n",
+            html);
     }
 }

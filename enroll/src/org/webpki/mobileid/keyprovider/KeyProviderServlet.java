@@ -324,7 +324,9 @@ public class KeyProviderServlet extends HttpServlet {
 
                   ////////////////////////////////////////////////////////////////////////////////////////////
                   // We are done, return an HTTP redirect taking the client out of its KeyGen2 mode
+                  // If we have initiated via QR we tell the QR driver that as well
                   ////////////////////////////////////////////////////////////////////////////////////////////
+                  QRSessions.optionalSessionSetReady((String) session.getAttribute(QRInitServlet.QR_SESSION_ID_ATTR));
                   response.sendRedirect(keygen2EnrollmentUrl);
                   return;
 

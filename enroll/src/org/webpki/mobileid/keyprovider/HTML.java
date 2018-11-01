@@ -18,6 +18,7 @@
 package org.webpki.mobileid.keyprovider;
 
 import java.io.IOException;
+
 import java.util.logging.Logger;
 
 import javax.servlet.ServletException;
@@ -38,6 +39,7 @@ public class HTML {
 
     static String getHTML(String customJavaScript, 
                           boolean toasterSupport,
+                          String onloadCode,
                           String content) {
         StringBuilder s = new StringBuilder(
             "<!DOCTYPE html>"+
@@ -76,7 +78,9 @@ public class HTML {
             "}\n" +
             "window.addEventListener('resize', () => { initUi() });\n" +
             "function initApplication() {\n" +
-            "  initUi();\n" +
+            "  initUi();\n")
+        .append(onloadCode == null ? "" : onloadCode)
+        .append(
             "}\n");
         if (customJavaScript != null) {
             s.append(customJavaScript);
@@ -132,10 +136,23 @@ public class HTML {
                            String customJavaScript,
                            boolean toasterSupport,
                            StringBuilder stringBuilder) throws IOException, ServletException {
+        resultPage(response,
+                   customJavaScript,
+                   toasterSupport,
+                   null,
+                   stringBuilder);
+    }
+
+    static void resultPage(HttpServletResponse response,
+                           String customJavaScript,
+                           boolean toasterSupport,
+                           String onloadCode,
+                           StringBuilder stringBuilder) throws IOException, ServletException {
         HTML.output(response, 
-                    HTML.getHTML(customJavaScript,
-                                 toasterSupport,
-                                 stringBuilder.toString()));
+             HTML.getHTML(customJavaScript,
+                          toasterSupport,
+                          onloadCode,
+                          stringBuilder.toString()));
     }
 
     static String javaScript(String string) {
@@ -153,5 +170,4 @@ public class HTML {
         }
         return s.toString();
     }
-
 }

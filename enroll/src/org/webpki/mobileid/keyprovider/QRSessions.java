@@ -32,7 +32,7 @@ public class QRSessions {
     static class SessionInProgress {
         long expiryTime;
         String id;
-        HttpSession session;
+        HttpSession httpSession;
         Synchronizer synchronizer;
     }
     
@@ -78,14 +78,15 @@ public class QRSessions {
 
     private static Looper looper;
 
-    static final String QR_RETURN         = "r";
     static final String QR_SUCCESS        = "s";
     static final String QR_CONTINUE       = "c";
     static final String QR_PROGRESS       = "p";
+    static final String QR_DIED           = "d";
 
     static final long CYCLE_TIME          = 60000L;
     static final long COMET_WAIT          = 30000L;
-    static final long MAX_SESSION         = 300000L;
+    static final long MAX_SESSION         = 120000L;
+//    static final long MAX_SESSION         = 300000L;
 
     static final String QR_SESSION_ID     = "qsi";
 
@@ -125,15 +126,16 @@ public class QRSessions {
         }
     }
 
-    static synchronized String createSession(HttpSession session) throws IOException {
+    static synchronized String createSession(HttpSession httpSession) throws IOException {
         SessionInProgress sessionInProgress = new SessionInProgress();
-        sessionInProgress.session = session;
-        sessionInProgress.id = String.valueOf(new SecureRandom().nextInt());
+        sessionInProgress.httpSession = httpSession;
+        sessionInProgress.id = String.valueOf(new SecureRandom().nextLong());
         sessionInProgress.expiryTime = System.currentTimeMillis() + MAX_SESSION;
         sessionInProgress.synchronizer = new Synchronizer();
         currentSessions.put(sessionInProgress.id, sessionInProgress);
         if (KeyProviderService.logging) {
-            logger.info("Created QR Session ID=" + sessionInProgress.id);
+            logger.info("Created QR Session ID=" + sessionInProgress.id + 
+                        " for HTTP Session ID=" + httpSession.getId());
         }
         if (looper == null) {
             logger.info("Timeout thread started");
@@ -154,12 +156,16 @@ public class QRSessions {
         return session.synchronizer;
     }
 
+    // This must be the bootstrap and only called once 
     static HttpSession getHttpSession(String id) {
         SessionInProgress session = currentSessions.get(id);
         if (session == null) {
             return null;
         }
-        return session.session;
+        session.synchronizer.setInProgress();
+        HttpSession httpSession = session.httpSession;
+        session.httpSession = null;  // A QR code is ONE TIME password
+        return httpSession;
     }
 
     static void optionalSessionSetReady(String id) {
