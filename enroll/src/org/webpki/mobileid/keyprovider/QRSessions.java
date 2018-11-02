@@ -83,10 +83,10 @@ public class QRSessions {
     static final String QR_PROGRESS       = "p";
     static final String QR_DIED           = "d";
 
-    static final long CYCLE_TIME          = 60000L;
+    static final long CYCLE_TIME          = 5000L;
     static final long COMET_WAIT          = 30000L;
-    static final long MAX_SESSION         = 120000L;
-//    static final long MAX_SESSION         = 300000L;
+ //   static final long MAX_SESSION         = 120000L;
+    static final long MAX_SESSION         = 300000L;
 
     static final String QR_SESSION_ID     = "qsi";
 

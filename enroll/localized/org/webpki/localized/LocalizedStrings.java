@@ -69,8 +69,8 @@ public interface LocalizedStrings {
     String QR_ACTIVATION_HEADER       = "QR Activation Mode";
 
     String QR_BOOTSTRAP               = "Since enrollment was not initiated from an @ " +
-                                        "device you need a QR code to &quot;boostrap&quot; " +
-                                        "the enrollment process.";
+                                        "device<br>you need a QR code to &quot;boostrap&quot; " +
+                                        "the process.";
 
     String QR_START_APPLICATION       = "Use the @ application to start!";
     

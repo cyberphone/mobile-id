@@ -125,10 +125,10 @@ public class QRInitServlet extends HttpServlet {
                 "<div style=\"display:flex;justify-content:center;align-items:center\">" +
                   "<div class=\"label\">" +
                   LocalizedStrings.QR_SESSION_STATUS + ":&nbsp;</div>" +
-                  "<div style=\"width:100px;background-color:#f2646b;" +
+                  "<div style=\"width:100px;" +
                               "border-width:1px;border-style:solid;" +
                               "border-color:grey\">" +
-                    "<div id=\"life\" style=\"width:100%;height:15pt;background-color:#adf0a6\"></div>" +
+                    "<div id=\"life\" style=\"width:100%;height:15pt;background-color:#3fdaa8\"></div>" +
                  "</div>" +
                 "</div>");
         HTML.resultPage(response, 
