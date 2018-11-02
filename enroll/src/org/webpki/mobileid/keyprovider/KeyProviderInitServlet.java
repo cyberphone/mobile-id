@@ -95,7 +95,7 @@ public class KeyProviderInitServlet extends HttpServlet {
         if (!targetPlatform.supported) {
             incompatibiltyIssues(response,
                                  LocalizedStrings.UNSUPPORTED_PLATFORM
-                                     .replace("@", targetPlatform.name));
+                                     .replace("@", "&quot;" + targetPlatform.name + "&quot;"));
             return;
         }
 
@@ -194,7 +194,6 @@ public class KeyProviderInitServlet extends HttpServlet {
         } else if (userAgent.contains(" Mobile/") && userAgent.contains(" Safari/")) {
             targetPlatform = userAgent.contains(" iPhone") ?
                                     TargetPlatforms.IPHONE : TargetPlatforms.IPAD;
-            return;
         }
 
         // Check if we need showing the footer
