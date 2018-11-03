@@ -99,7 +99,7 @@ public class HTML {
                 "  toaster.style.visibility = 'visible';\n" +
                 "  setTimeout(function () {\n" +
                 "    toaster.style.visibility = 'hidden';\n" +
-                "  }, 1000);\n" +
+                "  }, 2000);\n" +
                 "}\n");
         }
         s.append(

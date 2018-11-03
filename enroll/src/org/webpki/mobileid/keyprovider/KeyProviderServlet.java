@@ -376,7 +376,10 @@ public class KeyProviderServlet extends HttpServlet {
             "<div class=\"label\" style=\"text-align:left\">" +
             LocalizedStrings.RESULT_MESSAGE_HEADER +
             "</div>" +
-            "<svg id=\"cardimage\" style=\"width:100pt;padding:15pt 0\" " +
+            "<svg id=\"cardimage\" onclick=\"toast('")
+        .append(HTML.javaScript(LocalizedStrings.LOGOTYPE_HINT))
+        .append(
+            "', this)\" style=\"width:100pt;padding:15pt 0\" " +
             "viewBox=\"0 0 318 190\" xmlns=\"http://www.w3.org/2000/svg\">\n" +
             "<defs>\n" +
             " <clipPath id=\"cardClip\">\n" +
@@ -401,10 +404,10 @@ public class KeyProviderServlet extends HttpServlet {
             "<rect filter=\"url(#dropShaddow)\" rx=\"16\" ry=\"16\" " +
               "height=\"182\" width=\"302\" y=\"4\" x=\"12\" fill=\"#c0c0c0\"/>\n" +
             "<svg x=\"9\" y=\"1\" clip-path=\"url(#cardClip)\"");
-        String rawCardImage = ((UserData)((ServerState)session
+        UserData userData = (UserData)((ServerState)session
             .getAttribute(KeyProviderInitServlet.KG2_SESSION_ATTR))
-                .getServiceSpecificObject(KeyProviderInitServlet.SERVER_STATE_USER))
-                    .cardImage;
+                .getServiceSpecificObject(KeyProviderInitServlet.SERVER_STATE_USER);
+        String rawCardImage = userData.cardImage;
         html.append(rawCardImage.substring(rawCardImage.indexOf('>')))
             .append(
                 "<rect x=\"10\" y=\"2\" " +
@@ -416,7 +419,12 @@ public class KeyProviderServlet extends HttpServlet {
                 "width=\"301\" height=\"181\" " +
                 "rx=\"16\" ry=\"16\" fill=\"none\" stroke=\"url(#outerCardBorder)\"/>\n" +
                 "</svg>\n")
-            .append(showTestUrl());
+            .append(showTestUrl())
+            .append(
+                "</div>" +
+                "<div id=\"sitefooter\" class=\"sitefooter\">")
+            .append(LocalizedStrings.LEGAL_NOTICE.replace("@", "&quot;" + userData.issuerName + "&quot;"));
+
         return html;
     }
     
@@ -456,6 +464,6 @@ public class KeyProviderServlet extends HttpServlet {
         if (session != null) {
             session.invalidate();
         }
-        HTML.resultPage(response, null, false, html);
+        HTML.resultPage(response, null, true, html);
     }
 }

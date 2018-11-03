@@ -94,5 +94,11 @@ public interface LocalizedStrings {
 
     String WRONG_APP_VERSION          = "Incorrect version of the Mobile ID app, " +
                                         "you need to update";
+    
+    String LOGOTYPE_HINT              = "Logotypes are used for selecting digital " +
+                                        "identity in the Mobile ID application";
+
+    String LEGAL_NOTICE               = "Legal notice: Mobile ID is not affiliated with @. " +
+                                        "The use of their logotype and name is only an example." ;
 }
 

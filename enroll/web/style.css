@@ -16,6 +16,7 @@
   position:absolute;
   visibility:hidden;
   padding:5pt 10pt;
+  max-width:80%;
 }
 
 body {
@@ -79,7 +80,7 @@ li {
 
 .xicon {
   height:16pt;
-  padding:5pt;
+  padding-right:1em;
   cursor:pointer;
 }
 
@@ -89,11 +90,12 @@ li {
   border-width:1px 0 0 0;
   border-style:solid;
   border-color:#a9a9a9;
-  position:absolute;z-index:5;
+  position:absolute;
+  z-index:5;
   left:0px;
   bottom:0px;
   background-color:#ffffe0;
-  width:100%;
+  padding:0.3em 1em;
 }
 
 @media (max-width:768px) {
