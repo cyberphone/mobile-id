@@ -20,15 +20,15 @@ package org.webpki.mobileid.egovernment;
 import java.io.IOException;
 
 import javax.servlet.ServletException;
-
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.webpki.crypto.AsymSignatureAlgorithms;
 import org.webpki.localized.LocalizedStrings;
-
 import org.webpki.webauth.AuthenticationRequestEncoder;
+import org.webpki.webutil.ServletUtil;
 
 public class LoginServlet extends HttpServlet {
 
@@ -40,6 +40,12 @@ public class LoginServlet extends HttpServlet {
     static final String AUTH_REQ      = "authreq";
 
     static String baseUrl;
+    static String authenticationUrl;
+
+    synchronized void initGlobals(HttpServletRequest request) throws IOException {
+        baseUrl = ServletUtil.getContextURL(request);
+        authenticationUrl = baseUrl + "/webauth";
+    }
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -71,16 +77,26 @@ public class LoginServlet extends HttpServlet {
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
+
+        if (baseUrl == null) {
+            initGlobals(request);
+        }
+        // Create a session.
         HttpSession session = request.getSession(true);
-        session.removeAttribute(UserData.USER_DATA);  // In progress but not done
+        // But make sure i is empty
+        session.removeAttribute(UserData.USER_DATA);
+        // Save where to go when auth is ready
         session.setAttribute(LOGIN_TARGET, ProtectedServlet.getParameter(request, LOGIN_TARGET));
+        
+        // Demo only
         if (eGovernmentService.demoCertificate != null) {
             demoAuthentication(request, response);
             return;
         }
         
         // Real authentication
-        AuthenticationRequestEncoder authReq = new AuthenticationRequestEncoder(LoginServlet.baseUrl, null);
+        AuthenticationRequestEncoder authReq = new AuthenticationRequestEncoder(LoginServlet.authenticationUrl, null);
+        authReq.addSignatureAlgorithm(AsymSignatureAlgorithms.ECDSA_SHA256);
         session.setAttribute(AUTH_REQ, authReq);
         
         String userAgent = request.getHeader("User-Agent");

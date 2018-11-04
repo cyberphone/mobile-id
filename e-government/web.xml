@@ -48,12 +48,17 @@
 
     <servlet>
         <servlet-name>AndroidBootstrapServlet</servlet-name>
-        <servlet-class>org.webpki.mobileid.keyprovider.AndroidBootstrapServlet</servlet-class>
+        <servlet-class>org.webpki.mobileid.egovernment.AndroidBootstrapServlet</servlet-class>
     </servlet>
 
     <servlet>
         <servlet-name>QRInitServlet</servlet-name>
-        <servlet-class>org.webpki.mobileid.keyprovider.QRInitServlet</servlet-class>
+        <servlet-class>org.webpki.mobileid.egovernment.QRInitServlet</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>WebAuthServlet</servlet-name>
+        <servlet-class>org.webpki.mobileid.egovernment.WebAuthServlet</servlet-class>
     </servlet>
 
     <servlet>
@@ -99,6 +104,11 @@
     <servlet-mapping>
         <servlet-name>QRInitServlet</servlet-name>
         <url-pattern>/qrinit</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>WebAuthServlet</servlet-name>
+        <url-pattern>/webauth</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>

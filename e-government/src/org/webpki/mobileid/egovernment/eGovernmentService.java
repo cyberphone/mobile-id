@@ -40,13 +40,9 @@ import org.webpki.json.JSONObjectReader;
 import org.webpki.json.JSONParser;
 import org.webpki.json.JSONX509Verifier;
 
-import org.webpki.keygen2.CredentialDiscoveryResponseDecoder;
-import org.webpki.keygen2.InvocationResponseDecoder;
-import org.webpki.keygen2.KeyCreationResponseDecoder;
-import org.webpki.keygen2.ProvisioningFinalizationResponseDecoder;
-import org.webpki.keygen2.ProvisioningInitializationResponseDecoder;
-
 import org.webpki.util.ArrayUtil;
+
+import org.webpki.webauth.AuthenticationResponseDecoder;
 
 import org.webpki.webutil.InitPropertyReader;
 
@@ -66,7 +62,7 @@ public class eGovernmentService extends InitPropertyReader implements ServletCon
 
     static final String LOGGING               = "logging";
 
-    static JSONDecoderCache keygen2JSONCache;
+    static JSONDecoderCache webAuth2JSONCache;
     
     static String[] grantedVersions;
     
@@ -127,12 +123,8 @@ public class eGovernmentService extends InitPropertyReader implements ServletCon
             ////////////////////////////////////////////////////////////////////////////////////////////
             // KeyGen2
             ////////////////////////////////////////////////////////////////////////////////////////////
-            keygen2JSONCache = new JSONDecoderCache();
-            keygen2JSONCache.addToCache(InvocationResponseDecoder.class);
-            keygen2JSONCache.addToCache(ProvisioningInitializationResponseDecoder.class);
-            keygen2JSONCache.addToCache(CredentialDiscoveryResponseDecoder.class);
-            keygen2JSONCache.addToCache(KeyCreationResponseDecoder.class);
-            keygen2JSONCache.addToCache(ProvisioningFinalizationResponseDecoder.class);
+            webAuth2JSONCache = new JSONDecoderCache();
+            webAuth2JSONCache.addToCache(AuthenticationResponseDecoder.class);
 
             ////////////////////////////////////////////////////////////////////////////////////////////
             // Trusted issuers

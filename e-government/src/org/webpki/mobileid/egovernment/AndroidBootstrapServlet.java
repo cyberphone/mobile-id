@@ -43,20 +43,19 @@ public class AndroidBootstrapServlet extends HttpServlet {
     static final String ANDROID_WEBPKI_VERSION_MACRO    = "$VER$";  // KeyGen2 Android PoC
     
     static final String TOMCAT_SESSION_COOKIE           = "JSESSIONID";
-       
+    
     static String createIntent(HttpSession session) throws IOException {
         ////////////////////////////////////////////////////////////////////////////////////////////
-        // The following is the actual contract between an auth-server and a WebAuth client.
+        // The following is the actual contract between an authentication server and a WebAuth client.
         // The "cookie" argument holds the session in progress while the "url" argument holds
-        // an address to a protocol bootstrap service to be invoked by a HTTPS GET.
+        // an address to a protocol bootstrap service to be invoked by an HTTPS GET operation.
         ////////////////////////////////////////////////////////////////////////////////////////////
         return new StringBuilder("intent://webauth?cookie=" + TOMCAT_SESSION_COOKIE + "%3D")
             .append(session.getId())
             .append("&url=")
-            .append(URLEncoder.encode(LoginServlet.baseUrl +
-                                      "/androidbootstrap?" + 
-                                      ANDROID_WEBPKI_VERSION_TAG + "=" +
-                                      ANDROID_WEBPKI_VERSION_MACRO, "UTF-8"))
+            .append(URLEncoder.encode(LoginServlet.authenticationUrl +
+                                      "?" + ANDROID_WEBPKI_VERSION_TAG +
+                                      "=" + ANDROID_WEBPKI_VERSION_MACRO, "UTF-8"))
             .append("#Intent;scheme=webpkiproxy;" +
                     "package=org.webpki.mobile.android;end").toString();
     }
@@ -76,16 +75,5 @@ public class AndroidBootstrapServlet extends HttpServlet {
                         null,
                         new StringBuilder(
                             "<div class=\"header\">Android QR &quot;Bootstrap&quot;</div>"));
-    }
-    
-    @Override
-    public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        HttpSession session = request.getSession(false);
-        if (session == null) {
-            throw new IOException("Missing session");
-        }
-        if (session.getAttribute(UserData.USER_DATA) != null) {
-            throw new IOException("Session weirdness");
-        }
     }
 }
