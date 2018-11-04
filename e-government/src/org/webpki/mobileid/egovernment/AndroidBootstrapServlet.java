@@ -15,7 +15,7 @@
  *
  */
 
-package org.webpki.mobileid.keyprovider;
+package org.webpki.mobileid.egovernment;
 
 import java.io.IOException;
 
@@ -31,9 +31,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.webpki.util.Base64URL;
-
-// This is a servlet which through QR + mobile browser invokes the KeyGen2 protocol
+// This is a servlet which through QR + mobile browser invokes the WebAuth protocol
 
 public class AndroidBootstrapServlet extends HttpServlet {
 
@@ -48,29 +46,24 @@ public class AndroidBootstrapServlet extends HttpServlet {
        
     static String createIntent(HttpSession session) throws IOException {
         ////////////////////////////////////////////////////////////////////////////////////////////
-        // The following is the actual contract between an issuing server and a KeyGen2 client.
+        // The following is the actual contract between an auth-server and a WebAuth client.
         // The "cookie" argument holds the session in progress while the "url" argument holds
-    	// an address to a protocol bootstrap service to be invoked by a HTTPS GET.
-        //
-        // The "init" element on the bootstrap URL is a local Mobile ID RA convention.
-        // The purpose of the random element is suppressing caching of bootstrap data.
+        // an address to a protocol bootstrap service to be invoked by a HTTPS GET.
         ////////////////////////////////////////////////////////////////////////////////////////////
-        return new StringBuilder("intent://keygen2?cookie=" + TOMCAT_SESSION_COOKIE + "%3D")
+        return new StringBuilder("intent://webauth?cookie=" + TOMCAT_SESSION_COOKIE + "%3D")
             .append(session.getId())
             .append("&url=")
-            .append(URLEncoder.encode(
-                        new StringBuilder(KeyProviderInitServlet.keygen2EnrollmentUrl)
-                            .append("?" + KeyProviderInitServlet.KG2_INIT_TAG + "=" )
-                            .append(Base64URL.generateURLFriendlyRandom(8))
-                            .append("&" + ANDROID_WEBPKI_VERSION_TAG + "=" +
-                                    ANDROID_WEBPKI_VERSION_MACRO).toString(), "UTF-8"))
+            .append(URLEncoder.encode(LoginServlet.baseUrl +
+                                      "/androidbootstrap?" + 
+                                      ANDROID_WEBPKI_VERSION_TAG + "=" +
+                                      ANDROID_WEBPKI_VERSION_MACRO, "UTF-8"))
             .append("#Intent;scheme=webpkiproxy;" +
                     "package=org.webpki.mobile.android;end").toString();
     }
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        HttpSession session = QRSessions.getHttpSession(KeyProviderInitServlet
+        HttpSession session = QRSessions.getHttpSession(ProtectedServlet
                 .getParameter(request, QRSessions.QR_SESSION_ID));
         if (session == null) {
             throw new IOException("QR Session timeout");
@@ -79,8 +72,20 @@ public class AndroidBootstrapServlet extends HttpServlet {
         HTML.resultPage(response,
                         null,
                         false,
-                        "  document.location.href = '" + createIntent(session) + "';\n", 
+                        "  document.location.href = '" + createIntent(session) + "';\n",
+                        null,
                         new StringBuilder(
                             "<div class=\"header\">Android QR &quot;Bootstrap&quot;</div>"));
+    }
+    
+    @Override
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        HttpSession session = request.getSession(false);
+        if (session == null) {
+            throw new IOException("Missing session");
+        }
+        if (session.getAttribute(UserData.USER_DATA) != null) {
+            throw new IOException("Session weirdness");
+        }
     }
 }

@@ -87,5 +87,35 @@ public interface LocalizedStrings {
     String USER_CERTIFICATE           = "User Certificate";
     String SESSION_TERMINATED         = "The session appears to have terminated";
     String SESSION_TIMOUT             = "Session Timed Out";
+    
+    String DO_YOU_HAVE_MOBILE_ID      = "If you have not already installed " +
+            "Mobile ID, this is the time to do it!";
+
+    String QR_ACTIVATION_HEADER       = "QR Activation Mode";
+    
+    String QR_BOOTSTRAP               = "Since enrollment was not initiated from an @ " +
+                "device<br>you need a QR code to &quot;boostrap&quot; " +
+                "the process.";
+    
+    String QR_START_APPLICATION       = "Use the @ application to start!";
+    
+    String QR_APP_LOCATING            = "You get it automatically when you " +
+                                        "install Mobile ID, just look for the icon!";
+    
+    String QR_WAITING_FOR_MOB_DEVICE  = "Now waiting on your interactions with the mobile device...";
+    
+    String QR_SESSION_STATUS          = "Session Status";
+    
+    String FOUND_CHROME_VERSION       = "Found &quot;Chrome&quot; version";
+    
+    String UNSUPPORTED_PLATFORM       = "@ is currently not supported";
+    
+    String INCOMPATIBILITY_ISSUES     = "Incompatibility Issues";
+    
+    String UNSUPPORTED_ANDROID_BROWSER = "&quot;Chrome&quot; is currently the " +
+                                         "only supported browser on Android";
+    
+    String WRONG_APP_VERSION          = "Incorrect version of the Mobile ID app, " +
+                                        "you need to update";
  }
 

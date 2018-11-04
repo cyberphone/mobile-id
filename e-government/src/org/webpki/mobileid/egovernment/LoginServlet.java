@@ -28,12 +28,18 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.webpki.localized.LocalizedStrings;
 
+import org.webpki.webauth.AuthenticationRequestEncoder;
+
 public class LoginServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
     
     static final String LOGIN_TARGET  = "target";
     static final String MOBILE_ID_APP = "Mobile ID App";
+
+    static final String AUTH_REQ      = "authreq";
+
+    static String baseUrl;
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -45,7 +51,7 @@ public class LoginServlet extends HttpServlet {
         StringBuilder html = new StringBuilder(
             "<form name=\"shoot\" method=\"POST\" action=\"login\">" +
             "<input type=\"hidden\" name=\"" + LoginServlet.LOGIN_TARGET + "\" value=\"")
-        .append(request.getParameter(LOGIN_TARGET))
+        .append(ProtectedServlet.getParameter(request, LOGIN_TARGET))
         .append(
             "\">" +
             "<div class=\"header\">" +
@@ -65,22 +71,30 @@ public class LoginServlet extends HttpServlet {
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
+        HttpSession session = request.getSession(true);
+        session.removeAttribute(UserData.USER_DATA);  // In progress but not done
+        session.setAttribute(LOGIN_TARGET, ProtectedServlet.getParameter(request, LOGIN_TARGET));
         if (eGovernmentService.demoCertificate != null) {
             demoAuthentication(request, response);
             return;
         }
-/*
-        HttpSession session = request.getSession(true);
-        X509Certificate certificate = eGovernmentService.demoCertificate;
-        CertificateInfo certInfo = new CertificateInfo(certificate);
-        session.setAttribute(UserData.USER_DATA, 
-                             new UserData(session,
-                                          certInfo.getSubjectCommonName(), 
-                                          certInfo.getSubjectSerialNumber(),
-                                          certificate));
-        response.sendRedirect(request.getParameter(LOGIN_TARGET));
-*/
-        HTML.resultPage(response, null, new StringBuilder("NOT IMPLEMENTED!"));
+        
+        // Real authentication
+        AuthenticationRequestEncoder authReq = new AuthenticationRequestEncoder(LoginServlet.baseUrl, null);
+        session.setAttribute(AUTH_REQ, authReq);
+        
+        String userAgent = request.getHeader("User-Agent");
+        TargetPlatforms targetPlatform = userAgent.contains("Android") ? 
+                                               TargetPlatforms.ANDROID : TargetPlatforms.DESKTOP_MODE;
+
+        // Now to big question, are we on a [suitable] mobile phone or on a desktop?
+        if (targetPlatform == TargetPlatforms.DESKTOP_MODE) {
+            response.sendRedirect(QRInitServlet.QR_INIT_SERVLET_NAME);
+            return;
+        }
+        
+        // iOS code is not yet in place...
+        response.sendRedirect(AndroidBootstrapServlet.createIntent(session));
     }
 
     void demoAuthentication(HttpServletRequest request, HttpServletResponse response)

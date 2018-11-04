@@ -81,6 +81,7 @@
         <servlet-name>QRInitServlet</servlet-name>
         <url-pattern>/qrinit</url-pattern>
     </servlet-mapping>
+
     <servlet-mapping>
         <servlet-name>KeyProviderServlet</servlet-name>
         <url-pattern>/getkeys</url-pattern>

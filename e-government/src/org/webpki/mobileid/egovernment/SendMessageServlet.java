@@ -111,8 +111,8 @@ public class SendMessageServlet extends ProtectedServlet {
     void protectedPost(UserData userData,
                        HttpServletRequest request,
                        HttpServletResponse response) throws IOException, ServletException {
-        String type = getString(request, "type");
-        String message = getString(request, "message");
+        String type = getParameter(request, "type");
+        String message = getParameter(request, "message");
         if (eGovernmentService.logging) {
             logger.info(type + "\n" + message);
         }

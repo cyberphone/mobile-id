@@ -68,7 +68,7 @@ public abstract class ProtectedServlet extends HttpServlet {
         return new SimpleDateFormat("yyyy-MM-dd' 'HH:mm:ss' CET'").format(dateTime.getTime());
     }
     
-    static String getString(HttpServletRequest request, String name) throws IOException {
+    static String getParameter(HttpServletRequest request, String name) throws IOException {
         String result = request.getParameter(name);
         if (result == null) {
             throw new IOException("\"" + name + "\" missing");

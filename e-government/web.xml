@@ -47,6 +47,16 @@
     </listener>
 
     <servlet>
+        <servlet-name>AndroidBootstrapServlet</servlet-name>
+        <servlet-class>org.webpki.mobileid.keyprovider.AndroidBootstrapServlet</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>QRInitServlet</servlet-name>
+        <servlet-class>org.webpki.mobileid.keyprovider.QRInitServlet</servlet-class>
+    </servlet>
+
+    <servlet>
         <servlet-name>DeclarationServlet</servlet-name>
         <servlet-class>org.webpki.mobileid.egovernment.DeclarationServlet</servlet-class>
     </servlet>
@@ -80,6 +90,16 @@
         <servlet-name>HomeServlet</servlet-name>
         <servlet-class>org.webpki.mobileid.egovernment.HomeServlet</servlet-class>
     </servlet>
+
+    <servlet-mapping>
+        <servlet-name>AndroidBootstrapServlet</servlet-name>
+        <url-pattern>/androidbootstrap</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>QRInitServlet</servlet-name>
+        <url-pattern>/qrinit</url-pattern>
+    </servlet-mapping>
 
     <servlet-mapping>
         <servlet-name>DeclarationServlet</servlet-name>
