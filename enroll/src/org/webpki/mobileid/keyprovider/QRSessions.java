@@ -178,11 +178,13 @@ public class QRSessions {
     }
 
     static synchronized void cancelSession(String id) {
-        Synchronizer synchronizer = getSynchronizer(id);
-        if (synchronizer != null) {
-            currentSessions.remove(id);
-            synchronized (synchronizer) {
-                synchronizer.notify();
+        if (id != null) {
+            Synchronizer synchronizer = getSynchronizer(id);
+            if (synchronizer != null) {
+                currentSessions.remove(id);
+                synchronized (synchronizer) {
+                    synchronizer.notify();
+                }
             }
         }
     }

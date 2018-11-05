@@ -68,6 +68,11 @@
     </servlet>
 
     <servlet>
+        <servlet-name>AuthResultServlet</servlet-name>
+        <servlet-class>org.webpki.mobileid.egovernment.AuthResultServlet</servlet-class>
+    </servlet>
+
+    <servlet>
         <servlet-name>DeclarationServlet</servlet-name>
         <servlet-class>org.webpki.mobileid.egovernment.DeclarationServlet</servlet-class>
     </servlet>
@@ -115,6 +120,11 @@
     <servlet-mapping>
         <servlet-name>WebAuthServlet</servlet-name>
         <url-pattern>/webauth</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>AuthResultServlet</servlet-name>
+        <url-pattern>/authresult</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>

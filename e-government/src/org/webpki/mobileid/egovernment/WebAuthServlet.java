@@ -18,11 +18,13 @@
 package org.webpki.mobileid.egovernment;
 
 import java.io.IOException;
-import java.security.GeneralSecurityException;
-import java.util.logging.Level;
+
+import java.net.URLEncoder;
+
 import java.util.logging.Logger;
 
 import javax.servlet.ServletException;
+
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletRequest;
@@ -33,9 +35,12 @@ import org.webpki.crypto.CertificateFilter;
 import org.webpki.crypto.HashAlgorithms;
 import org.webpki.crypto.KeyStoreVerifier;
 import org.webpki.crypto.VerifierInterface;
+
 import org.webpki.json.JSONOutputFormats;
+
 import org.webpki.webauth.AuthenticationRequestEncoder;
 import org.webpki.webauth.AuthenticationResponseDecoder;
+
 import org.webpki.webutil.ServletUtil;
 
 // This is core WebAuth servlet
@@ -55,7 +60,10 @@ public class WebAuthServlet extends HttpServlet {
         if (session == null) {
             throw new IOException("Session timeout");
         }
-        AuthenticationRequestEncoder authReqEnc = new AuthenticationRequestEncoder(LoginServlet.authenticationUrl, null);
+        AuthenticationRequestEncoder authReqEnc = 
+                new AuthenticationRequestEncoder(LoginServlet.authenticationUrl, 
+                       WebAuthServlet.getResultUrl(AuthResultServlet.Status.USER_ABORT,
+                                                   (String)session.getAttribute(QRInitServlet.QR_SESSION_ID_ATTR)));
         authReqEnc.addSignatureAlgorithm(AsymSignatureAlgorithms.ECDSA_SHA256);
         authReqEnc.setExtendedCertPath(true);
         authReqEnc.addCertificateFilter(new CertificateFilter()
@@ -106,9 +114,25 @@ public class WebAuthServlet extends HttpServlet {
                 response.sendRedirect((String) session.getAttribute(LoginServlet.LOGIN_TARGET));
             } else {
                 QRSessions.optionalSessionSetReady(qrSessionId);
+                returnResult(response, AuthResultServlet.Status.QR_NORMAL, null);
             }
         } catch (Exception e) {
             logger.severe(e.getMessage());
+            returnResult(response, AuthResultServlet.Status.OTHER, e.getMessage());
         }
     }
+
+    static void returnResult(HttpServletResponse response,
+                             AuthResultServlet.Status status,
+                             String optionalData) throws IOException {
+        response.sendRedirect(getResultUrl(status, optionalData));
+    }
+    
+    static String getResultUrl(AuthResultServlet.Status status, String optionalData) throws IOException {
+        return LoginServlet.baseUrl + 
+           "/" + AuthResultServlet.AUTH_RESULT_SERVLET_NAME +
+           "?" + AuthResultServlet.STATUS_TAG + "=" + status.toString() +
+           (optionalData == null ? "" : 
+               "&" + AuthResultServlet.EXPLANATION_TAG + "=" + URLEncoder.encode(optionalData, "UTF-8")); 
+     }
 }

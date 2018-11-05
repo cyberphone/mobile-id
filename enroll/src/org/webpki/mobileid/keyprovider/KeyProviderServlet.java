@@ -463,6 +463,7 @@ public class KeyProviderServlet extends HttpServlet {
             }
         }
         if (session != null) {
+            QRSessions.cancelSession((String) session.getAttribute(QRInitServlet.QR_SESSION_ID_ATTR));
             session.invalidate();
         }
         HTML.resultPage(response, null, true, html);

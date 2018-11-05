@@ -25,7 +25,6 @@ import java.net.URLEncoder;
 
 import javax.servlet.ServletException;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletRequest;
@@ -65,9 +64,9 @@ public class AndroidBootstrapServlet extends HttpServlet {
         HttpSession session = QRSessions.getHttpSession(ProtectedServlet
                 .getParameter(request, QRSessions.QR_SESSION_ID));
         if (session == null) {
-            throw new IOException("QR Session timeout");
+            WebAuthServlet.returnResult(response, AuthResultServlet.Status.TIMEOUT, null);
+            return;
         }
-        response.addCookie(new Cookie(TOMCAT_SESSION_COOKIE, session.getId()));
         HTML.resultPage(response,
                         null,
                         false,
