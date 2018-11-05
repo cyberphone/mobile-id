@@ -18,13 +18,14 @@
 package org.webpki.mobileid.egovernment;
 
 import java.io.IOException;
+
 import java.util.logging.Logger;
 
 import javax.servlet.ServletException;
+
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 // This is servlet is called for QR auth and for errors
 
@@ -35,7 +36,7 @@ public class AuthResultServlet extends HttpServlet {
     static Logger logger = Logger.getLogger(AuthResultServlet.class.getCanonicalName());
 
     static final String STATUS_TAG               = "status";
-    static final String EXPLANATION_TAG          = "exp";
+    static final String OPTIONAL_DATA_TAG        = "optional";
     
     static final String AUTH_RESULT_SERVLET_NAME = "authresult";
 
@@ -56,7 +57,6 @@ public class AuthResultServlet extends HttpServlet {
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         request.setCharacterEncoding("UTF-8");
-        HttpSession session = request.getSession(false);
         String statusTag = request.getParameter(STATUS_TAG);
         StringBuilder html = new StringBuilder("<div class=\"header\">");
         if (statusTag == null) {
@@ -66,9 +66,9 @@ public class AuthResultServlet extends HttpServlet {
             return;
         }
         Status status = Status.valueOf(statusTag);
-        String explanation = request.getParameter(EXPLANATION_TAG);
+        String optional = request.getParameter(OPTIONAL_DATA_TAG);
         if (status == Status.USER_ABORT) {
-            QRSessions.cancelSession(explanation);
+            QRSessions.cancelSession(optional);
         }
         HTML.resultPage(response,
                         null,

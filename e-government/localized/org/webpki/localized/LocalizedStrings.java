@@ -91,9 +91,9 @@ public interface LocalizedStrings {
     String DO_YOU_HAVE_MOBILE_ID      = "If you have not already installed " +
             "Mobile ID, this is the time to do it!";
 
-    String QR_ACTIVATION_HEADER       = "QR Activation Mode";
+    String QR_AUTHENTICATION_HEADER   = "QR Authentication Mode";
     
-    String QR_BOOTSTRAP               = "Since enrollment was not initiated from an @ " +
+    String QR_BOOTSTRAP               = "Since authentication was not initiated from an @ " +
                 "device<br>you need a QR code to &quot;boostrap&quot; " +
                 "the process.";
     

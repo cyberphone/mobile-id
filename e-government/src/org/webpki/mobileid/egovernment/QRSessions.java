@@ -85,7 +85,7 @@ public class QRSessions {
 
     static final long CYCLE_TIME          = 5000L;
     static final long COMET_WAIT          = 30000L;
- //   static final long MAX_SESSION         = 120000L;
+//    static final long MAX_SESSION         = 100000L;
     static final long MAX_SESSION         = 300000L;
 
     static final String QR_SESSION_ID     = "qsi";
@@ -104,13 +104,13 @@ public class QRSessions {
                             break;
                         }
                         long current_time = System.currentTimeMillis();
-                        Iterator<SessionInProgress> list = currentSessions
-                                .values().iterator();
+                        Iterator<SessionInProgress> list = currentSessions.values().iterator();
                         while (list.hasNext()) {
                             SessionInProgress sessionInProgress = list.next();
                             if (current_time > sessionInProgress.expiryTime) {
                                 if (eGovernmentService.logging) {
                                     logger.info("Removed due to timeout, QR Session ID=" + sessionInProgress.id);
+                                    sessionInProgress.httpSession.invalidate();
                                 }
                                 synchronized (sessionInProgress.synchronizer) {
                                     sessionInProgress.synchronizer.notify();
@@ -156,16 +156,13 @@ public class QRSessions {
         return session.synchronizer;
     }
 
-    // This must be the bootstrap and only called once 
     static HttpSession getHttpSession(String id) {
         SessionInProgress session = currentSessions.get(id);
         if (session == null) {
             return null;
         }
         session.synchronizer.setInProgress();
-        HttpSession httpSession = session.httpSession;
-        session.httpSession = null;  // A QR code is ONE TIME password
-        return httpSession;
+        return session.httpSession;
     }
 
     static void optionalSessionSetReady(String id) {

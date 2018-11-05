@@ -104,7 +104,7 @@ public class QRInitServlet extends HttpServlet {
         }
         StringBuilder html = new StringBuilder(
                 "<div class=\"header\" style=\"padding-bottom:15pt\">" +
-                LocalizedStrings.QR_ACTIVATION_HEADER +
+                LocalizedStrings.QR_AUTHENTICATION_HEADER +
                 "</div><div id=\"qr\">" +
                 "<div class=\"label\" style=\"padding-bottom:15pt;text-align:left\">")
             .append(LocalizedStrings.QR_BOOTSTRAP.replace("@", supportedTargets.toString()))

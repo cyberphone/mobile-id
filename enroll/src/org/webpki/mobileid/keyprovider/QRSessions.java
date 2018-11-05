@@ -104,8 +104,7 @@ public class QRSessions {
                             break;
                         }
                         long current_time = System.currentTimeMillis();
-                        Iterator<SessionInProgress> list = currentSessions
-                                .values().iterator();
+                        Iterator<SessionInProgress> list = currentSessions.values().iterator();
                         while (list.hasNext()) {
                             SessionInProgress sessionInProgress = list.next();
                             if (current_time > sessionInProgress.expiryTime) {

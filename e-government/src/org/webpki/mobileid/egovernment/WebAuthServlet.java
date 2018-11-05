@@ -133,6 +133,6 @@ public class WebAuthServlet extends HttpServlet {
            "/" + AuthResultServlet.AUTH_RESULT_SERVLET_NAME +
            "?" + AuthResultServlet.STATUS_TAG + "=" + status.toString() +
            (optionalData == null ? "" : 
-               "&" + AuthResultServlet.EXPLANATION_TAG + "=" + URLEncoder.encode(optionalData, "UTF-8")); 
+               "&" + AuthResultServlet.OPTIONAL_DATA_TAG + "=" + URLEncoder.encode(optionalData, "UTF-8")); 
      }
 }
