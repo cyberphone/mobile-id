@@ -126,7 +126,7 @@ li {
 
 .xicon {
   height:16pt;
-  padding:5pt;
+  padding-right:1em;
   cursor:pointer;
 }
 
@@ -209,8 +209,9 @@ li {
   z-index:5;
   left:0px;
   bottom:0px;
+  right:0px;
   background-color:#ffffe0;
-  width:100%;
+  padding:0.3em 1em;
 }
 
 .uidheader {
@@ -234,7 +235,7 @@ li {
 
   .xicon {
     height:12pt;
- }
+  }
 
  .logouticon {
    height:32px;

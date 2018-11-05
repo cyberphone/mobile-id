@@ -17,11 +17,11 @@
         <param-name>key_password</param-name>
         <param-value>@key-password@</param-value>
     </context-param>
- 
+
     <context-param>
-        <description>Key Provider Base URL</description>
-        <param-name>keyprov_base_url</param-name>
-        <param-value>@keyprov-base-url@</param-value>
+        <description>Get Mobile ID URL</description>
+        <param-name>get_mobile_id_url</param-name>
+        <param-value>@get-mobile-id-url@</param-value>
     </context-param>
 
     <context-param>

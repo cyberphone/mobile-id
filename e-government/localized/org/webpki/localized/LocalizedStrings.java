@@ -88,8 +88,9 @@ public interface LocalizedStrings {
     String SESSION_TERMINATED         = "The session appears to have terminated";
     String SESSION_TIMOUT             = "Session Timed Out";
     
-    String DO_YOU_HAVE_MOBILE_ID      = "If you have not already installed " +
-            "Mobile ID, this is the time to do it!";
+    String AR_ABORTED_BY_USER         = "Aborted by the User";
+    String AR_AUTH_SUCCEEDED          = "Authentication Succeeded";
+    String AR_AUTH_ERROR              = "Authentication Error";
 
     String QR_AUTHENTICATION_HEADER   = "QR Authentication Mode";
     
@@ -117,5 +118,7 @@ public interface LocalizedStrings {
     
     String WRONG_APP_VERSION          = "Incorrect version of the Mobile ID app, " +
                                         "you need to update";
+
+    String GET_MOBILE_ID              = "If you do not yet have Mobile ID, go to";
  }
 

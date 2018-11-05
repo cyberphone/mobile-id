@@ -59,7 +59,7 @@ public abstract class ProtectedServlet extends HttpServlet {
         UserData userData = UserData.getUserData(request);
         if (userData == null) {
             String path = request.getServletPath();
-            response.sendRedirect("login?" + LoginServlet.LOGIN_TARGET + "=" + path.substring(path.lastIndexOf('/') + 1));
+            response.sendRedirect("login?" + LoginServlet.LOGIN_TO_APP_PARAM + "=" + path.substring(path.lastIndexOf('/') + 1));
         }
         return userData;
     }

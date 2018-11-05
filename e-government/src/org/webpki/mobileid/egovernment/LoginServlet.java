@@ -34,8 +34,12 @@ public class LoginServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
     
-    static final String LOGIN_TARGET  = "target";
+    static final String LOGIN_TO_APP_PARAM    = "application";
+    static final String TARGET_PLATFORM_PARAM = "platform";
+    
     static final String MOBILE_ID_APP = "Mobile ID App";
+
+    static final int    MINIMUM_CHROME_VERSION = 67;
 
     static String baseUrl;
     static String authenticationUrl;
@@ -48,44 +52,94 @@ public class LoginServlet extends HttpServlet {
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
+        if (baseUrl == null) {
+            initGlobals(request);
+        }
         HttpSession session = request.getSession(false);
         if (session != null) {
             session.invalidate();
         }
+
+        // Investigate which browser/platform we are using
+        TargetPlatforms targetPlatform = TargetPlatforms.DESKTOP_MODE;
+        String userAgent = request.getHeader("User-Agent");
+        if (userAgent.contains("Android ")) {
+            int i = userAgent.indexOf(" Chrome/");
+            if (i > 0) {
+                String chromeVersion = userAgent.substring(i + 8, userAgent.indexOf('.', i));
+                if (Integer.parseInt(chromeVersion) < MINIMUM_CHROME_VERSION) {
+                    incompatibiltyIssues(response,
+                                         LocalizedStrings.FOUND_CHROME_VERSION +
+                                         ": " +  chromeVersion +
+                                         ", min version: " + MINIMUM_CHROME_VERSION);
+                    return;
+                }
+            } else {
+                HTML.output(response,
+                    "<!DOCTYPE html><html><head>" +
+                    "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">" +
+                    "<title>" + LocalizedStrings.INCOMPATIBILITY_ISSUES + "</title>" +
+                    "</head><body>" +
+                    LocalizedStrings.UNSUPPORTED_ANDROID_BROWSER +
+                    "</body></html>");
+                return;
+            }
+            targetPlatform = TargetPlatforms.ANDROID;
+        } else if (userAgent.contains(" Mobile/") && userAgent.contains(" Safari/")) {
+            targetPlatform = userAgent.contains(" iPhone") ?
+                                    TargetPlatforms.IPHONE : TargetPlatforms.IPAD;
+        }
         StringBuilder html = new StringBuilder(
             "<form name=\"shoot\" method=\"POST\" action=\"login\">" +
-            "<input type=\"hidden\" name=\"" + LoginServlet.LOGIN_TARGET + "\" value=\"")
-        .append(ProtectedServlet.getParameter(request, LOGIN_TARGET))
+            "<input type=\"hidden\" name=\"" + LoginServlet.LOGIN_TO_APP_PARAM + "\" value=\"")
+        .append(ProtectedServlet.getParameter(request, LOGIN_TO_APP_PARAM))
         .append(
             "\">" +
+            "<input type=\"hidden\" name=\"" + LoginServlet.TARGET_PLATFORM_PARAM + "\" value=\"")
+        .append(targetPlatform.toString())
+        .append(
+            "\"></form>" +
             "<div class=\"header\">" +
             LocalizedStrings.REQUIRES_LOGIN +
             "<br>" +
             LocalizedStrings.SELECT_LOGIN_METHOD +
             "</div>" +
             "<img src=\"images/mobileidlogo.svg\" title=\"Mobile ID\" alt=\"Mobile ID\"" +
-             " onclick=\"document.forms.shoot.submit()\" class=\"loginbtn\">" +
+            " onclick=\"document.forms.shoot.submit()\" class=\"loginbtn\">" +
             "<div class=\"footer\">" +
              LocalizedStrings.ONLY_ONE_LOGIN_METHOD + 
-             "...</div>" +
-            "</form>");
+             "...</div></div>" +
+             "<div class=\"sitefooter\"><div>")
+        .append(LocalizedStrings.GET_MOBILE_ID)
+        .append(": <a href=\"")
+        .append(eGovernmentService.getMobileIdUrl)
+        .append("\">")
+        .append(eGovernmentService.getMobileIdUrl)
+        .append(
+            "</a></div>");
         HTML.resultPage(response, null, html);
     }
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
-
-        if (baseUrl == null) {
-            initGlobals(request);
+        // Check that we can make it at all
+        TargetPlatforms targetPlatform = 
+                TargetPlatforms.valueOf(ProtectedServlet.getParameter(request, TARGET_PLATFORM_PARAM));
+        if (!targetPlatform.supported) {
+            incompatibiltyIssues(response,
+                                 LocalizedStrings.UNSUPPORTED_PLATFORM
+                                     .replace("@", "&quot;" + targetPlatform.name + "&quot;"));
+            return;
         }
+
         // Create a session.
         HttpSession session = request.getSession(true);
         // But make sure i is empty
         session.removeAttribute(UserData.USER_DATA);
         // Save where to go when auth is ready
-        session.setAttribute(LOGIN_TARGET,
-                             baseUrl+ "/" + ProtectedServlet.getParameter(request, LOGIN_TARGET));
+        session.setAttribute(LOGIN_TO_APP_PARAM,
+                             baseUrl+ "/" + ProtectedServlet.getParameter(request, LOGIN_TO_APP_PARAM));
         
         // Demo only
         if (eGovernmentService.demoCertificate != null) {
@@ -93,11 +147,6 @@ public class LoginServlet extends HttpServlet {
             return;
         }
         
-        // Real authentication
-        String userAgent = request.getHeader("User-Agent");
-        TargetPlatforms targetPlatform = userAgent.contains("Android") ? 
-                                               TargetPlatforms.ANDROID : TargetPlatforms.DESKTOP_MODE;
-
         // Now to big question, are we on a [suitable] mobile phone or on a desktop?
         if (targetPlatform == TargetPlatforms.DESKTOP_MODE) {
             response.sendRedirect(QRInitServlet.QR_INIT_SERVLET_NAME);
@@ -106,6 +155,15 @@ public class LoginServlet extends HttpServlet {
         
         // iOS code is not yet in place...
         response.sendRedirect(AndroidBootstrapServlet.createIntent(session));
+    }
+
+    void incompatibiltyIssues(HttpServletResponse response, String reason) throws IOException, ServletException {
+        StringBuilder html = new StringBuilder(
+                "<div class=\"header\">" + LocalizedStrings.INCOMPATIBILITY_ISSUES + "</div>" +
+                "<div class=\"label\" style=\"padding-top:20pt\">")
+            .append(reason)
+            .append("</div>");
+        HTML.resultPage(response, null, html);
     }
 
     void demoAuthentication(HttpServletRequest request, HttpServletResponse response)

@@ -27,6 +27,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletRequest;
 
+import org.webpki.localized.LocalizedStrings;
+
 // This is servlet is called for QR auth and for errors
 
 public class AuthResultServlet extends HttpServlet {
@@ -42,10 +44,10 @@ public class AuthResultServlet extends HttpServlet {
 
     enum Status {
 
-        USER_ABORT ("Aborted by the User"),
-        QR_NORMAL  ("Authentication Succeded"),
-        TIMEOUT    ("Authentication Timeout"),
-        OTHER      ("Authentication Error");
+        USER_ABORT (LocalizedStrings.AR_ABORTED_BY_USER),
+        QR_NORMAL  (LocalizedStrings.AR_AUTH_SUCCEEDED ),
+        TIMEOUT    (LocalizedStrings.SESSION_TIMOUT),
+        OTHER      (LocalizedStrings.AR_AUTH_ERROR);
         
         String header;
         

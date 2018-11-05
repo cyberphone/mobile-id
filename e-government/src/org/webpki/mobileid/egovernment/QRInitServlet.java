@@ -84,7 +84,7 @@ public class QRInitServlet extends HttpServlet {
         if (session == null) {
             throw new IOException("Missing session");
         }
-        String loginTarget = (String)session.getAttribute(LoginServlet.LOGIN_TARGET);
+        String loginTarget = (String)session.getAttribute(LoginServlet.LOGIN_TO_APP_PARAM);
         String qrSessionId = QRSessions.createSession(session);
         session.setAttribute(QR_SESSION_ID_ATTR, qrSessionId);
         String url = "webpki.org=" + URLEncoder.encode(LoginServlet.baseUrl + "/androidbootstrap?" +

@@ -57,6 +57,8 @@ public class eGovernmentService extends InitPropertyReader implements ServletCon
 
     static final String BOUNCYCASTLE_FIRST    = "bouncycastle_first";
 
+    static final String GET_MOBILE_ID_URL     = "get_mobile_id_url";
+
     static final String ISSUER_JSON           = "issuer";
 
     static final String UIDEMO                = "uidemo";  // No user auth
@@ -67,6 +69,8 @@ public class eGovernmentService extends InitPropertyReader implements ServletCon
     
     static String[] grantedVersions;
     
+    static String getMobileIdUrl;
+
     static KeyStore trustedIssuers;
     
     static boolean logging;
@@ -143,6 +147,11 @@ public class eGovernmentService extends InitPropertyReader implements ServletCon
             // Android WebPKI version check
             ////////////////////////////////////////////////////////////////////////////////////////////
             grantedVersions = getPropertyStringList(VERSION_CHECK);
+
+            ////////////////////////////////////////////////////////////////////////////////////////////
+            // Get Mobile ID URL
+            ////////////////////////////////////////////////////////////////////////////////////////////
+            getMobileIdUrl = getPropertyString(GET_MOBILE_ID_URL);
 
             ////////////////////////////////////////////////////////////////////////////////////////////
             // Get TLS server certificate hash

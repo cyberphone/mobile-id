@@ -423,7 +423,7 @@ public class KeyProviderServlet extends HttpServlet {
             .append(showTestUrl())
             .append(
                 "</div>" +
-                "<div id=\"sitefooter\" class=\"sitefooter\">")
+                "<div class=\"sitefooter\">")
             .append(LocalizedStrings.LEGAL_NOTICE.replace("@", "&quot;" + userData.issuerName + "&quot;"));
 
         return html;

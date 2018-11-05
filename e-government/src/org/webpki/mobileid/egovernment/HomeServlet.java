@@ -79,7 +79,7 @@ public class HomeServlet extends HttpServlet {
                         "<img src=\"images/x.svg\" class=\"xicon\" alt=\"x\" title=\"" +
                         LocalizedStrings.CLOSE_VIEW +
                         "\" onclick=\"closeDescription()\">" +
-                        "<div style=\"padding:0.3em 1em 0.3em 0\">")
+                        "<div>")
                 .append(LocalizedStrings.DEMO_TEXT
                    .replace("@", WEB_LINK))
                 .append("</div>");

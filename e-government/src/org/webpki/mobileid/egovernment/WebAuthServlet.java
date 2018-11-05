@@ -109,7 +109,7 @@ public class WebAuthServlet extends HttpServlet {
                                  new UserData(session, verifier.getSignerCertificatePath()[0]));
             logger.info("Auth OK=" + qrSessionId);
             if (qrSessionId == null) {
-                response.sendRedirect((String) session.getAttribute(LoginServlet.LOGIN_TARGET));
+                response.sendRedirect((String) session.getAttribute(LoginServlet.LOGIN_TO_APP_PARAM));
             } else {
                 QRSessions.optionalSessionSetReady(qrSessionId);
                 returnResult(response, AuthResultServlet.Status.QR_NORMAL, null);

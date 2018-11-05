@@ -9,8 +9,8 @@
         
   <target name="localize">
     <replace file="${app.dir}/build.xml" failOnNoReplacements="true">
-      <replacetoken expandProperties="false"><![CDATA[${application.path}]]></replacetoken>
-      <replacevalue expandProperties="true"><![CDATA[${french.app.path}]]></replacevalue>
+      <replacetoken expandProperties="false"><![CDATA[${application.path}enroll.war]]></replacetoken>
+      <replacevalue expandProperties="true"><![CDATA[${french.app.path}inscrire.war]]></replacevalue>
     </replace>
   </target>
    
