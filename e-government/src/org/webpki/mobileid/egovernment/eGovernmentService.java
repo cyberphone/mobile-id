@@ -32,6 +32,7 @@ import javax.servlet.ServletContextListener;
 
 import org.webpki.crypto.CertificateUtil;
 import org.webpki.crypto.CustomCryptoProvider;
+import org.webpki.crypto.HashAlgorithms;
 
 import org.webpki.json.JSONArrayReader;
 import org.webpki.json.JSONDecoderCache;
@@ -78,7 +79,7 @@ public class eGovernmentService extends InitPropertyReader implements ServletCon
     
     static String pinKeyboard;
 
-    static X509Certificate tlsCertificate;
+    static byte[] tlsCertificateHash;
 
     void addIssuer(KeyStore keyStore, JSONObjectReader issuerObject) throws IOException, GeneralSecurityException {
         String issuerBase = issuerObject.getString(ISSUER_JSON);
@@ -144,9 +145,11 @@ public class eGovernmentService extends InitPropertyReader implements ServletCon
             grantedVersions = getPropertyStringList(VERSION_CHECK);
 
             ////////////////////////////////////////////////////////////////////////////////////////////
-            // Get TLS server certificate
+            // Get TLS server certificate hash
             ////////////////////////////////////////////////////////////////////////////////////////////
-            tlsCertificate = CertificateUtil.getCertificateFromBlob(ArrayUtil.readFile(getPropertyString(TLS_CERTIFICATE)));
+            tlsCertificateHash = HashAlgorithms.SHA256.digest(
+                    CertificateUtil.getCertificateFromBlob(ArrayUtil.readFile(getPropertyString(TLS_CERTIFICATE)))
+                        .getEncoded());
 
             ////////////////////////////////////////////////////////////////////////////////////////////
             // Are we in demo mode?

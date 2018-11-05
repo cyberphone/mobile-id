@@ -73,6 +73,8 @@ public class AuthResultServlet extends HttpServlet {
         HTML.resultPage(response,
                         null,
                         html.append(status.header)
+                            .append(status != Status.OTHER || optional == null ? "" :
+                                "</div><div class=\"label\" style=\"padding-top:10pt\">" + optional)
                             .append("</div>"));
     }
 }

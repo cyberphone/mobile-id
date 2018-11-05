@@ -32,7 +32,6 @@ import javax.servlet.http.HttpSession;
 
 import org.webpki.crypto.AsymSignatureAlgorithms;
 import org.webpki.crypto.CertificateFilter;
-import org.webpki.crypto.HashAlgorithms;
 import org.webpki.crypto.KeyStoreVerifier;
 import org.webpki.crypto.VerifierInterface;
 
@@ -82,6 +81,7 @@ public class WebAuthServlet extends HttpServlet {
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         // This where we are supposed to get the authentication response
+        String qrSessionId = null;
         try {
             HttpSession session = request.getSession(false);
             if (session == null) {
@@ -90,6 +90,7 @@ public class WebAuthServlet extends HttpServlet {
             if (session.getAttribute(UserData.USER_DATA) != null) {
                 throw new IOException("Session weirdness");
             }
+            qrSessionId = (String) session.getAttribute(QRInitServlet.QR_SESSION_ID_ATTR);
             AuthenticationRequestEncoder authReqEnc = (AuthenticationRequestEncoder) session.getAttribute(AUTH_REQ);
             byte[] jsonData = ServletUtil.getData(request);
             if (!request.getContentType().equals(JSON_CONTENT_TYPE)) {
@@ -100,15 +101,12 @@ public class WebAuthServlet extends HttpServlet {
             }
             AuthenticationResponseDecoder authReqDec = (AuthenticationResponseDecoder)
                     eGovernmentService.webAuth2JSONCache.parse(jsonData);
-                authReqEnc.checkRequestResponseIntegrity(authReqDec, 
-                                                         HashAlgorithms.SHA256.digest(
-                                                                 eGovernmentService.tlsCertificate.getEncoded()));
+            authReqEnc.checkRequestResponseIntegrity(authReqDec, eGovernmentService.tlsCertificateHash);
             VerifierInterface verifier = new KeyStoreVerifier(eGovernmentService.trustedIssuers);
             verifier.setTrustedRequired(true);
             authReqDec.verifySignature(verifier);
             session.setAttribute(UserData.USER_DATA,
                                  new UserData(session, verifier.getSignerCertificatePath()[0]));
-            String qrSessionId = (String) session.getAttribute(QRInitServlet.QR_SESSION_ID_ATTR);
             logger.info("Auth OK=" + qrSessionId);
             if (qrSessionId == null) {
                 response.sendRedirect((String) session.getAttribute(LoginServlet.LOGIN_TARGET));
@@ -118,6 +116,7 @@ public class WebAuthServlet extends HttpServlet {
             }
         } catch (Exception e) {
             logger.severe(e.getMessage());
+            QRSessions.cancelSession(qrSessionId);
             returnResult(response, AuthResultServlet.Status.OTHER, e.getMessage());
         }
     }
