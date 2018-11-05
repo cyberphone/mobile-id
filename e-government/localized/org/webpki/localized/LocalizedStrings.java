@@ -119,6 +119,6 @@ public interface LocalizedStrings {
     String WRONG_APP_VERSION          = "Incorrect version of the Mobile ID app, " +
                                         "you need to update";
 
-    String GET_MOBILE_ID              = "If you do not yet have Mobile ID, go to";
+    String GET_MOBILE_ID              = "If you do not yet have a Mobile ID, go to";
  }
 

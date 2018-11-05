@@ -120,19 +120,25 @@ li {
   text-align:right;font-weight:normal;font-size:10pt;font-family:Arial,'Liberation Sans',Verdana,'Bitstream Vera Sans','DejaVu Sans';
 }
 
+.header {
+  padding-bottom:15pt;
+  color:#036F17;
+}
+
 .dialog, .header {
   font-size:14pt;
 }
 
 .xicon {
   height:16pt;
-  padding-right:1em;
+  padding-right:0.7em;
   cursor:pointer;
 }
 
 .dialog {
-  display:inline-block;
-  vertical-align:middle;
+  display:flex;
+  align-items:center;
+  padding:0.3em 0 0 0.3em;
 }
 
 .content {
@@ -140,10 +146,6 @@ li {
   text-align:center;
   padding:5pt;
   visibility:hidden;
-}
-
-.header {
-  padding-bottom:15pt;
 }
 
 .footer {
@@ -157,8 +159,6 @@ li {
 }
 
 .stdbtn, .multibtn {
-  font-size:11pt;
-  font-family:Arial,'Liberation Sans',Verdana,'Bitstream Vera Sans','DejaVu Sans';
   cursor:pointer;
   background:linear-gradient(to bottom, #eaeaea 14%,#fcfcfc 52%,#e5e5e5 89%);
   border-width:1px;
@@ -166,6 +166,11 @@ li {
   border-color:#a9a9a9;
   border-radius:5pt;
   padding:3pt 10pt;
+}
+
+.label, .stdbtn, .multibtn {
+  font-family:Arial,'Liberation Sans',Verdana,'Bitstream Vera Sans','DejaVu Sans';
+  font-size:11pt;
 }
 
 .stdbtn, .multibtn, .login, .logout, .tftable, .loginbtn {
@@ -211,7 +216,7 @@ li {
   bottom:0px;
   right:0px;
   background-color:#ffffe0;
-  padding:0.3em 1em;
+  padding:0.3em 0.7em;
 }
 
 .uidheader {

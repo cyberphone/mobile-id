@@ -51,7 +51,7 @@ li {
   padding:3pt 10pt;
 }
 
-.label, .stdbtn {
+.label, .stdbtn, .multibtn {
   font-family:Arial,'Liberation Sans',Verdana,'Bitstream Vera Sans','DejaVu Sans';
   font-size:11pt;
 }
@@ -80,7 +80,7 @@ li {
 
 .xicon {
   height:16pt;
-  padding-right:1em;
+  padding-right:0.7em;
   cursor:pointer;
 }
 
@@ -96,7 +96,7 @@ li {
   bottom:0px;
   right:0px;
   background-color:#ffffe0;
-  padding:0.3em 1em;
+  padding:0.3em 0.7em;
 }
 
 @media (max-width:768px) {

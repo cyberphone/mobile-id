@@ -45,13 +45,11 @@ public class ShowSessionServlet extends HttpServlet {
     public void doGet(HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
         StringBuilder s = new StringBuilder(
-            "<div>" +
-            "<div class=\"dialog\" style=\"font-size:8pt\">" +
+            "<div class=\"dialog\">" +
             "<img src=\"images/x.svg\" class=\"xicon\" alt=\"x\" title=\"" +
             LocalizedStrings.CLOSE_VIEW +
             "\" onclick=\"document.getElementById('session').style.visibility='hidden'\">" +
-            "</div>" + 
-            "<div class=\"dialog\">" +
+            "<div>" +
             LocalizedStrings.SESSION_DATA +
             "</div>" +
             "</div>" +
