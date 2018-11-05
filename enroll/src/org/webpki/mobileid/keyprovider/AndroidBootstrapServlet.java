@@ -50,7 +50,7 @@ public class AndroidBootstrapServlet extends HttpServlet {
         ////////////////////////////////////////////////////////////////////////////////////////////
         // The following is the actual contract between an issuing server and a KeyGen2 client.
         // The "cookie" argument holds the session in progress while the "url" argument holds
-    	// an address to a protocol bootstrap service to be invoked by an HTTPS GET operation.
+        // an address to a protocol bootstrap service to be invoked by an HTTPS GET operation.
         //
         // The "init" element on the bootstrap URL is a local Mobile ID RA convention.
         // The purpose of the random element is suppressing caching of bootstrap data.

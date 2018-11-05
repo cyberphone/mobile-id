@@ -119,7 +119,7 @@ public class KeyProviderServlet extends HttpServlet {
                                          8,
                                          3,
                                          null);
-        keygen2State.createKey(AppUsage.SIGNATURE,
+        keygen2State.createKey(AppUsage.UNIVERSAL,
                                new KeySpecifier(KeyAlgorithms.NIST_P_256),
                                standardPinPolicy);
         keygen2JSONBody(response, 
@@ -255,6 +255,7 @@ public class KeyProviderServlet extends HttpServlet {
                   certSpec.setEndEntityConstraint();
                   certSpec.setKeyUsageBit(KeyUsageBits.DIGITAL_SIGNATURE);
                   certSpec.addOCSPResponderURI(issuer.ocspURL);
+                  certSpec.addCertificatePolicyOID("1.2.250.33");  // AFNOR - French ISO
                   CA ca = new CA();
                   X509Certificate[] caCertPath = issuer.subCA.getCertificatePath();
                   DistinguishedName issuerName = DistinguishedName.subjectDN(caCertPath[0]);

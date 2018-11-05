@@ -32,13 +32,11 @@ import javax.servlet.ServletContextListener;
 
 import org.webpki.crypto.CertificateUtil;
 import org.webpki.crypto.CustomCryptoProvider;
-import org.webpki.crypto.KeyStoreVerifier;
 
 import org.webpki.json.JSONArrayReader;
 import org.webpki.json.JSONDecoderCache;
 import org.webpki.json.JSONObjectReader;
 import org.webpki.json.JSONParser;
-import org.webpki.json.JSONX509Verifier;
 
 import org.webpki.util.ArrayUtil;
 
@@ -54,6 +52,8 @@ public class eGovernmentService extends InitPropertyReader implements ServletCon
 
     static final String KEYSTORE_PASSWORD     = "key_password";
 
+    static final String TLS_CERTIFICATE       = "server_tls_certificate";
+
     static final String BOUNCYCASTLE_FIRST    = "bouncycastle_first";
 
     static final String ISSUER_JSON           = "issuer";
@@ -66,7 +66,7 @@ public class eGovernmentService extends InitPropertyReader implements ServletCon
     
     static String[] grantedVersions;
     
-    static JSONX509Verifier trustedIssuers;
+    static KeyStore trustedIssuers;
     
     static boolean logging;
     
@@ -77,6 +77,8 @@ public class eGovernmentService extends InitPropertyReader implements ServletCon
     static String demoCard;
     
     static String pinKeyboard;
+
+    static X509Certificate tlsCertificate;
 
     void addIssuer(KeyStore keyStore, JSONObjectReader issuerObject) throws IOException, GeneralSecurityException {
         String issuerBase = issuerObject.getString(ISSUER_JSON);
@@ -130,17 +132,21 @@ public class eGovernmentService extends InitPropertyReader implements ServletCon
             // Trusted issuers
             ////////////////////////////////////////////////////////////////////////////////////////////
             JSONArrayReader issuerArray = readJSONFile("issuers.json").getJSONArrayReader();
-            KeyStore keyStore = KeyStore.getInstance("JKS");
-            keyStore.load(null, null);
+            trustedIssuers = KeyStore.getInstance("JKS");
+            trustedIssuers.load(null, null);
             do {
-                addIssuer(keyStore, issuerArray.getObject());
+                addIssuer(trustedIssuers, issuerArray.getObject());
             } while (issuerArray.hasMore());
-            trustedIssuers = new JSONX509Verifier(new KeyStoreVerifier(keyStore));
 
             ////////////////////////////////////////////////////////////////////////////////////////////
             // Android WebPKI version check
             ////////////////////////////////////////////////////////////////////////////////////////////
             grantedVersions = getPropertyStringList(VERSION_CHECK);
+
+            ////////////////////////////////////////////////////////////////////////////////////////////
+            // Get TLS server certificate
+            ////////////////////////////////////////////////////////////////////////////////////////////
+            tlsCertificate = CertificateUtil.getCertificateFromBlob(ArrayUtil.readFile(getPropertyString(TLS_CERTIFICATE)));
 
             ////////////////////////////////////////////////////////////////////////////////////////////
             // Are we in demo mode?

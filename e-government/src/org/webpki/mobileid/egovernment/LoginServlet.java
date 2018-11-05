@@ -20,14 +20,14 @@ package org.webpki.mobileid.egovernment;
 import java.io.IOException;
 
 import javax.servlet.ServletException;
+
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.webpki.crypto.AsymSignatureAlgorithms;
 import org.webpki.localized.LocalizedStrings;
-import org.webpki.webauth.AuthenticationRequestEncoder;
+
 import org.webpki.webutil.ServletUtil;
 
 public class LoginServlet extends HttpServlet {
@@ -36,8 +36,6 @@ public class LoginServlet extends HttpServlet {
     
     static final String LOGIN_TARGET  = "target";
     static final String MOBILE_ID_APP = "Mobile ID App";
-
-    static final String AUTH_REQ      = "authreq";
 
     static String baseUrl;
     static String authenticationUrl;
@@ -86,7 +84,8 @@ public class LoginServlet extends HttpServlet {
         // But make sure i is empty
         session.removeAttribute(UserData.USER_DATA);
         // Save where to go when auth is ready
-        session.setAttribute(LOGIN_TARGET, ProtectedServlet.getParameter(request, LOGIN_TARGET));
+        session.setAttribute(LOGIN_TARGET,
+                             baseUrl+ "/" + ProtectedServlet.getParameter(request, LOGIN_TARGET));
         
         // Demo only
         if (eGovernmentService.demoCertificate != null) {
@@ -95,10 +94,6 @@ public class LoginServlet extends HttpServlet {
         }
         
         // Real authentication
-        AuthenticationRequestEncoder authReq = new AuthenticationRequestEncoder(LoginServlet.authenticationUrl, null);
-        authReq.addSignatureAlgorithm(AsymSignatureAlgorithms.ECDSA_SHA256);
-        session.setAttribute(AUTH_REQ, authReq);
-        
         String userAgent = request.getHeader("User-Agent");
         TargetPlatforms targetPlatform = userAgent.contains("Android") ? 
                                                TargetPlatforms.ANDROID : TargetPlatforms.DESKTOP_MODE;

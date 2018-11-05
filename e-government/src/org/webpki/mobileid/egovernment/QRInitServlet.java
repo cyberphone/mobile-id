@@ -80,15 +80,15 @@ public class QRInitServlet extends HttpServlet {
     
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        HttpSession session = request.getSession();
+        HttpSession session = request.getSession(false);
         if (session == null) {
             throw new IOException("Missing session");
         }
         String loginTarget = (String)session.getAttribute(LoginServlet.LOGIN_TARGET);
-        String id = QRSessions.createSession(session);
-        session.setAttribute(QR_SESSION_ID_ATTR, id);
-        String url = "webpki.org=" + URLEncoder.encode(LoginServlet.baseUrl +
-                                                       "/androidbootstrap?" + QRSessions.QR_SESSION_ID  + "=" + id,
+        String qrSessionId = QRSessions.createSession(session);
+        session.setAttribute(QR_SESSION_ID_ATTR, qrSessionId);
+        String url = "webpki.org=" + URLEncoder.encode(LoginServlet.baseUrl + "/androidbootstrap?" +
+                                                       QRSessions.QR_SESSION_ID  + "=" + qrSessionId,
                                                        "UTF-8");
         logger.info("URL=" + url + " SID=" + session.getId());
         String qrImage = new Base64(false).getBase64StringFromBinary(QRCode.from(url)
@@ -139,7 +139,7 @@ public class QRInitServlet extends HttpServlet {
             "       'Content-Type': 'text/plain'\n" +
             "     },\n" +
             "     method: 'POST',\n" +
-            "     body: '" + id + "'\n" +
+            "     body: '" + qrSessionId + "'\n" +
             "  }).then(function (response) {\n" +
             "    return response.text();\n" +
             "  }).then(function (resultData) {\n" +
