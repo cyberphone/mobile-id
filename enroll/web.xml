@@ -19,12 +19,6 @@
     </context-param>
  
     <context-param>
-        <description>Key Provider Base URL</description>
-        <param-name>keyprov_base_url</param-name>
-        <param-value>@keyprov-base-url@</param-value>
-    </context-param>
-
-    <context-param>
         <description>Loading of Bouncycastle (EJBCA or Tomcat)</description>
         <param-name>bouncycastle_first</param-name>
         <param-value>@bouncycastle-first@</param-value>
