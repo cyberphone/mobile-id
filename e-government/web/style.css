@@ -1,15 +1,8 @@
-.point {
-  text-align:center;font-family:courier;font-weight:bold;font-size:10pt;
-  border-radius:3pt;border-width:1px;border-style:solid;
-  border-color:#B0B0B0;display:inline-block;padding:1.5pt 3pt 1pt 3pt;
-}
-
 .egovlogo {
   cursor:pointer;
   position:absolute;
   top:12px;
   left:12px;
-  visibility:visible;
   height:40pt;
   filter: drop-shadow(3pt 3pt 3pt #d0d0d0);
 }
@@ -114,10 +107,6 @@ li {
 .jsonbox {
   font-size:8pt;word-break:break-all;width:800pt;background:#f8f8f8;
   border-width:1px;border-style:solid;border-color:grey;padding:10pt;box-shadow:3pt 3pt 3pt #d0d0d0;
-}
-
-.quantity {
-  text-align:right;font-weight:normal;font-size:10pt;font-family:Arial,'Liberation Sans',Verdana,'Bitstream Vera Sans','DejaVu Sans';
 }
 
 .header {
@@ -226,6 +215,9 @@ li {
 
 @media (max-width:768px) {
 
+  body {
+    font-size:8pt;
+  }
   .stdbtn, .multibtn, .login, .logout, .tftable, .loginbtn {
     box-shadow:2pt 2pt 2pt #d0d0d0;
   }
@@ -242,12 +234,8 @@ li {
     height:12pt;
   }
 
- .logouticon {
+  .logouticon {
    height:32px;
- }
-
-  body {
-    font-size:8pt;
   }
 
   .login, .logout {
@@ -275,10 +263,6 @@ li {
   .tftable td {
     font-size:8pt;
     padding:3pt 5pt;
-  }
-
-  .product {
-    width:100px;
   }
 
   code {

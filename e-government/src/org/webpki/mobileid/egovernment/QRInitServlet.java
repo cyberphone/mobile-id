@@ -103,7 +103,7 @@ public class QRInitServlet extends HttpServlet {
             supportedTargets.append(targetPlatform.name);
         }
         StringBuilder html = new StringBuilder(
-                "<div class=\"header\" style=\"padding-bottom:15pt\">" +
+                "<div class=\"header\">" +
                 LocalizedStrings.QR_AUTHENTICATION_HEADER +
                 "</div><div id=\"qr\">" +
                 "<div class=\"label\" style=\"padding-bottom:15pt;text-align:left\">")
