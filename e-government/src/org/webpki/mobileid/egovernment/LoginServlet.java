@@ -48,7 +48,7 @@ public class LoginServlet extends HttpServlet {
         baseUrl = ServletUtil.getContextURL(request);
         authenticationUrl = baseUrl + "/webauth";
     }
-
+    
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
@@ -75,13 +75,7 @@ public class LoginServlet extends HttpServlet {
                     return;
                 }
             } else {
-                HTML.output(response,
-                    "<!DOCTYPE html><html><head>" +
-                    "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">" +
-                    "<title>" + LocalizedStrings.INCOMPATIBILITY_ISSUES + "</title>" +
-                    "</head><body>" +
-                    LocalizedStrings.UNSUPPORTED_ANDROID_BROWSER +
-                    "</body></html>");
+                incompatibiltyIssues(response, LocalizedStrings.UNSUPPORTED_ANDROID_BROWSER);
                 return;
             }
             targetPlatform = TargetPlatforms.ANDROID;
@@ -157,13 +151,14 @@ public class LoginServlet extends HttpServlet {
         response.sendRedirect(AndroidBootstrapServlet.createIntent(session));
     }
 
-    void incompatibiltyIssues(HttpServletResponse response, String reason) throws IOException, ServletException {
-        StringBuilder html = new StringBuilder(
-                "<div class=\"header\">" + LocalizedStrings.INCOMPATIBILITY_ISSUES + "</div>" +
-                "<div class=\"label\" style=\"padding-top:20pt\">")
-            .append(reason)
-            .append("</div>");
-        HTML.resultPage(response, null, html);
+    static void incompatibiltyIssues(HttpServletResponse response, String reason) throws IOException, ServletException {
+        HTML.output(response,
+                    "<!DOCTYPE html><html><head>" +
+                    "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">" +
+                    "<title>" + LocalizedStrings.INCOMPATIBILITY_ISSUES + "</title>" +
+                    "</head><body><h3>" + LocalizedStrings.INCOMPATIBILITY_ISSUES + "</h3>" +
+                    reason +
+                    "</body></html>");
     }
 
     void demoAuthentication(HttpServletRequest request, HttpServletResponse response)

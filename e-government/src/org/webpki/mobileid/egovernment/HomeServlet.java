@@ -33,7 +33,7 @@ public class HomeServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     static final String DISMISSED_FOOTER = "dismiss";
-    static final int DISMISS_TIME = 60 * 60 * 8; // 8 hours
+    static final int DISMISS_TIME        = 60 * 60 * 8; // 8 hours
     
     private static final String WEB_LINK =
             "<a href=\"" +
@@ -43,6 +43,14 @@ public class HomeServlet extends HttpServlet {
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
+        // MSIE doesn't support the UI
+        String msieTest = request.getHeader("User-Agent");
+        if (msieTest.contains("Mozilla/5") && (msieTest.contains(" MSIE ") || msieTest.contains("Trident/"))) {
+            LoginServlet.incompatibiltyIssues(response, 
+                                              LocalizedStrings.UNSUPPORTED_PLATFORM
+                                                  .replace("@", "&quot;Internet Explorer&quot;"));
+            return;
+        }
         boolean footerDismissed = false;
         Cookie[] cookies = request.getCookies();
         if (cookies != null) for (Cookie cookie : cookies) {

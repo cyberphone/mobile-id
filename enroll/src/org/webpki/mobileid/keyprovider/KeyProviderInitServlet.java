@@ -149,16 +149,25 @@ public class KeyProviderInitServlet extends HttpServlet {
     
    
     void incompatibiltyIssues(HttpServletResponse response, String reason) throws IOException, ServletException {
-        StringBuilder html = new StringBuilder(
-                "<div class=\"header\">" + LocalizedStrings.INCOMPATIBILITY_ISSUES + "</div>" +
-                "<div class=\"label\" style=\"padding-top:20pt\">")
-            .append(reason)
-            .append("</div>");
-        HTML.resultPage(response, null, false, html);
+        HTML.output(response,
+                    "<!DOCTYPE html><html><head>" +
+                    "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">" +
+                    "<title>" + LocalizedStrings.INCOMPATIBILITY_ISSUES + "</title>" +
+                    "</head><body><h3>" + LocalizedStrings.INCOMPATIBILITY_ISSUES + "</h3>" +
+                    reason +
+                    "</body></html>");
     }
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        // MSIE doesn't support the UI
+        String msieTest = request.getHeader("User-Agent");
+        if (msieTest.contains("Mozilla/5") && (msieTest.contains(" MSIE ") || msieTest.contains("Trident/"))) {
+            incompatibiltyIssues(response, 
+                                 LocalizedStrings.UNSUPPORTED_PLATFORM
+                                     .replace("@", "&quot;Internet Explorer&quot;"));
+            return;
+        }
 
         // We always start from zero
         HttpSession session = request.getSession(false);
@@ -181,13 +190,7 @@ public class KeyProviderInitServlet extends HttpServlet {
                     return;
                 }
             } else {
-                HTML.output(response,
-                    "<!DOCTYPE html><html><head>" +
-                    "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">" +
-                    "<title>" + LocalizedStrings.INCOMPATIBILITY_ISSUES + "</title>" +
-                    "</head><body>" +
-                    LocalizedStrings.UNSUPPORTED_ANDROID_BROWSER +
-                    "</body></html>");
+                incompatibiltyIssues(response, LocalizedStrings.UNSUPPORTED_ANDROID_BROWSER);
                 return;
             }
             targetPlatform = TargetPlatforms.ANDROID;
