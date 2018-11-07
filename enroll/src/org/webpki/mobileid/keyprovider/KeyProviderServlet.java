@@ -119,9 +119,12 @@ public class KeyProviderServlet extends HttpServlet {
                                          8,
                                          3,
                                          null);
+        UserData userData = 
+                (UserData) keygen2State.getServiceSpecificObject(KeyProviderInitServlet.SERVER_STATE_USER);
         keygen2State.createKey(AppUsage.UNIVERSAL,
                                new KeySpecifier(KeyAlgorithms.NIST_P_256),
-                               standardPinPolicy);
+                               standardPinPolicy)
+                    .setFriendlyName("ID=" + userData.userId + ", " + userData.userName);
         keygen2JSONBody(response, 
                         new KeyCreationRequestEncoder(keygen2State,
                                                       KeyProviderInitServlet.keygen2EnrollmentUrl));
@@ -310,6 +313,19 @@ public class KeyProviderServlet extends HttpServlet {
                       @Override
                       public String getMimeType() throws IOException {
                           return "image/svg+xml";
+                      }
+                  });
+                  // Get the static issuer icon
+                  key.addLogotype(KeyGen2URIs.LOGOTYPES.LIST, new MIMETypedObject() {
+
+                      @Override
+                       public byte[] getData() throws IOException {
+                          return issuer.icon;
+                      }
+    
+                      @Override
+                      public String getMimeType() throws IOException {
+                          return "image/png";
                       }
                   });
                   keygen2JSONBody(response,

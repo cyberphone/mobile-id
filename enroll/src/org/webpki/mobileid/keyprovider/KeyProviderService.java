@@ -89,6 +89,7 @@ public class KeyProviderService extends InitPropertyReader implements ServletCon
         String cardImage;
         String issuer;
         String commonName;
+        byte[] icon;
 
         public IssuerHolder(JSONObjectReader issuerObject) throws IOException {
             issuer = issuerObject.getString(ISSUER_JSON);
@@ -99,6 +100,7 @@ public class KeyProviderService extends InitPropertyReader implements ServletCon
             subCA = new KeyStoreEnumerator(getResource(issuer + "-sub-ca.p12"),
                                            getPropertyString(KEYSTORE_PASSWORD));
             cardImage = getResourceString(issuer + "-card.svg");
+            icon = getResourceBytes(issuer + "-icon.png");
             issuerObject.checkForUnread();
         }
     }

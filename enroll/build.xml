@@ -94,6 +94,7 @@
       </zipfileset>
       <zipfileset dir="${logotype.dir}" prefix="${class_war_path}">
         <include name="*-card.svg"/>
+        <include name="*-icon.png"/>
       </zipfileset>
       <zipfileset file="${logotype.dir}/mobileidlogo.svg" prefix="images"/>
       <zipfileset file="${resource.dir}/issuers.json" prefix="${class_war_path}"/>
