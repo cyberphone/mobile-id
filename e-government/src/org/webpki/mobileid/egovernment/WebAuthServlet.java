@@ -59,10 +59,7 @@ public class WebAuthServlet extends HttpServlet {
         if (session == null) {
             throw new IOException("Session timeout");
         }
-        AuthenticationRequestEncoder authReqEnc = 
-                new AuthenticationRequestEncoder(LoginServlet.authenticationUrl, 
-                       WebAuthServlet.getResultUrl(AuthResultServlet.Status.USER_ABORT,
-                                                   (String)session.getAttribute(QRInitServlet.QR_SESSION_ID_ATTR)));
+        AuthenticationRequestEncoder authReqEnc = new AuthenticationRequestEncoder();
         authReqEnc.addSignatureAlgorithm(AsymSignatureAlgorithms.ECDSA_SHA256);
         authReqEnc.setExtendedCertPath(true);
         authReqEnc.addCertificateFilter(new CertificateFilter()

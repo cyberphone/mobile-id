@@ -69,7 +69,7 @@ public class KeyProviderService extends InitPropertyReader implements ServletCon
     
     static X509Certificate tlsCertificate;
 
-    static String[] grantedVersions;
+    static String grantedVersions;
 
     static boolean logging;
     
@@ -157,7 +157,7 @@ public class KeyProviderService extends InitPropertyReader implements ServletCon
             ////////////////////////////////////////////////////////////////////////////////////////////
             // Android WebPKI version check
             ////////////////////////////////////////////////////////////////////////////////////////////
-            grantedVersions = getPropertyStringList(VERSION_CHECK);
+            grantedVersions = getPropertyString(VERSION_CHECK);
  
             ////////////////////////////////////////////////////////////////////////////////////////////
             // Get TLS server certificate

@@ -18,13 +18,10 @@
 package org.webpki.mobileid.egovernment;
 
 import java.io.IOException;
-
 import java.util.logging.Logger;
-
 import java.net.URLEncoder;
 
 import javax.servlet.ServletException;
-
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletRequest;
@@ -38,9 +35,6 @@ public class AndroidBootstrapServlet extends HttpServlet {
 
     static Logger logger = Logger.getLogger(AndroidBootstrapServlet.class.getCanonicalName());
 
-    static final String ANDROID_WEBPKI_VERSION_TAG      = "VER";
-    static final String ANDROID_WEBPKI_VERSION_MACRO    = "$VER$";  // KeyGen2 Android PoC
-    
     static final String TOMCAT_SESSION_COOKIE           = "JSESSIONID";
     
     static String createIntent(HttpSession session) throws IOException {
@@ -49,12 +43,15 @@ public class AndroidBootstrapServlet extends HttpServlet {
         // The "cookie" argument holds the session in progress while the "url" argument holds
         // an address to a protocol bootstrap service to be invoked by an HTTPS GET operation.
         ////////////////////////////////////////////////////////////////////////////////////////////
-        return new StringBuilder("intent://webauth?cookie=" + TOMCAT_SESSION_COOKIE + "%3D")
-            .append(session.getId())
-            .append("&url=")
-            .append(URLEncoder.encode(LoginServlet.authenticationUrl +
-                                      "?" + ANDROID_WEBPKI_VERSION_TAG +
-                                      "=" + ANDROID_WEBPKI_VERSION_MACRO, "UTF-8"))
+
+        String authUrlEnc = URLEncoder.encode(LoginServlet.authenticationUrl, "utf-8");
+        return new StringBuilder("intent://webauth?cookie=" + TOMCAT_SESSION_COOKIE + "%3D").append(session.getId())
+            .append("&url=").append(authUrlEnc)
+            .append("&ver=").append(eGovernmentService.grantedVersions)
+            .append("&init=").append(authUrlEnc)
+            .append("&cncl=").append(URLEncoder.encode(
+                    WebAuthServlet.getResultUrl(AuthResultServlet.Status.USER_ABORT,
+                                                (String)session.getAttribute(QRInitServlet.QR_SESSION_ID_ATTR)), "utf-8"))
             .append("#Intent;scheme=webpkiproxy;" +
                     "package=org.webpki.mobile.android;end").toString();
     }

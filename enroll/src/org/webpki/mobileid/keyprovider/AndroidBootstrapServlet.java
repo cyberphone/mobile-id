@@ -31,7 +31,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.webpki.util.Base64URL;
 
 // This is a servlet which through QR + mobile browser invokes the KeyGen2 protocol
 
@@ -41,9 +40,6 @@ public class AndroidBootstrapServlet extends HttpServlet {
 
     static Logger logger = Logger.getLogger(AndroidBootstrapServlet.class.getCanonicalName());
 
-    static final String ANDROID_WEBPKI_VERSION_TAG      = "VER";
-    static final String ANDROID_WEBPKI_VERSION_MACRO    = "$VER$";  // KeyGen2 Android PoC
-    
     static final String TOMCAT_SESSION_COOKIE           = "JSESSIONID";
        
     static String createIntent(HttpSession session) throws IOException {
@@ -51,19 +47,13 @@ public class AndroidBootstrapServlet extends HttpServlet {
         // The following is the actual contract between an issuing server and a KeyGen2 client.
         // The "cookie" argument holds the session in progress while the "url" argument holds
         // an address to a protocol bootstrap service to be invoked by an HTTPS GET operation.
-        //
-        // The "init" element on the bootstrap URL is a local Mobile ID RA convention.
-        // The purpose of the random element is suppressing caching of bootstrap data.
         ////////////////////////////////////////////////////////////////////////////////////////////
-        return new StringBuilder("intent://keygen2?cookie=" + TOMCAT_SESSION_COOKIE + "%3D")
-            .append(session.getId())
-            .append("&url=")
-            .append(URLEncoder.encode(
-                        new StringBuilder(KeyProviderInitServlet.keygen2EnrollmentUrl)
-                            .append("?" + KeyProviderInitServlet.KG2_INIT_TAG + "=" )
-                            .append(Base64URL.generateURLFriendlyRandom(8))
-                            .append("&" + ANDROID_WEBPKI_VERSION_TAG + "=" +
-                                    ANDROID_WEBPKI_VERSION_MACRO).toString(), "UTF-8"))
+        String urlEncoded = URLEncoder.encode(KeyProviderInitServlet.keygen2EnrollmentUrl, "utf-8");
+        return new StringBuilder("intent://keygen2?cookie=" + TOMCAT_SESSION_COOKIE + "%3D").append(session.getId())
+            .append("&url=").append(urlEncoded)
+            .append("&ver=").append(KeyProviderService.grantedVersions)
+            .append("&init=").append(urlEncoded).append("%3F" + KeyProviderInitServlet.KG2_INIT_TAG + "%3Dtrue")
+            .append("&cncl=").append(urlEncoded).append("%3F" + KeyProviderInitServlet.KG2_ABORT_TAG + "%3Dtrue")
             .append("#Intent;scheme=webpkiproxy;" +
                     "package=org.webpki.mobile.android;end").toString();
     }

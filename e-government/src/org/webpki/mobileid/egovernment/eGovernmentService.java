@@ -67,7 +67,7 @@ public class eGovernmentService extends InitPropertyReader implements ServletCon
 
     static JSONDecoderCache webAuth2JSONCache;
     
-    static String[] grantedVersions;
+    static String grantedVersions;
     
     static String getMobileIdUrl;
 
@@ -146,7 +146,7 @@ public class eGovernmentService extends InitPropertyReader implements ServletCon
             ////////////////////////////////////////////////////////////////////////////////////////////
             // Android WebPKI version check
             ////////////////////////////////////////////////////////////////////////////////////////////
-            grantedVersions = getPropertyStringList(VERSION_CHECK);
+            grantedVersions = getPropertyString(VERSION_CHECK);
 
             ////////////////////////////////////////////////////////////////////////////////////////////
             // Get Mobile ID URL
