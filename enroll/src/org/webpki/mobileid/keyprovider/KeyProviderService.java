@@ -67,7 +67,7 @@ public class KeyProviderService extends InitPropertyReader implements ServletCon
 
     static JSONDecoderCache keygen2JSONCache;
     
-    static X509Certificate tlsCertificate;
+    static X509Certificate serverCertificate;
 
     static String grantedVersions;
 
@@ -162,7 +162,9 @@ public class KeyProviderService extends InitPropertyReader implements ServletCon
             ////////////////////////////////////////////////////////////////////////////////////////////
             // Get TLS server certificate
             ////////////////////////////////////////////////////////////////////////////////////////////
-            tlsCertificate = CertificateUtil.getCertificateFromBlob(ArrayUtil.readFile(getPropertyString(TLS_CERTIFICATE)));
+            serverCertificate = 
+                    CertificateUtil.getCertificateFromBlob(
+                            ArrayUtil.readFile(getPropertyString(TLS_CERTIFICATE)));
 
             ////////////////////////////////////////////////////////////////////////////////////////////
             // Last page shows where you can use/test your Mobile ID
@@ -174,7 +176,7 @@ public class KeyProviderService extends InitPropertyReader implements ServletCon
             ////////////////////////////////////////////////////////////////////////////////////////////
             logging = getPropertyBoolean(LOGGING);
 
-            logger.info("Mobile ID KeyProvider [" + LocalizedStrings.LANGUAGE_CODE + "] Server initiated: " + tlsCertificate.getSubjectX500Principal().getName());
+            logger.info("Mobile ID KeyProvider [" + LocalizedStrings.LANGUAGE_CODE + "] Server initiated: " + serverCertificate.getSubjectX500Principal().getName());
         } catch (Exception e) {
             logger.log(Level.SEVERE, "********\n" + e.getMessage() + "\n********", e);
         }

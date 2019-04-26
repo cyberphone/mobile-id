@@ -190,7 +190,7 @@ public class KeyProviderServlet extends HttpServlet {
                   // Now we really start doing something
                   ProvisioningInitializationRequestEncoder provisioningInitRequest =
                       new ProvisioningInitializationRequestEncoder(keygen2State,
-                                                                   1000,
+                                                                   (short)1000,
                                                                    (short)50);
                   provisioningInitRequest.setKeyManagementKey(issuer.keyManagementKey.getPublicKey());
                   keygen2JSONBody(response, provisioningInitRequest);
@@ -198,7 +198,7 @@ public class KeyProviderServlet extends HttpServlet {
 
                 case PROVISIONING_INITIALIZATION:
                   ProvisioningInitializationResponseDecoder provisioningInitResponse = (ProvisioningInitializationResponseDecoder) jsonObject;
-                  keygen2State.update(provisioningInitResponse, KeyProviderService.tlsCertificate);
+                  keygen2State.update(provisioningInitResponse);
 
                   logger.info("Device Certificate=" + certificateData(keygen2State.getDeviceCertificate()));
                   CredentialDiscoveryRequestEncoder credentialDiscoveryRequest =

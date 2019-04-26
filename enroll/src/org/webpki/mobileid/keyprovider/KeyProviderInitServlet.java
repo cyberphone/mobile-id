@@ -134,6 +134,7 @@ public class KeyProviderInitServlet extends HttpServlet {
         // Setup KeyGen2 using a session cookie for keeping state
         ServerState serverState = new ServerState(new KeyGen2SoftHSM(issuer.keyManagementKey),
                                                   keygen2EnrollmentUrl,
+                                                  KeyProviderService.serverCertificate,
                                                   null);
         serverState.setServiceSpecificObject(SERVER_STATE_ISSUER, issuer);
         serverState.setServiceSpecificObject(SERVER_STATE_USER, userData);
