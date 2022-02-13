@@ -268,7 +268,7 @@ public class KeyProviderServlet extends HttpServlet {
                                 throws IOException {
                           try {
                               return new SignatureWrapper(certAlg, issuer.subCA.getPrivateKey())
-                                        .setEcdsaSignatureEncoding(true)
+                                        .ecdsaAsn1SignatureEncoding(true)
                                         .update(data)
                                         .sign();
                           } catch (GeneralSecurityException e) {
